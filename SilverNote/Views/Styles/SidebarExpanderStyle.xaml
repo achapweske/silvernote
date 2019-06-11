@@ -1,0 +1,93 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- SidebarExpanderToggleButtonTemplate -->
+    <ControlTemplate x:Key="SidebarExpanderToggleButtonTemplate" TargetType="ToggleButton">
+        <!-- Layout Root -->
+        <Border
+            Name="Border"
+            Width="15" 
+            Height="15" 
+            CornerRadius="2" 
+            Background="{TemplateBinding Background}">
+            <Path 
+                Name="Glyph"
+                Width="15"
+                Height="15"
+                Stroke="{TemplateBinding Foreground}"
+                StrokeThickness="2"
+                Data="M 4,8 12,8 M 8,4 8,12"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="Glyph" Property="Stroke" Value="#888"/>
+                <Setter TargetName="Border" Property="Background" Value="#CCC"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="Glyph" Property="Stroke" Value="#CCC" />
+                <Setter TargetName="Border" Property="Background" Value="#888"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="true">
+                <Setter TargetName="Glyph" Property="Data" Value="M 4,8 12,8" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- SidebarExpanderTemplate -->
+    <ControlTemplate x:Key="SidebarExpanderTemplate" TargetType="{x:Type Expander}">
+        <!-- Layout Root -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Header -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!-- Title -->
+                <ContentPresenter 
+                    Grid.Column="0"
+                    Margin="0,0,0,2"
+                    TextBlock.FontWeight="Bold"
+                    TextBlock.Foreground="#968282"
+                    ContentSource="Header">
+                    <ContentPresenter.Effect>
+                        <!-- Give the text an inset effect -->
+                        <DropShadowEffect Color="White" Direction="270" ShadowDepth="1" BlurRadius="0" />
+                    </ContentPresenter.Effect>
+                </ContentPresenter>
+                <!-- Button -->
+                <ToggleButton 
+                    Grid.Column="1" 
+                    Width="15" 
+                    Height="15" 
+                    Background="Transparent"
+                    Foreground="#AAA" 
+                    Template="{StaticResource SidebarExpanderToggleButtonTemplate}"
+                    IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </Grid>
+            <!-- Content -->
+            <Border 
+                Name="Content"
+                Grid.Row="1" 
+                Visibility="Collapsed"
+                Background="White">
+                <ContentPresenter />
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="True">
+                <Setter TargetName="Content" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- SidebarExpanderStyle -->
+    <Style x:Key="SidebarExpanderStyle" TargetType="{x:Type Expander}" BasedOn="{x:Null}">
+        <Setter Property="Margin" Value="0,0,0,10"/>
+        <Setter Property="Template" Value="{StaticResource SidebarExpanderTemplate}"/>
+    </Style>
+</ResourceDictionary>

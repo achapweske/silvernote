@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="1waem0uto2i">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <polygon stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#1waem0uto2i)" points="510,220 450,260 390,220 450,180" />
+    <text x="450" y="260" placeholder="?" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-left:4px;padding-right:2px;width:80px;height:70px;display:block;" />
+    <text x="510" y="150" placeholder="?" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-left:4px;padding-right:2px;width:70px;height:70px;vertical-align:bottom;display:block;" />
+    <text x="390" y="180" placeholder="Decision" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:120px;height:80px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="450" y1="180" x2="450" y2="180" />
+    <line class="snap" x1="390" y1="220" x2="390" y2="220" />
+    <line class="snap" x1="510" y1="220" x2="510" y2="220" />
+    <line class="snap" x1="450" y1="260" x2="450" y2="260" />
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="locked" fill="none">
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" x="0" y="0" width="30" height="10" />
+      <text fill="black" x="0" y="0" style="width:30px;height:10px;display:block;vertical-align:middle;text-align:center;">
+        <tspan x="6" y="8" class="" font-family="Comic Sans MS, Cursive" font-size="8" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Menu</tspan>
+      </text>
+    </g>
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" x="0" y="0" width="180" height="20" />
+    <text class="autofocus" fill="black" x="0" y="0" placeholder="Text field" style="padding-top:2px;padding-left:4px;width:180px;height:20px;display:block;">
+      <tspan x="4" y="16" class="" font-family="Comic Sans MS, Cursive" font-size="13.3333333333333" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href=""> File   Edit   View   Help</tspan>
+    </text>
+  </g>
+</svg>

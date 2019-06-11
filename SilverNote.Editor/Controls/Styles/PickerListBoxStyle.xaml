@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="PickerItemStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- PickerListBoxTemplate -->
+    <ControlTemplate x:Key="PickerListBoxTemplate" TargetType="ListBox">
+        <Border 
+            Name="Bd" 
+            BorderBrush="{TemplateBinding Border.BorderBrush}" 
+            BorderThickness="{TemplateBinding Border.BorderThickness}" 
+            Background="{TemplateBinding Panel.Background}" 
+            SnapsToDevicePixels="True">
+            <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </ScrollViewer>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Panel.Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            </Trigger>
+            <Trigger Property="IsGrouping" Value="True">
+                <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerListBoxStyle -->
+    <Style x:Key="PickerListBoxStyle" TargetType="ListBox">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource PickerItemStyle}" />
+        <Setter Property="Template" Value="{StaticResource PickerListBoxTemplate}" />
+    </Style>
+</ResourceDictionary>

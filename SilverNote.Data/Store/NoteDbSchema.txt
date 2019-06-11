@@ -1,0 +1,140 @@
+﻿
+CREATE TABLE Repository (
+    user_id TEXT PRIMARY KEY,
+	version INTEGER DEFAULT 2,
+    selected_notebook_id INTEGER DEFAULT 0
+);
+
+CREATE TABLE Notebooks (
+    id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT,
+	name_modified_at DATETIME DEFAULT NULL,
+    selected_note_id INTEGER DEFAULT 0,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	viewed_at DATETIME DEFAULT NULL,
+	is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TRIGGER OnNotebookDeleted AFTER DELETE ON Notebooks
+    BEGIN
+		UPDATE Repository SET selected_notebook_id=0 WHERE selected_notebook_id=OLD.id;
+		DELETE FROM Categories WHERE notebook_id=OLD.id;
+	    DELETE FROM Notes WHERE notebook_id=OLD.id;
+        DELETE FROM OpenNotes WHERE notebook_id=OLD.id;
+		DELETE FROM Files WHERE notebook_id=OLD.id;
+    END;
+
+CREATE TABLE Notes (
+    id INTEGER PRIMARY KEY NOT NULL,
+    notebook_id INTEGER NOT NULL,
+    title TEXT,
+    content TEXT,
+	categories_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	viewed_at DATETIME DEFAULT NULL,
+	is_deleted BOOLEAN DEFAULT FALSE,
+	hash VARCHAR(255),
+	remote_hash VARCHAR(255),
+	last_sent_hash VARCHAR(255),
+	last_recv_hash VARCHAR(255)
+);
+
+CREATE TRIGGER OnNoteDeleted AFTER UPDATE OF is_deleted ON Notes WHEN NEW.is_deleted=1
+    BEGIN
+		DELETE FROM FullTextSearch WHERE docid=OLD.id;
+		UPDATE Notebooks SET selected_note_id=0 WHERE selected_note_id=OLD.id;
+		DELETE FROM OpenNotes WHERE note_id=OLD.id;
+		UPDATE Files SET is_deleted=1 WHERE note_id=OLD.id;
+		DELETE FROM NoteCategories WHERE note_id=OLD.id;
+	END;
+
+CREATE TRIGGER OnNotePurged AFTER DELETE ON Notes
+    BEGIN
+		DELETE FROM FullTextSearch WHERE docid=OLD.id;
+		UPDATE Notebooks SET selected_note_id=0 WHERE selected_note_id=OLD.id;
+		DELETE FROM OpenNotes WHERE note_id=OLD.id;
+        DELETE FROM Files WHERE note_id=OLD.id;
+		DELETE FROM NoteCategories WHERE note_id=OLD.id;
+    END;
+
+CREATE TABLE OpenNotes (
+    notebook_id INTEGER NOT NULL,
+    note_id INTEGER NOT NULL,
+	sequence INTEGER DEFAULT 0,
+    PRIMARY KEY(notebook_id, note_id)
+);
+
+CREATE VIRTUAL TABLE FullTextSearch USING fts3(title, text);
+
+CREATE TABLE Files (
+    name VARCHAR(255) NOT NULL,
+    note_id INTEGER,
+	notebook_id INTEGER,
+	type TEXT,
+    data BLOB,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	viewed_at DATETIME DEFAULT NULL,
+	is_deleted BOOLEAN DEFAULT FALSE,
+	PRIMARY KEY(name, note_id)
+);
+
+CREATE TABLE Categories (
+    id INTEGER PRIMARY KEY NOT NULL,
+    notebook_id INTEGER NOT NULL,
+    parent_id INTEGER DEFAULT 0,
+	parent_id_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    name TEXT,
+	name_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE NoteCategories (
+	note_id INTEGER NOT NULL,
+	category_id INTEGER NOT NULL
+);
+
+CREATE TRIGGER OnCategoryDeleted AFTER UPDATE OF is_deleted ON Categories WHEN NEW.is_deleted=1
+    BEGIN
+		DELETE FROM NoteCategories WHERE category_id=OLD.id;
+	END;
+
+CREATE TRIGGER OnCategoryPurged BEFORE DELETE ON Categories
+    BEGIN
+        DELETE FROM Categories WHERE parent_id=OLD.id;
+		DELETE FROM NoteCategories WHERE category_id=OLD.id;
+    END;
+
+CREATE TABLE ClipartGroups (
+	id INTEGER PRIMARY KEY NOT NULL,
+	name TEXT,
+	name_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	viewed_at DATETIME DEFAULT NULL,
+	is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TRIGGER OnClipartGroupDeleted AFTER DELETE ON ClipartGroups
+    BEGIN
+        DELETE FROM Clipart WHERE group_id=OLD.id;
+    END;
+
+CREATE TABLE Clipart (
+	id INTEGER PRIMARY KEY NOT NULL,
+	group_id INTEGER NOT NULL,
+	group_id_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	name TEXT,
+	name_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	data TEXT,
+	data_modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	modified_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	viewed_at DATETIME DEFAULT NULL,
+	is_deleted BOOLEAN DEFAULT FALSE,
+	hash VARCHAR(255),
+	last_sent_hash VARCHAR(255),
+	last_recv_hash VARCHAR(255)
+);

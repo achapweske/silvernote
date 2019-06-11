@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="ogqmvjtreeq">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <polygon stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#ogqmvjtreeq)" points="130,620 190,620 220,660 190,700 130,700 100,660" />
+    <text x="110" y="620" placeholder="Preparation" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:100px;height:80px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="220" y1="660" x2="220" y2="660" />
+    <line class="snap" x1="100" y1="660" x2="100" y2="660" />
+    <line class="snap" x1="160" y1="700" x2="160" y2="700" />
+    <line class="snap" x1="160" y1="620" x2="160" y2="620" />
+  </g>
+</svg>

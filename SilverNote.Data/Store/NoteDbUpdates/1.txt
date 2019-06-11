@@ -1,0 +1,2 @@
+﻿ALTER TABLE OpenNotes ADD sequence INTEGER DEFAULT 0;
+UPDATE Repository SET version=2;

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="locked" fill="none">
+    <g class="thumb" fill="none" style="display:none;">
+      <path stroke-width="2" stroke="rgb(51,51,51)" fill="white" d="M0,20 Q0,0 5,0 L45,0 Q50,0 50,20" />
+      <text fill="black" x="0" y="0" style="width:50px;height:20px;vertical-align:middle;display:block;text-align:center;">
+        <tspan x="18" y="13" class="cursive" font-family="Comic Sans MS, Cursive" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Tab</tspan>
+      </text>
+    </g>
+    <path stroke-width="2" stroke="rgb(51,51,51)" fill="white" layout="var c = Math.min(bounds.width*.25,5);this.setAttribute('d','M'+(bounds.x)+','+(bounds.y+bounds.height)+' Q'+(bounds.x)+','+(bounds.y)+' '+(bounds.x+c)+','+(bounds.y)+' L'+(bounds.x+bounds.width-c)+','+(bounds.y)+' Q'+(bounds.x+bounds.width)+','+(bounds.y)+' '+(bounds.x+bounds.width)+','+(bounds.y+bounds.height))" d="M0,20 Q0,0 5,0 L95,0 Q100,0 100,20" />
+    <text class="autofocus" fill="black" placeholder="Tab" x="4" y="2" style="width:92px;height:16px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="38" y="16" class="cursive" font-family="Comic Sans MS, Cursive" font-size="13.3333333333333" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Tab</tspan>
+    </text>
+    <line class="snap" x1="0" y1="0" x2="0" y2="0" />
+    <line class="snap" x1="100" y1="0" x2="100" y2="0" />
+    <line class="snap" x1="100" y1="20" x2="100" y2="20" />
+    <line class="snap" x1="0" y1="20" x2="0" y2="20" />
+  </g>
+</svg>

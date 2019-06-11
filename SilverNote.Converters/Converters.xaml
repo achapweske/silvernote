@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:SilverNote.Converters">
+    <c:AddConverter x:Key="AddConverter" />
+    <c:BooleanConverter x:Key="BooleanToVisibleConverter">
+        <c:BooleanConverter.TrueValue>
+            <Visibility>Visible</Visibility>
+        </c:BooleanConverter.TrueValue>
+        <c:BooleanConverter.FalseValue>
+            <Visibility>Collapsed</Visibility>
+        </c:BooleanConverter.FalseValue>
+    </c:BooleanConverter>
+    <c:BooleanConverter x:Key="BooleanToHiddenConverter">
+        <c:BooleanConverter.TrueValue>
+            <Visibility>Hidden</Visibility>
+        </c:BooleanConverter.TrueValue>
+        <c:BooleanConverter.FalseValue>
+            <Visibility>Visible</Visibility>
+        </c:BooleanConverter.FalseValue>
+    </c:BooleanConverter>
+    <c:BooleanConverter x:Key="BooleanToCollapsedConverter">
+        <c:BooleanConverter.TrueValue>
+            <Visibility>Collapsed</Visibility>
+        </c:BooleanConverter.TrueValue>
+        <c:BooleanConverter.FalseValue>
+            <Visibility>Visible</Visibility>
+        </c:BooleanConverter.FalseValue>
+    </c:BooleanConverter>
+    <c:CollectionEmptyConverter x:Key="CollectionEmptyToVisibleConverter">
+        <c:CollectionEmptyConverter.TrueValue>
+            <Visibility>Visible</Visibility>
+        </c:CollectionEmptyConverter.TrueValue>
+        <c:CollectionEmptyConverter.FalseValue>
+            <Visibility>Collapsed</Visibility>
+        </c:CollectionEmptyConverter.FalseValue>
+    </c:CollectionEmptyConverter>
+    <c:CollectionEmptyConverter x:Key="CollectionEmptyToCollapsedConverter">
+        <c:CollectionEmptyConverter.TrueValue>
+            <Visibility>Collapsed</Visibility>
+        </c:CollectionEmptyConverter.TrueValue>
+        <c:CollectionEmptyConverter.FalseValue>
+            <Visibility>Visible</Visibility>
+        </c:CollectionEmptyConverter.FalseValue>
+    </c:CollectionEmptyConverter>
+    <c:BooleanAndConverter x:Key="BooleanAndConverter" />
+    <c:BooleanOrConverter x:Key="BooleanOrConverter" />
+    <c:BooleanNotConverter x:Key="BooleanNotConverter" />
+    <c:CollectionEmptyConverter x:Key="CollectionEmptyConverter" />
+    <c:CommaSeparatedValuesConverter x:Key="CommaSeparatedValuesConverter" />
+    <c:SelectConverter x:Key="SelectConverter" />
+    <c:EqualsConverter x:Key="EqualsConverter"/>
+    <c:EqualsParameterConverter x:Key="EqualsParameterConverter" />
+    <c:NotEqualsParameterConverter x:Key="NotEqualsParameterConverter" />
+    <c:MultiplyConverter x:Key="MultiplyConverter" />
+    <c:NotNullConverter x:Key="NotNullConverter" />
+    <c:PercentConverter x:Key="PercentConverter" />
+    <c:SortCollectionConverter x:Key="SortCollectionConverter" />
+    <c:StringFormatConverter x:Key="StringFormatConverter" />
+</ResourceDictionary>

@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+                    xmlns:vm="clr-namespace:SilverNote.ViewModels">
+
+    <!-- MessagesListBoxSelectionBackgroundBrush -->
+    <LinearGradientBrush x:Key="MessagesListBoxSelectionBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#B2B2B2" />
+        <GradientStop Offset="1" Color="#8D8D8D" />
+    </LinearGradientBrush>
+    
+    <!-- MessagesListBoxItemContainerTemplate -->
+    <ControlTemplate x:Key="MessagesListBoxItemContainerTemplate" TargetType="ListBoxItem">
+        <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="1" Padding="{TemplateBinding Padding}" VerticalAlignment="Center">
+            <ContentPresenter />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource MessagesListBoxSelectionBackgroundBrush}" />
+                <Setter Property="Foreground" Value="#FFFFFFFF" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- MessagesListBoxItemContainerStyle -->
+    <Style x:Key="MessagesListBoxItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Padding" Value="5,1.5" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template" Value="{StaticResource MessagesListBoxItemContainerTemplate}"/>
+    </Style>
+
+    <!-- MessagesListBoxItemTemplate -->
+    <DataTemplate x:Key="MessagesListBoxItemTemplate" DataType="{x:Type vm:MessageViewModel}">
+        <TextBlock Text="{Binding Title}" />
+    </DataTemplate>
+
+    <!-- MessagesListBoxStyle -->
+    <Style x:Key="MessagesListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="SelectionMode" Value="Extended" />
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True" />
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding RelativeSource={RelativeSource Self}, Path=SelectedItems}" />
+        <Setter Property="b:DragDropBehavior.DragEffects" Value="Move, Copy" />
+        <Setter Property="b:DragDropBehavior.DragMoveCommand" Value="{Binding DragCommand}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MessagesListBoxItemContainerStyle}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource MessagesListBoxItemTemplate}"/>
+    </Style>
+    
+</ResourceDictionary>

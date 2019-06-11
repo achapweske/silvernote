@@ -1,0 +1,161 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- SearchFilterComboBoxItemContainerTemplate -->
+    <ControlTemplate x:Key="SearchFilterComboBoxItemContainerTemplate" TargetType="{x:Type ComboBoxItem}">
+        <!-- Root -->
+        <Grid SnapsToDevicePixels="True">
+            <!-- Border -->
+            <Border 
+                x:Name="Border" 
+                Background="{TemplateBinding Background}" 
+                BorderBrush="{TemplateBinding BorderBrush}" 
+                BorderThickness="{TemplateBinding BorderThickness}"/>
+            <!-- Content -->
+            <ContentPresenter 
+                Margin="{TemplateBinding Padding}" 
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- SearchFilterComboBoxItemContainerStyle -->
+    <Style x:Key="SearchFilterComboBoxItemContainerStyle" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="6,0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Template" Value="{StaticResource SearchFilterComboBoxItemContainerTemplate}"/>
+    </Style>
+    
+    <!-- SearchFilterComboBoxToggleButton -->
+    <ControlTemplate x:Key="SearchFilterComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+        <!-- Root -->
+        <Grid>
+            <!-- Border -->
+            <Rectangle 
+                x:Name="Border" 
+                RadiusX="3" 
+                RadiusY="3" 
+                StrokeThickness="1"
+                Stroke="Transparent" 
+                Fill="Transparent"/>
+        </Grid>
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Stroke" Value="#DDD"/>
+                <Setter TargetName="Border" Property="Fill">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#FFF" Offset="0.0"/>
+                            <GradientStop Color="#EEE" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Border" Property="Fill">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                            <GradientStop Color="#EEE" Offset="0.0"/>
+                            <GradientStop Color="#FFF" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- SearchFilterComboBoxTemplate -->
+    <ControlTemplate x:Key="SearchFilterComboBoxTemplate" TargetType="{x:Type ComboBox}">
+        <!-- Root -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- ToggleButton -->
+            <ToggleButton 
+                x:Name="ToggleButton" 
+                Grid.ColumnSpan="2"
+                Focusable="False" 
+                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                ClickMode="Press"
+                Template="{DynamicResource SearchFilterComboBoxToggleButton}"/>
+            <!-- Selection Box -->
+            <ContentPresenter 
+                x:Name="ContentSite" 
+                Grid.Column="0"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Center" 
+                Content="{TemplateBinding SelectionBoxItem}" 
+                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                IsHitTestVisible="False" 
+                RenderOptions.ClearTypeHint="Enabled"/>
+            <!-- Drop-down arrow -->
+            <Path 
+                x:Name="Arrow" 
+                Grid.Column="1"
+                Margin="0,0,6,0"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Center" 
+                Fill="Black" 
+                Data="M0,0 L3,3 L6,0 Z"/>
+            <!-- Popup -->
+            <Popup 
+                Focusable="False" 
+                AllowsTransparency="True"  
+                Placement="Bottom" 
+                PopupAnimation="Slide"
+                IsOpen="{TemplateBinding IsDropDownOpen}">
+                <Grid 
+                    x:Name="DropDown" 
+                    MaxHeight="{TemplateBinding MaxDropDownHeight}" 
+                    MinWidth="{TemplateBinding ActualWidth}">
+                    <!-- Border -->
+                    <Border 
+                        x:Name="DropDownBorder" 
+                        Margin="3,0,3,3"
+                        BorderThickness="1" 
+                        BorderBrush="#888" 
+                        Background="White"
+                        SnapsToDevicePixels="True">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="1" Color="DarkGray" BlurRadius="3"/>
+                        </Border.Effect>
+                    </Border>
+                    <!-- ScrollViewer -->
+                    <ScrollViewer Margin="6,3,6,6">
+                        <!-- Items Host -->
+                        <StackPanel 
+                            IsItemsHost="True"
+                            Background="White"
+                            RenderOptions.ClearTypeHint="Enabled" 
+                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                    </ScrollViewer>
+                </Grid>
+            </Popup>
+        </Grid>
+    </ControlTemplate>
+
+    <!-- SearchFilterComboBoxStyle -->
+    <Style x:Key="SearchFilterComboBoxStyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="Margin" Value="4,0"/>
+        <Setter Property="Padding" Value="4,2"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="TextBlock.FontWeight" Value="Normal"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource SearchFilterComboBoxItemContainerStyle}"/>
+        <Setter Property="Template" Value="{StaticResource SearchFilterComboBoxTemplate}"/>
+    </Style>
+</ResourceDictionary>

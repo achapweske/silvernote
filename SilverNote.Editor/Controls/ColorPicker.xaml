@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="SilverNote.Controls.ColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:SilverNote.Converters;assembly=SilverNote.Converters"
+             xmlns:local="clr-namespace:SilverNote"
+             x:Name="TheColorPicker"
+             mc:Ignorable="d"
+             d:DesignWidth="120"
+             Width="120"
+             Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/PickerListBoxStyle.xaml" />
+                <ResourceDictionary>
+                    <!-- Colors -->
+                    <x:Array x:Key="Colors" Type="Color">
+                        <!-- Dark -->
+                        <Color>Black</Color>
+                        <Color>Brown</Color>
+                        <Color>Orange</Color>
+                        <Color>DarkGreen</Color>
+                        <Color>DarkBlue</Color>
+                        <Color>Indigo</Color>
+                        <!-- Normal -->
+                        <Color>LightGray</Color>
+                        <Color>Maroon</Color>
+                        <Color>#D2B48C</Color>
+                        <Color>Green</Color>
+                        <Color>Blue</Color>
+                        <Color>Purple</Color>
+                        <!-- Light -->
+                        <Color>#eeeeee</Color>
+                        <Color>Red</Color>
+                        <Color>Yellow</Color>
+                        <Color>#7FFF00</Color>
+                        <Color>Aqua</Color>
+                        <Color>Violet</Color>
+                        <!-- Ultra light -->
+                        <Color>White</Color>
+                        <Color>#FFE0E0</Color>
+                        <Color>#FFFFAF</Color>
+                        <Color>#BFFFBF</Color>
+                        <Color>#BFEFFF</Color>
+                        <Color>#FFE0FF</Color>
+                    </x:Array>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!-- Root-->
+    <StackPanel 
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <!-- "None" button -->
+        <Button 
+            x:Name="NoneButton" 
+            Height="20"
+            Margin="0,0,0,4"
+            Content="None"
+            Visibility="{Binding AllowsNone, Converter={StaticResource BooleanToVisibleConverter}}"
+            Click="NoneButton_Click">
+        </Button>
+        <!-- Colors ListBox -->
+        <ListBox 
+            x:Name="ColorsListBox"
+            Background="White" 
+            Margin="0"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ItemsSource="{StaticResource Colors}" 
+            SelectedItem="{Binding SelectedColor}"
+            Style="{StaticResource PickerListBoxStyle}">
+            <!-- ItemsPanel -->
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel 
+                        Orientation="Horizontal" 
+                        ItemHeight="{Binding RelativeSource={RelativeSource Self}, Path=ItemWidth}">
+                        <!-- ItemWidth = (ListBox.ActualWidth - 2) / 6 -->
+                        <WrapPanel.ItemWidth>
+                            <Binding RelativeSource="{RelativeSource AncestorType=ListBox}" Path="ActualWidth" ConverterParameter="-2|1/6">
+                                <Binding.Converter>
+                                    <c:ValueConverterGroup>
+                                        <c:AddConverter />
+                                        <c:MultiplyConverter />
+                                    </c:ValueConverterGroup>
+                                </Binding.Converter>
+                            </Binding>
+                        </WrapPanel.ItemWidth>
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <!-- ItemTemplate -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle MouseLeftButtonDown="Color_MouseLeftButtonDown">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="{Binding}"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!-- "Gradient" CheckBox -->
+        <CheckBox
+            x:Name="GradientCheckBox"
+            Margin="0,4,0,0"
+            Content="Gradient"
+            Visibility="{Binding AllowsGradient, Converter={StaticResource BooleanToVisibleConverter}}"
+            IsChecked="{Binding IsGradientEnabled}"
+            Click="GradientCheckBox_Click"/>
+    </StackPanel>
+</UserControl>

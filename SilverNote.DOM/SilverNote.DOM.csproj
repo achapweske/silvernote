@@ -1,0 +1,641 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F49DE49B-5F66-426C-A559-144A49B6DE82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SilverNote.DOM</RootNamespace>
+    <AssemblyName>SilverNote.DOM</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.11.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.7\lib\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Jurassic, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jurassic.2.2.1\lib\net35\Jurassic.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Attr.cs" />
+    <Compile Include="Core\Attributes.cs" />
+    <Compile Include="Core\CDATASection.cs" />
+    <Compile Include="Core\CharacterData.cs" />
+    <Compile Include="Core\Comment.cs" />
+    <Compile Include="Core\Document.cs" />
+    <Compile Include="Core\DocumentExtensions.cs" />
+    <Compile Include="Core\DocumentFragment.cs" />
+    <Compile Include="Core\DocumentType.cs" />
+    <Compile Include="Core\DOMConfiguration.cs" />
+    <Compile Include="Core\DOMDerivationType.cs" />
+    <Compile Include="Core\DOMDocumentPosition.cs" />
+    <Compile Include="Core\DOMError.cs" />
+    <Compile Include="Core\DOMErrorHandler.cs" />
+    <Compile Include="Core\DOMErrorSeverityType.cs" />
+    <Compile Include="Core\DOMException.cs" />
+    <Compile Include="Core\DOMImplementation.cs" />
+    <Compile Include="Core\DOMImplementationList.cs" />
+    <Compile Include="Core\DOMImplementationSource.cs" />
+    <Compile Include="Core\DOMLocator.cs" />
+    <Compile Include="Core\DOMOperationType.cs" />
+    <Compile Include="Core\DOMParameters.cs" />
+    <Compile Include="Core\DOMStringList.cs" />
+    <Compile Include="Core\DOMUserDataHandler.cs" />
+    <Compile Include="Core\Element.cs" />
+    <Compile Include="Core\ElementContext.cs" />
+    <Compile Include="Core\ElementExtensions.cs" />
+    <Compile Include="Core\Entity.cs" />
+    <Compile Include="Core\EntityReference.cs" />
+    <Compile Include="Core\EventSource.cs" />
+    <Compile Include="Core\Implementation\AttrBase.cs" />
+    <Compile Include="Core\Implementation\AttrMap.cs" />
+    <Compile Include="Core\Implementation\AttrProxy.cs" />
+    <Compile Include="Core\Implementation\AttrProxyMap.cs" />
+    <Compile Include="Core\Implementation\CDATASectionBase.cs" />
+    <Compile Include="Core\Implementation\CharacterDataBase.cs" />
+    <Compile Include="Core\Implementation\CommentBase.cs" />
+    <Compile Include="Core\Implementation\DocumentBase.cs" />
+    <Compile Include="Core\Implementation\DocumentConfig.cs" />
+    <Compile Include="Core\Implementation\DocumentFragmentBase.cs" />
+    <Compile Include="Core\Implementation\DocumentTypeBase.cs" />
+    <Compile Include="Core\Implementation\DOMConfigurationBase.cs" />
+    <Compile Include="Core\Implementation\DOMConfigurationParameters.cs" />
+    <Compile Include="Core\Implementation\DOMErrorBase.cs" />
+    <Compile Include="Core\Implementation\DOMImplementationBase.cs" />
+    <Compile Include="Core\Implementation\DOMImplementationListBase.cs" />
+    <Compile Include="Core\Implementation\DOMList.cs" />
+    <Compile Include="Core\Implementation\DynamicNodeList.cs" />
+    <Compile Include="Core\Implementation\ElementBase.cs" />
+    <Compile Include="Core\Implementation\ElementExtensions.cs" />
+    <Compile Include="Core\Implementation\MutableNodeList.cs" />
+    <Compile Include="Core\Implementation\NamedNodeMapBase.cs" />
+    <Compile Include="Core\Implementation\NameListBase.cs" />
+    <Compile Include="Core\Implementation\NodeBase.cs" />
+    <Compile Include="Core\Implementation\NodeExtensions.cs" />
+    <Compile Include="Core\Implementation\NodeListBase.cs" />
+    <Compile Include="Core\Implementation\NodeProxy.cs" />
+    <Compile Include="Core\Implementation\ProcessingInstructionBase.cs" />
+    <Compile Include="Core\Implementation\SGMLFormatter.cs" />
+    <Compile Include="Core\Implementation\TextBase.cs" />
+    <Compile Include="Core\NamedNodeMap.cs" />
+    <Compile Include="Core\NameList.cs" />
+    <Compile Include="Core\Node.cs" />
+    <Compile Include="Core\NodeContext.cs" />
+    <Compile Include="Core\NodeList.cs" />
+    <Compile Include="Core\NodeSource.cs" />
+    <Compile Include="Core\NodeType.cs" />
+    <Compile Include="Core\Notation.cs" />
+    <Compile Include="Core\ProcessingInstruction.cs" />
+    <Compile Include="Core\ScriptTarget.cs" />
+    <Compile Include="Core\Text.cs" />
+    <Compile Include="Core\TypeInfo.cs" />
+    <Compile Include="CSS\AbstractViewExtensions.cs" />
+    <Compile Include="CSS\CSS2Properties.cs" />
+    <Compile Include="CSS\CSS3Properties.cs" />
+    <Compile Include="CSS\CSS3StyleDeclaration.cs" />
+    <Compile Include="CSS\CSSCharsetRule.cs" />
+    <Compile Include="CSS\CSSConverter.cs" />
+    <Compile Include="CSS\CSSCounter.cs" />
+    <Compile Include="CSS\CSSFontFaceRule.cs" />
+    <Compile Include="CSS\CSSFormatter.cs" />
+    <Compile Include="CSS\CSSImportRule.cs" />
+    <Compile Include="CSS\CSSMediaRule.cs" />
+    <Compile Include="CSS\CSSOrigin.cs" />
+    <Compile Include="CSS\CSSPageRule.cs" />
+    <Compile Include="CSS\CSSParser.cs" />
+    <Compile Include="CSS\CSSPrimitiveType.cs" />
+    <Compile Include="CSS\CSSPrimitiveValue.cs" />
+    <Compile Include="CSS\CSSPrimitiveValueExtensions.cs" />
+    <Compile Include="CSS\CSSProperties.cs" />
+    <Compile Include="CSS\CSSRect.cs" />
+    <Compile Include="CSS\CSSRule.cs" />
+    <Compile Include="CSS\CSSRuleList.cs" />
+    <Compile Include="CSS\CSSRuleType.cs" />
+    <Compile Include="CSS\CSSStyleDeclaration.cs" />
+    <Compile Include="CSS\CSSStyleDeclarationExtensions.cs" />
+    <Compile Include="CSS\CSSStyleRule.cs" />
+    <Compile Include="CSS\CSSStyleSheet.cs" />
+    <Compile Include="CSS\CSSUnknownRule.cs" />
+    <Compile Include="CSS\CSSValue.cs" />
+    <Compile Include="CSS\CSSValueList.cs" />
+    <Compile Include="CSS\CSSValues.cs" />
+    <Compile Include="CSS\CSSValueType.cs" />
+    <Compile Include="CSS\DocumentCSS.cs" />
+    <Compile Include="CSS\DocumentExtensions.cs" />
+    <Compile Include="CSS\DOMImplementationCSS.cs" />
+    <Compile Include="CSS\ElementCSSInlineStyle.cs" />
+    <Compile Include="CSS\ElementExtensions.cs" />
+    <Compile Include="CSS\ICSSRenderer.cs" />
+    <Compile Include="CSS\Implementation\CSSCharsetRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSCombinator.cs" />
+    <Compile Include="CSS\Implementation\CSSComputedStyle.cs" />
+    <Compile Include="CSS\Implementation\CSSElement.cs" />
+    <Compile Include="CSS\Implementation\CSSFontFaceRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSImportRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSMediaRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSPageRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSPrimitiveValueBase.cs" />
+    <Compile Include="CSS\Implementation\CSSRectBase.cs" />
+    <Compile Include="CSS\Implementation\CSSRenderedStyle.cs" />
+    <Compile Include="CSS\Implementation\CSSRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSRuleListBase.cs" />
+    <Compile Include="CSS\Implementation\CSSSelector.cs" />
+    <Compile Include="CSS\Implementation\CSSSelectorGroup.cs" />
+    <Compile Include="CSS\Implementation\CSSSimpleSelector.cs" />
+    <Compile Include="CSS\Implementation\CSSSimpleSelectorSequence.cs" />
+    <Compile Include="CSS\Implementation\CSSSortedRuleSet.cs" />
+    <Compile Include="CSS\Implementation\CSSSpecifiedStyle.cs" />
+    <Compile Include="CSS\Implementation\CSSStyleDeclarationBase.cs" />
+    <Compile Include="CSS\Implementation\CSSStyleRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSStyleSheetImpl.cs" />
+    <Compile Include="CSS\Implementation\CSSUnknownRuleBase.cs" />
+    <Compile Include="CSS\Implementation\CSSValueBase.cs" />
+    <Compile Include="CSS\Implementation\CSSValueListBase.cs" />
+    <Compile Include="CSS\Implementation\MutableCSSRuleList.cs" />
+    <Compile Include="CSS\Implementation\RGBColorBase.cs" />
+    <Compile Include="CSS\Implementation\ViewCSSBase.cs" />
+    <Compile Include="CSS\IStyleable.cs" />
+    <Compile Include="CSS\RGBColor.cs" />
+    <Compile Include="CSS\RGBColors.cs" />
+    <Compile Include="CSS\ViewCSS.cs" />
+    <Compile Include="DOMFactory.cs" />
+    <Compile Include="DOMFeatures.cs" />
+    <Compile Include="Events\AttrChangeType.cs" />
+    <Compile Include="Events\DocumentEvent.cs" />
+    <Compile Include="Events\DocumentExtensions.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventListener.cs" />
+    <Compile Include="Events\EventPhaseType.cs" />
+    <Compile Include="Events\EventSource.cs" />
+    <Compile Include="Events\EventTarget.cs" />
+    <Compile Include="Events\EventTypes.cs" />
+    <Compile Include="Events\HTMLEventTypes.cs" />
+    <Compile Include="Events\Implementation\EventBase.cs" />
+    <Compile Include="Events\Implementation\MouseEventImpl.cs" />
+    <Compile Include="Events\Implementation\MutationEventImpl.cs" />
+    <Compile Include="Events\Implementation\UIEventImpl.cs" />
+    <Compile Include="Events\MouseButtons.cs" />
+    <Compile Include="Events\MouseEvent.cs" />
+    <Compile Include="Events\MouseEventExtensions.cs" />
+    <Compile Include="Events\MouseEventSource.cs" />
+    <Compile Include="Events\MouseEventTypes.cs" />
+    <Compile Include="Events\MutationEvent.cs" />
+    <Compile Include="Events\MutationEventTypes.cs" />
+    <Compile Include="Events\NodeExtensions.cs" />
+    <Compile Include="Events\UIEvent.cs" />
+    <Compile Include="Events\UIEventSource.cs" />
+    <Compile Include="Events\UIEventTypes.cs" />
+    <Compile Include="Helpers\DOMHelper.cs" />
+    <Compile Include="Helpers\EventDelegates.cs" />
+    <Compile Include="Helpers\EventHandlers.cs" />
+    <Compile Include="Helpers\Query.cs" />
+    <Compile Include="Helpers\WindowExtensions.cs" />
+    <Compile Include="HTML\HTMLAnchorElement.cs" />
+    <Compile Include="HTML\HTMLAppletElement.cs" />
+    <Compile Include="HTML\HTMLAreaElement.cs" />
+    <Compile Include="HTML\HTMLAttributes.cs" />
+    <Compile Include="HTML\HTMLBaseElement.cs" />
+    <Compile Include="HTML\HTMLBaseFontElement.cs" />
+    <Compile Include="HTML\HTMLBodyElement.cs" />
+    <Compile Include="HTML\HTMLBRElement.cs" />
+    <Compile Include="HTML\HTMLButtonElement.cs" />
+    <Compile Include="HTML\HTMLColElement.cs" />
+    <Compile Include="HTML\HTMLCollection.cs" />
+    <Compile Include="HTML\HTMLDirectoryElement.cs" />
+    <Compile Include="HTML\HTMLDivElement.cs" />
+    <Compile Include="HTML\HTMLDListElement.cs" />
+    <Compile Include="HTML\HTMLDocument.cs" />
+    <Compile Include="HTML\HTMLDocumentExtensions.cs" />
+    <Compile Include="HTML\HTMLElement.cs" />
+    <Compile Include="HTML\HTMLElements.cs" />
+    <Compile Include="HTML\HTMLFieldSetElement.cs" />
+    <Compile Include="HTML\HTMLFontElement.cs" />
+    <Compile Include="HTML\HTMLFormatter.cs" />
+    <Compile Include="HTML\HTMLFormElement.cs" />
+    <Compile Include="HTML\HTMLFrameElement.cs" />
+    <Compile Include="HTML\HTMLFrameSetElement.cs" />
+    <Compile Include="HTML\HTMLHeadElement.cs" />
+    <Compile Include="HTML\HTMLHeadingElement.cs" />
+    <Compile Include="HTML\HTMLHRElement.cs" />
+    <Compile Include="HTML\HTMLHtmlElement.cs" />
+    <Compile Include="HTML\HTMLIFrameElement.cs" />
+    <Compile Include="HTML\HTMLImageElement.cs" />
+    <Compile Include="HTML\HTMLInputElement.cs" />
+    <Compile Include="HTML\HTMLIsIndexElement.cs" />
+    <Compile Include="HTML\HTMLLabelElement.cs" />
+    <Compile Include="HTML\HTMLLegendElement.cs" />
+    <Compile Include="HTML\HTMLLIElement.cs" />
+    <Compile Include="HTML\HTMLLinkElement.cs" />
+    <Compile Include="HTML\HTMLMapElement.cs" />
+    <Compile Include="HTML\HTMLMenuElement.cs" />
+    <Compile Include="HTML\HTMLMetaElement.cs" />
+    <Compile Include="HTML\HTMLModElement.cs" />
+    <Compile Include="HTML\HTMLObjectElement.cs" />
+    <Compile Include="HTML\HTMLOListElement.cs" />
+    <Compile Include="HTML\HTMLOptGroupElement.cs" />
+    <Compile Include="HTML\HTMLOptionElement.cs" />
+    <Compile Include="HTML\HTMLOptionsCollection.cs" />
+    <Compile Include="HTML\HTMLParagraphElement.cs" />
+    <Compile Include="HTML\HTMLParamElement.cs" />
+    <Compile Include="HTML\HTMLPreElement.cs" />
+    <Compile Include="HTML\HTMLQuoteElement.cs" />
+    <Compile Include="HTML\HTMLScriptElement.cs" />
+    <Compile Include="HTML\HTMLSelectElement.cs" />
+    <Compile Include="HTML\HTMLStyleElement.cs" />
+    <Compile Include="HTML\HTMLTableCaptionElement.cs" />
+    <Compile Include="HTML\HTMLTableCellElement.cs" />
+    <Compile Include="HTML\HTMLTableElement.cs" />
+    <Compile Include="HTML\HTMLTableRowElement.cs" />
+    <Compile Include="HTML\HTMLTableSectionElement.cs" />
+    <Compile Include="HTML\HTMLTextAreaElement.cs" />
+    <Compile Include="HTML\HTMLTitleElement.cs" />
+    <Compile Include="HTML\HTMLUListElement.cs" />
+    <Compile Include="HTML\Implementation\HTMLAnchorElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLAppletElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLAreaElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLBaseElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLBaseFontElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLBodyElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLBRElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLButtonElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLColElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLCollectionBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLDirectoryElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLDivElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLDListElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLDocumentImpl.cs" />
+    <Compile Include="HTML\Implementation\HTMLElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLFieldSetElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLFontElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLFormElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLFrameElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLFrameSetElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLHeadElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLHeadingElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLHRElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLHtmlElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLIFrameElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLImageElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLInputElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLIsIndexElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLLabelElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLLegendElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLLIElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLLinkElementImpl.cs" />
+    <Compile Include="HTML\Implementation\HTMLMapElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLMenuElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLMetaElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLModElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLObjectElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLOListElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLOptGroupElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLOptionElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLParagraphElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLParamElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLPreElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLQuoteElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLScriptElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLSelectElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLStyleElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTableCaptionElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTableCellElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTableElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTableRowElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTableSectionElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTextAreaElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLTitleElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLUListElementBase.cs" />
+    <Compile Include="HTML\Implementation\HTMLViewBase.cs" />
+    <Compile Include="HTML\Implementation\MutableHTMLCollection.cs" />
+    <Compile Include="Objects\Math.cs" />
+    <Compile Include="Javascript\Core\Document.cs" />
+    <Compile Include="Javascript\Core\Element.cs" />
+    <Compile Include="Javascript\Core\Node.cs" />
+    <Compile Include="Javascript\CSS\CSS3StyleDeclaration.cs" />
+    <Compile Include="Javascript\CSS\CSSStyleDeclaration.cs" />
+    <Compile Include="Javascript\JSFactory.cs" />
+    <Compile Include="Javascript\Math.cs" />
+    <Compile Include="Javascript\Object.cs" />
+    <Compile Include="Javascript\SVG\SVGAnimatedLength.cs" />
+    <Compile Include="Javascript\SVG\SVGElement.cs" />
+    <Compile Include="Javascript\SVG\SVGLength.cs" />
+    <Compile Include="Javascript\SVG\SVGLineElement.cs" />
+    <Compile Include="Javascript\Windows\Window.cs" />
+    <Compile Include="LoadAndSave\ActionTypes.cs" />
+    <Compile Include="LoadAndSave\DocumentLS.cs" />
+    <Compile Include="LoadAndSave\DOMImplementationLS.cs" />
+    <Compile Include="LoadAndSave\DOMImplementationLSMode.cs" />
+    <Compile Include="LoadAndSave\ElementLS.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSInputImpl.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSOutputImpl.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSParserConfig.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSParserImpl.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSSerializerConfig.cs" />
+    <Compile Include="LoadAndSave\Implementation\LSSerializerImpl.cs" />
+    <Compile Include="LoadAndSave\LSInput.cs" />
+    <Compile Include="LoadAndSave\LSOutput.cs" />
+    <Compile Include="LoadAndSave\LSParser.cs" />
+    <Compile Include="LoadAndSave\LSParserExtensions.cs" />
+    <Compile Include="LoadAndSave\LSParserFilter.cs" />
+    <Compile Include="LoadAndSave\LSParserParameters.cs" />
+    <Compile Include="LoadAndSave\LSResourceResolver.cs" />
+    <Compile Include="LoadAndSave\LSSerializer.cs" />
+    <Compile Include="LoadAndSave\LSSerializerFilter.cs" />
+    <Compile Include="LoadAndSave\LSSerializerParameters.cs" />
+    <Compile Include="NodeExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selectors\Implementation\DOMSelectors.cs" />
+    <Compile Include="Selectors\Selectors.cs" />
+    <Compile Include="Style\DocumentStyle.cs" />
+    <Compile Include="Style\Implementation\MediaListBase.cs" />
+    <Compile Include="Style\Implementation\MutableStyleSheetList.cs" />
+    <Compile Include="Style\Implementation\StyleSheetBase.cs" />
+    <Compile Include="Style\Implementation\StyleSheetListBase.cs" />
+    <Compile Include="Style\LinkStyle.cs" />
+    <Compile Include="Style\MediaList.cs" />
+    <Compile Include="Style\StyleSheet.cs" />
+    <Compile Include="Style\StyleSheetList.cs" />
+    <Compile Include="SVG\ElementTimeControl.cs" />
+    <Compile Include="SVG\GetSVGDocument.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGAngle.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGLength.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGMatrix.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGNumber.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGPoint.cs" />
+    <Compile Include="SVG\Implementation\ConstSVGRect.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGAngle.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGLength.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGMatrix.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGNumber.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGPoint.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGRect.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGTransform.cs" />
+    <Compile Include="SVG\Implementation\MutableSVGTransformList.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedBooleanImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedEnumerationImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedLengthImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedLengthListImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedNumberImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedStringImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGAnimatedTransformListImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGColorImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGDefsElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGDocumentImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGElementBase.cs" />
+    <Compile Include="SVG\Implementation\SVGElementInstanceImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGFilterElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGGradientElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGLengthAttr.cs" />
+    <Compile Include="SVG\Implementation\SVGLinearGradientElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGLineElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGPaintImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGScriptElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGStopElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGStyleElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGSVGElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGTextContentElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGTextElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGTextPositioningElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGTitleElementImpl.cs" />
+    <Compile Include="SVG\Implementation\SVGTSpanElement.cs" />
+    <Compile Include="SVG\Implementation\SVGUseElementImpl.cs" />
+    <Compile Include="SVG\SVGAlignmentType.cs" />
+    <Compile Include="SVG\SVGAltGlyphDefElement.cs" />
+    <Compile Include="SVG\SVGAltGlyphElement.cs" />
+    <Compile Include="SVG\SVGAltGlyphItemElement.cs" />
+    <Compile Include="SVG\SVGAngle.cs" />
+    <Compile Include="SVG\SVGAngleType.cs" />
+    <Compile Include="SVG\SVGAnimateColorElement.cs" />
+    <Compile Include="SVG\SVGAnimatedAngle.cs" />
+    <Compile Include="SVG\SVGAnimatedBoolean.cs" />
+    <Compile Include="SVG\SVGAnimatedEnumeration.cs" />
+    <Compile Include="SVG\SVGAnimatedInteger.cs" />
+    <Compile Include="SVG\SVGAnimatedLength.cs" />
+    <Compile Include="SVG\SVGAnimatedLengthList.cs" />
+    <Compile Include="SVG\SVGAnimatedNumber.cs" />
+    <Compile Include="SVG\SVGAnimatedNumberList.cs" />
+    <Compile Include="SVG\SVGAnimatedPathData.cs" />
+    <Compile Include="SVG\SVGAnimatedPoints.cs" />
+    <Compile Include="SVG\SVGAnimatedPreserveAspectRatio.cs" />
+    <Compile Include="SVG\SVGAnimatedRect.cs" />
+    <Compile Include="SVG\SVGAnimatedString.cs" />
+    <Compile Include="SVG\SVGAnimatedTransformList.cs" />
+    <Compile Include="SVG\SVGAnimateElement.cs" />
+    <Compile Include="SVG\SVGAnimateMotionElement.cs" />
+    <Compile Include="SVG\SVGAnimateTransformElement.cs" />
+    <Compile Include="SVG\SVGAnimationElement.cs" />
+    <Compile Include="SVG\SVGAttributes.cs" />
+    <Compile Include="SVG\SVGCircleElement.cs" />
+    <Compile Include="SVG\SVGClipPathElement.cs" />
+    <Compile Include="SVG\SVGColor.cs" />
+    <Compile Include="SVG\SVGColorProfileElement.cs" />
+    <Compile Include="SVG\SVGColorProfileRule.cs" />
+    <Compile Include="SVG\SVGColorType.cs" />
+    <Compile Include="SVG\SVGConverter.cs" />
+    <Compile Include="SVG\SVGCSSRule.cs" />
+    <Compile Include="SVG\SVGDefsElement.cs" />
+    <Compile Include="SVG\SVGDescElement.cs" />
+    <Compile Include="SVG\SVGDocument.cs" />
+    <Compile Include="SVG\SVGElement.cs" />
+    <Compile Include="SVG\SVGElementInstance.cs" />
+    <Compile Include="SVG\SVGElementInstanceList.cs" />
+    <Compile Include="SVG\SVGElements.cs" />
+    <Compile Include="SVG\SVGEllipseElement.cs" />
+    <Compile Include="SVG\SVGException.cs" />
+    <Compile Include="SVG\SVGExternalResourcesRequired.cs" />
+    <Compile Include="SVG\SVGFEGaussianBlurElement.cs" />
+    <Compile Include="SVG\SVGFEMergeElement.cs" />
+    <Compile Include="SVG\SVGFEMergeNodeElement.cs" />
+    <Compile Include="SVG\SVGFEOffsetElement.cs" />
+    <Compile Include="SVG\SVGFilterElement.cs" />
+    <Compile Include="SVG\SVGFilterPrimitiveStandardAttributes.cs" />
+    <Compile Include="SVG\SVGFitToViewBox.cs" />
+    <Compile Include="SVG\SVGFormatter.cs" />
+    <Compile Include="SVG\SVGGElement.cs" />
+    <Compile Include="SVG\SVGGlyphRefElement.cs" />
+    <Compile Include="SVG\SVGGradientElement .cs" />
+    <Compile Include="SVG\SVGHelper.cs" />
+    <Compile Include="SVG\SVGICCColor.cs" />
+    <Compile Include="SVG\SVGImageElement.cs" />
+    <Compile Include="SVG\SVGLangSpace.cs" />
+    <Compile Include="SVG\SVGLength.cs" />
+    <Compile Include="SVG\SVGLengthAdjustType.cs" />
+    <Compile Include="SVG\SVGLengthList.cs" />
+    <Compile Include="SVG\SVGLengthType.cs" />
+    <Compile Include="SVG\SVGLinearGradientElement.cs" />
+    <Compile Include="SVG\SVGLineElement.cs" />
+    <Compile Include="SVG\SVGLocatable.cs" />
+    <Compile Include="SVG\SVGMarkerElement.cs" />
+    <Compile Include="SVG\SVGMarkerOrientationType.cs" />
+    <Compile Include="SVG\SVGMarkerUnitType.cs" />
+    <Compile Include="SVG\SVGMaskElement.cs" />
+    <Compile Include="SVG\SVGMatrix.cs" />
+    <Compile Include="SVG\SVGMeetOrSliceType.cs" />
+    <Compile Include="SVG\SVGMethodType.cs" />
+    <Compile Include="SVG\SVGMPathElement.cs" />
+    <Compile Include="SVG\SVGNumber.cs" />
+    <Compile Include="SVG\SVGNumberList.cs" />
+    <Compile Include="SVG\SVGPaint.cs" />
+    <Compile Include="SVG\SVGPaintType.cs" />
+    <Compile Include="SVG\SVGParser.cs" />
+    <Compile Include="SVG\SVGPathElement.cs" />
+    <Compile Include="SVG\SVGPathSeg.cs" />
+    <Compile Include="SVG\SVGPathSegArcAbs.cs" />
+    <Compile Include="SVG\SVGPathSegArcRel.cs" />
+    <Compile Include="SVG\SVGPathSegClosePath.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoCubicAbs.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoCubicRel.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoCubicSmoothAbs.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoCubicSmoothRel.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoQuadraticAbs.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoQuadraticRel.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoQuadraticSmoothAbs.cs" />
+    <Compile Include="SVG\SVGPathSegCurvetoQuadraticSmoothRel.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoAbs.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoHorizontalAbs.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoHorizontalRel.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoRel.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoVerticalAbs.cs" />
+    <Compile Include="SVG\SVGPathSegLinetoVerticalRel.cs" />
+    <Compile Include="SVG\SVGPathSegList.cs" />
+    <Compile Include="SVG\SVGPathSegMovetoAbs.cs" />
+    <Compile Include="SVG\SVGPathSegMovetoRel.cs" />
+    <Compile Include="SVG\SVGPathSegType.cs" />
+    <Compile Include="SVG\SVGPatternElement.cs" />
+    <Compile Include="SVG\SVGPoint.cs" />
+    <Compile Include="SVG\SVGPointList.cs" />
+    <Compile Include="SVG\SVGPolygonElement.cs" />
+    <Compile Include="SVG\SVGPolylineElement.cs" />
+    <Compile Include="SVG\SVGPreserveAspectRatio.cs" />
+    <Compile Include="SVG\SVGRadialGradientElement .cs" />
+    <Compile Include="SVG\SVGRect.cs" />
+    <Compile Include="SVG\SVGRectElement.cs" />
+    <Compile Include="SVG\SVGRenderingIntent.cs" />
+    <Compile Include="SVG\SVGScriptElement.cs" />
+    <Compile Include="SVG\SVGSpacingType.cs" />
+    <Compile Include="SVG\SVGSpreadMethodTypes.cs" />
+    <Compile Include="SVG\SVGStopElement.cs" />
+    <Compile Include="SVG\SVGStopElementExtensions.cs" />
+    <Compile Include="SVG\SVGStringList.cs" />
+    <Compile Include="SVG\SVGStylable.cs" />
+    <Compile Include="SVG\SVGStyleElement.cs" />
+    <Compile Include="SVG\SVGSVGElement.cs" />
+    <Compile Include="SVG\SVGSwitchElement.cs" />
+    <Compile Include="SVG\SVGSymbolElement.cs" />
+    <Compile Include="SVG\SVGTests.cs" />
+    <Compile Include="SVG\SVGTextContentElement .cs" />
+    <Compile Include="SVG\SVGTextElement.cs" />
+    <Compile Include="SVG\SVGTextPathElement.cs" />
+    <Compile Include="SVG\SVGTextPositioningElement.cs" />
+    <Compile Include="SVG\SVGTitleElement.cs" />
+    <Compile Include="SVG\SVGTransform.cs" />
+    <Compile Include="SVG\SVGTransformable.cs" />
+    <Compile Include="SVG\SVGTransformList.cs" />
+    <Compile Include="SVG\SVGTransformType.cs" />
+    <Compile Include="SVG\SVGTRefElement.cs" />
+    <Compile Include="SVG\SVGTSpanElement.cs" />
+    <Compile Include="SVG\SVGUnitTypes.cs" />
+    <Compile Include="SVG\SVGURIReference.cs" />
+    <Compile Include="SVG\SVGUseElement.cs" />
+    <Compile Include="SVG\SVGViewSpec.cs" />
+    <Compile Include="SVG\SVGZoomAndPan.cs" />
+    <Compile Include="SVG\SVGZoomEvent.cs" />
+    <Compile Include="SVG\TimeEvent.cs" />
+    <Compile Include="SVG\WindowExtensions.cs" />
+    <Compile Include="Traversal\FilterResultType.cs" />
+    <Compile Include="Traversal\FilterType.cs" />
+    <Compile Include="Traversal\NodeFilter.cs" />
+    <Compile Include="UASettings.cs" />
+    <Compile Include="Views\AbstractView.cs" />
+    <Compile Include="Views\DocumentExtensions.cs" />
+    <Compile Include="Views\DocumentView.cs" />
+    <Compile Include="Views\Implementation\AbstractViewBase.cs" />
+    <Compile Include="Windows\Implementation\WindowBase.cs" />
+    <Compile Include="Windows\Implementation\WPF\WindowBase.cs" />
+    <Compile Include="Windows\Location.cs" />
+    <Compile Include="Windows\TimerListener.cs" />
+    <Compile Include="Windows\Window.cs" />
+    <Compile Include="XMLHttpRequest\ReadyStates.cs" />
+    <Compile Include="XMLHttpRequest\XMLHttpRequest.cs" />
+    <Compile Include="XMLHttpRequest\XMLHttpRequestEventTarget.cs" />
+    <Compile Include="XMLHttpRequest\XMLHttpRequestOptions.cs" />
+    <Compile Include="XMLHttpRequest\XMLHttpRequestResponseType.cs" />
+    <Compile Include="XMLHttpRequest\XMLHttpRequestUpload.cs" />
+    <Compile Include="XPath\Implementation\XPathDOMNavigator.cs" />
+    <Compile Include="XPath\NodeExtensions.cs" />
+    <Compile Include="XPath\XPathEvaluator.cs" />
+    <Compile Include="XPath\XPathException.cs" />
+    <Compile Include="XPath\XPathExpression.cs" />
+    <Compile Include="XPath\XPathNSResolver.cs" />
+    <Compile Include="XPath\XPathResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="XMLHttpRequest\Implementation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SilverNote.Common\SilverNote.Common.csproj">
+      <Project>{242b9764-d047-4d82-ab97-1c3097ace146}</Project>
+      <Name>SilverNote.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

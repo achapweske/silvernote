@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- ContainerMenuItemTemplate -->
+    <ControlTemplate x:Key="ContainerMenuItemTemplate" TargetType="{x:Type MenuItem}">
+        <ContentPresenter ContentSource="Header"/>
+    </ControlTemplate>
+
+    <!-- ContainerMenuItemStyle -->
+    <Style x:Key="ContainerMenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Template" Value="{StaticResource ContainerMenuItemTemplate}" />
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,11 @@
+﻿<Window x:Class="SilverNote.Views.ClientViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:SilverNote.Views"
+        Title="Client"
+        Width="1400"
+        Height="768" 
+        Topmost="True"
+        Style="{DynamicResource WindowStyle}">
+    <v:ClientView />
+</Window>

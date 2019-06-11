@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- CloseNoteButtonTemplate -->
+    <ControlTemplate x:Key="CloseNoteButtonTemplate" TargetType="{x:Type Button}">
+        <!-- Layout Root -->
+        <Border x:Name="Border" Width="14" Height="14" CornerRadius="2" Background="{TemplateBinding Background}">
+            <Grid>
+                <Line x:Name="criss" X1="4" Y1="4" X2="10" Y2="10" StrokeThickness="2" Stroke="{TemplateBinding Foreground}"/>
+                <Line x:Name="cross" X1="10" Y1="4" X2="4" Y2="10" StrokeThickness="2" Stroke="{TemplateBinding Foreground}"/>
+            </Grid>
+        </Border>
+        <!--Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Foreground" Value="#666"/>
+                <Setter Property="Background" Value="#DDD"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Stroke" Value="#DDD" TargetName="criss"/>
+                <Setter Property="Stroke" Value="#DDD" TargetName="cross"/>
+                <Setter Property="Background" Value="#AAA"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- CloseNoteButtonStyle -->
+    <Style x:Key="CloseNoteButtonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#AAA"/>
+        <Setter Property="Template" Value="{StaticResource CloseNoteButtonTemplate}"/>
+    </Style>
+
+    <!-- MaximizeNoteButtonTemplate -->
+    <ControlTemplate x:Key="MaximizeNoteButtonTemplate" TargetType="{x:Type Button}">
+        <!-- Layout Root -->
+        <Border x:Name="Border" Width="14" Height="14" CornerRadius="2" Background="{TemplateBinding Background}">
+            <Rectangle x:Name="glyph" Width="7" Height="7" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="2" Stroke="{TemplateBinding Foreground}"/>
+        </Border>
+        <!--Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Foreground" Value="#666"/>
+                <Setter Property="Background" Value="#DDD"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Stroke" Value="#DDD" TargetName="glyph"/>
+                <Setter Property="Background" Value="#AAA"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- MaximizeNoteButtonStyle -->
+    <Style x:Key="MaximizeNoteButtonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#AAA"/>
+        <Setter Property="Template" Value="{StaticResource MaximizeNoteButtonTemplate}"/>
+    </Style>
+</ResourceDictionary>

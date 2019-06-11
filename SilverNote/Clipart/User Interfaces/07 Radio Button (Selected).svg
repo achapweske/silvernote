@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="locked" fill="none">
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="0" stroke="none" fill="none" x="0" y="0" width="20" height="20" />
+      <ellipse stroke-width="2" stroke="rgb(51,51,51)" fill="white" cx="10" cy="10" rx="5" ry="5" />
+      <ellipse stroke-width="2" stroke="rgb(51,51,51)" fill="black" cx="10" cy="10" rx="1.1" ry="1.1" />
+    </g>
+    <rect stroke-width="0" stroke="none" fill="none" x="0" y="0" width="110" height="20" />
+    <ellipse stroke-width="2" stroke="rgb(51,51,51)" fill="white" layout="var c = Math.min(bounds.width,bounds.height,20);this.setAttribute('rx',c/4);this.setAttribute('ry',c/4);this.setAttribute('cx',bounds.x+c/2);this.setAttribute('cy',bounds.y+c/2)" cx="10" cy="10" rx="5" ry="5" />
+    <ellipse stroke-width="2" stroke="rgb(51,51,51)" fill="black" layout="var c = Math.min(bounds.width,bounds.height,20);this.setAttribute('rx',c/18);this.setAttribute('ry',c/18);this.setAttribute('cx',bounds.x+c/2);this.setAttribute('cy',bounds.y+c/2)" cx="10" cy="10" rx="1.11111111111111" ry="1.11111111111111" />
+    <text class="autofocus" fill="black" layout="var c = Math.min(bounds.width,bounds.height,20);this.setAttribute('x',bounds.x+c);this.setAttribute('y',bounds.y);this.style.width=(bounds.width-c)+'px';this.style.height=bounds.height+'px'" x="20" y="0" placeholder="Label" style="width:90px;height:20px;display:block;">
+      <tspan x="20" y="14" class="cursive" font-family="Comic Sans MS, Cursive" font-size="13.3333333333333" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Radio Button</tspan>
+    </text>
+    <line class="snap" x1="0" y1="20" x2="0" y2="20" />
+    <line class="snap" x1="110" y1="20" x2="110" y2="20" />
+    <line class="snap" x1="0" y1="0" x2="0" y2="0" />
+    <line class="snap" x1="110" y1="0" x2="110" y2="0" />
+  </g>
+</svg>

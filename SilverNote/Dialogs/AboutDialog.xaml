@@ -1,0 +1,53 @@
+﻿<Window x:Class="SilverNote.Dialogs.AboutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About SilverNote"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False"
+        SizeToContent="Height"
+        Width="550"
+        ResizeMode="NoResize"
+        Style="{StaticResource WindowStyle}">
+    <StackPanel 
+        Orientation="Vertical" 
+        Margin="10"
+        DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+        <Grid>             
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <!-- Icon -->
+            <Image 
+                Source="/SilverNote;component/Images/icon_48x48.png" 
+                Width="48" 
+                Height="48" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top"
+                Margin="5" 
+                SnapsToDevicePixels="True"/>
+            <!-- Content -->
+            <StackPanel 
+                Grid.Column="1" 
+                Margin="5" 
+                Orientation="Vertical"
+                TextBlock.FontFamily="Verdana"
+                TextBlock.FontSize="10pt">
+                <!-- Product/Version -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ProductName}"/>
+                    <TextBlock Text=" v"/>
+                    <TextBlock Text="{Binding Version}"/>
+                </StackPanel>
+                <!-- Copyright -->
+                <TextBlock TextWrapping="Wrap" Text="{Binding Copyright}"/>
+                <!-- Space -->
+                <TextBlock />
+                <!-- Operating System -->
+                <TextBlock TextWrapping="Wrap" Text="{Binding Path=OperatingSystem, StringFormat='System: {0}'}"/>
+            </StackPanel>
+        </Grid>
+        <!-- "OK" -->
+        <Button Content="OK" HorizontalAlignment="Center" IsDefault="True" IsCancel="True" />
+    </StackPanel>
+</Window>

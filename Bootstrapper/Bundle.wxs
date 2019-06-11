@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Bundle Name="SilverNote" 
+          Version="!(bind.packageVersion.Setup)"
+          Manufacturer="Adam Chapweske"
+          IconSourceFile="$(var.SilverNote.ProjectDir)SilverNote.ico"
+          UpgradeCode="a3dcf217-8440-4cf0-80ba-4573df302301">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
+      <bal:WixStandardBootstrapperApplication
+            LogoFile="logo.png" 
+            LicenseUrl=""/>
+    </BootstrapperApplicationRef>
+    <Chain>
+      <!-- Download and install .NET Framework 4.0 if not already installed -->
+      <PackageGroupRef Id="NetFx40ClientWeb" />
+      <!-- Install SilverNote -->
+      <MsiPackage Id="Setup" SourceFile="$(var.Setup.TargetPath)" DisplayInternalUI="yes" Compressed="yes" Vital="yes" />
+    </Chain>     
+	</Bundle>
+</Wix>

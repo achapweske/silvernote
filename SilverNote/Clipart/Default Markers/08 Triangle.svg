@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <marker fill="none" refX="15" refY="5" markerWidth="15" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+    <polygon stroke-width="1" stroke="black" fill="white" points="0,0 15,5 0,10" />
+  </marker>
+</svg>

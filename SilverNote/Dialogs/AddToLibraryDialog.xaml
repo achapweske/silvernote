@@ -1,0 +1,108 @@
+﻿<Window x:Class="SilverNote.Dialogs.AddToLibraryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:editor="clr-namespace:SilverNote.Editor;assembly=SilverNote.Editor"
+        Title="Add to Library" 
+        Width="300"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        FocusManager.FocusedElement="{Binding ElementName=NameTextBox}"
+        Style="{DynamicResource WindowStyle}"
+        Loaded="Window_Loaded">
+    <!-- Layout Root -->
+    <StackPanel 
+        Orientation="Vertical"
+        Margin="5"
+        DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Preview -->
+            <Border 
+                Width="60"
+                Height="60"
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="1"
+                CornerRadius="3">
+                <editor:NCanvas
+                    x:Name="PreviewCanvas"
+                    Width="50" 
+                    Height="50" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsEnabled="False" />
+            </Border>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!-- "Group:" label -->
+                <Label 
+                    Grid.Row="0" 
+                    Grid.Column="0" 
+                    VerticalAlignment="Center"
+                    Content="Group:" />
+                <!-- Group ComboBox -->
+                <ComboBox 
+                    x:Name="GroupsComboBox"
+                    Grid.Row="0" 
+                    Grid.Column="1" 
+                    Height="23"
+                    VerticalAlignment="Center"
+                    SelectedIndex="0"
+                    ItemsSource="{Binding ClipartGroups}"
+                    DisplayMemberPath="Name"/>
+                <!-- "Name:" Label -->
+                <Label 
+                    Grid.Row="1" 
+                    Grid.Column="0" 
+                    VerticalAlignment="Center"
+                    Content="Name:" />
+                <!-- Name TextBox -->
+                <TextBox 
+                    x:Name="NameTextBox"
+                    Grid.Row="1" 
+                    Grid.Column="1" 
+                    VerticalAlignment="Center" 
+                    Padding="2,4,0,0"/>
+            </Grid>
+        </Grid>
+        <!-- Checkbox -->
+        <Grid Margin="5">
+            <CheckBox 
+                Name="LineMarkerCheckBox"
+                Margin="2"
+                HorizontalAlignment="Center" 
+                Content=" Make available as a line end style" />
+        </Grid>
+        <!-- Save/Cancel -->
+        <StackPanel 
+            Orientation="Horizontal" 
+            HorizontalAlignment="Center" 
+            Margin="5,2,5,5">
+            <!-- Save Button -->
+            <Button 
+                Name="SaveButton" 
+                Margin="0,0,2,0" 
+                IsDefault="True" 
+                Content="Save" 
+                Click="SaveButton_Click" />
+            <!-- Cancel Button -->
+            <Button 
+                Name="CancelButton" 
+                Margin="2,0,0,0"
+                Content="Cancel" 
+                IsCancel="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>

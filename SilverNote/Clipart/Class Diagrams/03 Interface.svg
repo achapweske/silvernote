@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="bg3umikelme">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none" layout="return uml_interface.layout(this,bounds)">
+    <script>
+      var uml_interface = {
+        layout: function (element, bounds) {
+          var topPadding = Math.min(bounds.height, 2);
+          var headerText2Height = Math.min(bounds.height-topPadding, 21);
+          var headerText1Height = Math.min(bounds.height-headerText2Height-topPadding, 12);
+          var headerHeight = topPadding+headerText1Height+headerText2Height;
+          var splitter=element.querySelector('.splitter');
+          var splitterOffset = Math.max(splitter.y1.baseVal.value, bounds.y+headerHeight);
+          this.headerText1 = {
+            x: bounds.x,
+            y: bounds.y+topPadding,
+            style: {
+              width: bounds.width+'px',
+              height: headerText1Height+'px'
+            }
+          };
+          this.headerText2 = {
+            x: bounds.x,
+            y: bounds.y+topPadding+headerText1Height-1,
+            style: {
+              width: bounds.width+'px',
+              height: headerText2Height+'px'
+            }
+          };
+          this.headerLine = {
+            x1: bounds.x,
+            y1: bounds.y+headerHeight,
+            x2: bounds.right,
+            y2: bounds.y+headerHeight
+          };
+          this.attributesText = {
+            x: bounds.x,
+            y: bounds.y+headerHeight,
+            style: {
+              width: bounds.width+'px',
+              height: (splitterOffset-bounds.top-headerHeight)+'px'
+            }
+          };
+          this.operationsText = {
+            x: bounds.x,
+            y: splitterOffset,
+            style: {
+              width: bounds.width+'px',
+              height: (bounds.bottom-splitterOffset)+'px'
+            }
+          };
+          return false;
+        }
+      };
+    </script>
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#bg3umikelme)" x="0" y="0" width="30" height="30"/>
+      <text fill="black" x="0" y="0" style="width:30px;height:10px;vertical-align:middle;display:block;text-align:center;">
+        <tspan x="0" y="8" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Iface</tspan>
+      </text>
+      <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" x1="0" y1="10" x2="30" y2="10" />
+      <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" x1="30" y1="20" x2="0" y2="20" />
+    </g>
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#bg3umikelme)" x="0" y="0" width="160" height="100" />
+    <text fill="black" layout="layout.update(this,uml_interface.headerText1)" x="0" y="2" placeholder="type" style="width:160px;height:12px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="50" y="12" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="11" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">« interface »</tspan>
+    </text>
+    <text class="autofocus" fill="black" layout="layout.update(this,uml_interface.headerText2)" x="0" y="13" placeholder="Class Name" style="width:160px;height:21px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="60" y="29" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Name</tspan>
+    </text>
+    <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" layout="layout.update(this,uml_interface.headerLine)" x1="0" y1="35" x2="160" y2="35" />
+    <text layout="layout.update(this,uml_interface.attributesText)" x="0" y="35" placeholder="Attributes" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-right:3px;padding-left:3px;width:160px;height:32px;display:block;" />
+    <text layout="layout.update(this,uml_interface.operationsText)" x="0" y="67" placeholder="Operations" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-right:3px;padding-left:3px;width:160px;height:33px;display:block;" />
+    <line class="splitter" stroke-width="2" stroke="rgb(51,51,51)" fill="none" drag="var y = Math.min(Math.max(this.y1.baseVal.value+delta.y,bounds.top+40), bounds.bottom-5);this.setAttribute('y1',y);this.setAttribute('y2',y)" x1="160" y1="67" x2="0" y2="67" style="cursor:s-resize;" />
+    <line class="snap" x1="40" y1="0" x2="40" y2="0" />
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="80" y1="0" x2="80" y2="0" />
+    <line class="snap" x1="100" y1="0" x2="100" y2="0" />
+    <line class="snap" x1="120" y1="0" x2="120" y2="0" />
+    <line class="snap" x1="160" y1="30" x2="160" y2="30" />
+    <line class="snap" x1="160" y1="50" x2="160" y2="50" />
+    <line class="snap" x1="160" y1="70" x2="160" y2="70" />
+    <line class="snap" x1="0" y1="30" x2="0" y2="30" />
+    <line class="snap" x1="0" y1="50" x2="0" y2="50" />
+    <line class="snap" x1="0" y1="70" x2="0" y2="70" />
+    <line class="snap" x1="40" y1="100" x2="40" y2="100" />
+    <line class="snap" x1="60" y1="100" x2="60" y2="100" />
+    <line class="snap" x1="80" y1="100" x2="80" y2="100" />
+    <line class="snap" x1="100" y1="100" x2="100" y2="100" />
+    <line class="snap" x1="120" y1="100" x2="120" y2="100" />
+  </g>
+</svg>

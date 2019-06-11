@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="locked" fill="none">
+    <rect stroke-width="2" stroke="black" fill="none" x="0" y="0" width="400" height="400" />
+    <text class="autofocus" fill="black" layout="this.setAttribute('x',bounds.x);this.setAttribute('y',bounds.y);this.style.width=bounds.width+'px';this.style.height=Math.min(20, bounds.height*.2)+'px'" x="0" y="0" placeholder="Window Title" style="width:400px;height:20px;padding-left:5px;vertical-align:middle;display:block;">
+      <tspan x="5" y="15" class="" font-family="Comic Sans MS, Cursive" font-size="13.3333333333333" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Window</tspan>
+    </text>
+    <rect stroke-width="2" stroke="black" fill="none" layout="var c = Math.min(10,bounds.width*.1,bounds.height*.1);this.setAttribute('x',bounds.x+bounds.width-c*3.5);this.setAttribute('y',bounds.y+c/2);this.setAttribute('width',c);this.setAttribute('height',c)" x="365" y="5" width="10" height="10" />
+    <line stroke-width="2" stroke="black" fill="none" layout="var c = Math.min(10,bounds.width*.1,bounds.height*.1);this.setAttribute('x1',bounds.x+bounds.width-c-c/2);this.setAttribute('y1',bounds.y+c/2);this.setAttribute('x2',bounds.x+bounds.width-c/2);this.setAttribute('y2',bounds.y+c+c/2);" x1="385" y1="5" x2="395" y2="15" />
+    <line stroke-width="2" stroke="black" fill="none" layout="var c = Math.min(10,bounds.width*.1,bounds.height*.1);this.setAttribute('x1',bounds.x+bounds.width-c/2);this.setAttribute('y1',bounds.y+c/2);this.setAttribute('x2',bounds.x+bounds.width-c-c/2);this.setAttribute('y2',bounds.y+c+c/2)" x1="395" y1="5" x2="385" y2="15" />
+    <line stroke-width="2" stroke="black" fill="none" layout="var c = Math.min(10,bounds.width*.1,bounds.height*.1);this.setAttribute('x1',bounds.x+bounds.width-c*5.5);this.setAttribute('y1',bounds.y+c);this.setAttribute('x2',bounds.x+bounds.width-4.5*c);this.setAttribute('y2',bounds.y+c);" x1="345" y1="10" x2="355" y2="10" />
+    <line stroke-width="2" stroke="black" fill="none" layout="this.setAttribute('x1',bounds.x);this.setAttribute('y1',bounds.y+Math.min(20, bounds.height*.2));this.setAttribute('x2',bounds.x+bounds.width);this.setAttribute('y2',bounds.y+Math.min(20, bounds.height*.2))" x1="0" y1="20" x2="400" y2="20" />
+    <line class="snap" x1="0" y1="400" x2="0" y2="400" />
+    <line class="snap" x1="400" y1="400" x2="400" y2="400" />
+    <line class="snap" x1="400" y1="0" x2="400" y2="0" />
+    <line class="snap" x1="0" y1="0" x2="0" y2="0" />
+  </g>
+</svg>

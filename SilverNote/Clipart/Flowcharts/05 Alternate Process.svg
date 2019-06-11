@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="oljv04snyui">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#oljv04snyui)" x="100" y="220" width="120" height="80" rx="4" ry="4" />
+    <text x="100" y="220" placeholder="Alternate" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:120px;height:80px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="220" y1="300" x2="220" y2="300" />
+    <line class="snap" x1="220" y1="220" x2="220" y2="220" />
+    <line class="snap" x1="100" y1="220" x2="100" y2="220" />
+    <line class="snap" x1="100" y1="300" x2="100" y2="300" />
+    <line class="snap" x1="160" y1="220" x2="160" y2="220" />
+    <line class="snap" x1="220" y1="260" x2="220" y2="260" />
+    <line class="snap" x1="160" y1="300" x2="160" y2="300" />
+    <line class="snap" x1="100" y1="260" x2="100" y2="260" />
+    <line class="snap" x1="220" y1="240" x2="220" y2="240" />
+    <line class="snap" x1="220" y1="280" x2="220" y2="280" />
+    <line class="snap" x1="180" y1="300" x2="180" y2="300" />
+    <line class="snap" x1="140" y1="300" x2="140" y2="300" />
+    <line class="snap" x1="180" y1="220" x2="180" y2="220" />
+    <line class="snap" x1="140" y1="220" x2="140" y2="220" />
+    <line class="snap" x1="100" y1="240" x2="100" y2="240" />
+    <line class="snap" x1="100" y1="280" x2="100" y2="280" />
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="ytvyplqigya">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <ellipse stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#ytvyplqigya)" cx="450" cy="320" rx="20" ry="20" />
+    <text x="430" y="300" placeholder="X" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:40px;height:40px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="450" y1="300" x2="450" y2="300" />
+    <line class="snap" x1="450" y1="340" x2="450" y2="340" />
+    <line class="snap" x1="470" y1="320" x2="470" y2="320" />
+    <line class="snap" x1="430" y1="320" x2="430" y2="320" />
+  </g>
+</svg>

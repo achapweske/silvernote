@@ -1,0 +1,380 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:SilverNote"
+                    xmlns:cl="clr-namespace:SilverNote;assembly=SilverNote.Common"
+                    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+                    xmlns:c="clr-namespace:SilverNote.Converters"
+                    xmlns:v="clr-namespace:SilverNote.Views"
+                    xmlns:vm="clr-namespace:SilverNote.ViewModels"
+                    xmlns:tree="clr-namespace:SilverNote.ViewModels.CategoryTree"
+                    xmlns:styles="clr-namespace:SilverNote.Views.Styles"
+                    x:Class="SilverNote.Views.Styles.NotesTreeListStyle"
+                    x:ClassModifier="public">
+   
+    <v:NotesTreeListTemplateSelector x:Key="NotesTreeListTemplateSelector" />
+    <v:NotesTreeListStyleSelector x:Key="NotesTreeListStyleSelector" />
+    <styles:NotesTreeListDepthConverter x:Key="NotesTreeListDepthConverter" />
+    <tree:ClipboardConverter x:Key="NotesTreeListClipboardConverter" />
+    <tree:DragFeedbackProvider x:Key="NotesTreeListDragFeedbackProvider" />
+    <tree:DropFeedbackProvider x:Key="NotesTreeListDropFeedbackProvider" />
+    
+    <!-- NotesTreeListSelectionBackgroundBrush -->
+    <LinearGradientBrush x:Key="NotesTreeListSelectionBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#B2B2B2" />
+        <GradientStop Offset="1" Color="#8D8D8D" />
+    </LinearGradientBrush>
+
+    <!-- NotesTreeListItemTemplate -->
+    <ControlTemplate x:Key="NotesTreeListItemTemplate" TargetType="ListBoxItem">
+        <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="1" Padding="{TemplateBinding Padding}" VerticalAlignment="Center">
+            <ContentPresenter />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource NotesTreeListSelectionBackgroundBrush}" />
+                <Setter Property="Foreground" Value="#FFFFFFFF" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- NotesTreeListToggleButtonTemplate -->
+    <ControlTemplate x:Key="NotesTreeListToggleButtonTemplate" TargetType="{x:Type ToggleButton}">
+        <Grid Width="10" Height="10" VerticalAlignment="Center" Background="Transparent">
+            <Path Name="Glyph" HorizontalAlignment="Left" VerticalAlignment="Center" Fill="#808080" Data="M0,0 L9,5 0,10z">
+                <Path.RenderTransform>
+                    <RotateTransform 
+                        x:Name="Transform" 
+                        CenterX="4.5" 
+                        CenterY="5" />
+                </Path.RenderTransform>
+            </Path>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Glyph" Property="Data" Value="M0,0 L5,9 10,0z" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="cl:AnimationSettings.IsAnimationEnabled" Value="True"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation 
+                                Storyboard.TargetName="Glyph"
+                                Storyboard.TargetProperty="Fill.Color"
+                                Duration="0:0:0.1"
+                                From="#808080"
+                                To="#A0A0A0" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetName="Glyph"
+                                Storyboard.TargetProperty="Fill.Color"
+                                Duration="0:0:0.1"
+                                From="#A0A0A0"
+                                To="#808080" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="True" />
+                    <Condition Property="cl:AnimationSettings.IsAnimationEnabled" Value="False"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="Glyph" Property="Fill" Value="#A0A0A0" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- NotesTreeListCategoryTemplate -->
+    <DataTemplate x:Key="NotesTreeListCategoryTemplate" DataType="{x:Type tree:CategoryNode}">
+        <Grid Margin="{Binding Depth, Converter={StaticResource NotesTreeListDepthConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="15" Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ToggleButton Name="Expander" VerticalAlignment="Center" ClickMode="Press" Focusable="False" Template="{StaticResource NotesTreeListToggleButtonTemplate}" IsChecked="{Binding Path=IsExpanded}" />
+            <TextBlock Grid.Column="1" Text="{Binding Category.Name, FallbackValue=Loading...}" b:UIElementBehavior.MouseDoubleClickCommand="{Binding ToggleExpandedCommand}" Visibility="{Binding Category.IsEditable, Converter={StaticResource BooleanToCollapsedConverter}}" />
+            <TextBox Grid.Column="1" BorderThickness="0" Margin="-2,0" Padding="0" MinWidth="60" b:TextBoxBehavior.WeakFocus="True" b:TextBoxBehavior.HandleEnter="False" Text="{Binding Category.Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Category.IsEditable, Converter={StaticResource BooleanToVisibleConverter}}" b:UIElementBehavior.IsFocused="{Binding Category.IsEditable}" b:TextBoxBehavior.SelectAllWhen="{Binding Category.IsEditable}" b:UIElementBehavior.LostKeyboardFocusCommand="{Binding Category.RenameCommand}" />
+        </Grid>
+    </DataTemplate>
+
+    <!-- NotesTreeListNoteTemplate -->
+    <DataTemplate x:Key="NotesTreeListNoteTemplate" DataType="{x:Type tree:SearchResultNode}">
+        <Grid Margin="{Binding Depth, Converter={StaticResource NotesTreeListDepthConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="15" Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" Text="{Binding SearchResult.Title, FallbackValue=Loading...}" />
+        </Grid>
+    </DataTemplate>
+
+    <!-- NotesTreeListCategoryStyle -->
+    <Style x:Key="NotesTreeListCategoryStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Padding" Value="0,1.5" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True" />
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding Root.SelectedItems}" />
+        <Setter Property="b:DragDropBehavior.DragDataConverter" Value="{StaticResource NotesTreeListClipboardConverter}" />
+        <Setter Property="b:DragDropBehavior.DragEffects" Value="Move, Copy" />
+        <Setter Property="b:DragDropBehavior.DragMoveCommand" Value="{Binding Root.DragCommand}" />
+        <Setter Property="b:DragDropBehavior.DragFeedbackProvider" Value="{StaticResource NotesTreeListDragFeedbackProvider}" />
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True" />
+        <Setter Property="b:DragDropBehavior.DropEffects" Value="Move" />
+        <Setter Property="b:DragDropBehavior.DropControlEffects" Value="Copy" />
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding DropCommand}" />
+        <Setter Property="b:DragDropBehavior.DropCopyCommand" Value="{Binding DropCommand}" />
+        <Setter Property="b:DragDropBehavior.DropFeedbackProvider" Value="{StaticResource NotesTreeListDropFeedbackProvider}" />
+        <Setter Property="Template" Value="{StaticResource NotesTreeListItemTemplate}"/>
+    </Style>
+   
+    <!-- NotesTreeListNoteStyle -->
+    <Style x:Key="NotesTreeListNoteStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Padding" Value="0,1.5" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="b:UIElementBehavior.FocusWhenMouseRightButtonDown" Value="True" />
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True" />
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding Root.SelectedItems}" />
+        <Setter Property="b:DragDropBehavior.DragDataConverter" Value="{StaticResource NotesTreeListClipboardConverter}" />
+        <Setter Property="b:DragDropBehavior.DragEffects" Value="Move, Copy" />
+        <Setter Property="b:DragDropBehavior.DragMoveCommand" Value="{Binding Root.DragCommand}" />
+        <Setter Property="b:DragDropBehavior.DragFeedbackProvider" Value="{StaticResource NotesTreeListDragFeedbackProvider}" />
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True" />
+        <Setter Property="b:DragDropBehavior.DropEffects" Value="Move" />
+        <Setter Property="b:DragDropBehavior.DropControlEffects" Value="Copy" />
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding Parent.DropCommand}" />
+        <Setter Property="b:DragDropBehavior.DropCopyCommand" Value="{Binding Parent.DropCommand}" />
+        <Setter Property="b:DragDropBehavior.DropFeedbackProvider" Value="{StaticResource NotesTreeListDropFeedbackProvider}" />
+        <Setter Property="Template" Value="{StaticResource NotesTreeListItemTemplate}"/>
+    </Style>
+   
+    <!-- AddToCategoryItemTemplate-->
+    <HierarchicalDataTemplate x:Key="CategoryTreeMenuItemTemplate" DataType="vm:CategoryViewModel" ItemsSource="{Binding SelfAndChildren}">
+        <TextBlock FontWeight="Normal" Text="{Binding Name}" />
+    </HierarchicalDataTemplate>
+
+    <!-- AddToCategoryMenuStyle -->
+    <Style x:Key="AddToCategoryMenuItemContainerStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="b:MenuItemBehavior.ClickCommand" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=DataContext.AddToCategoryCommand}"/>
+        <Setter Property="b:MenuItemBehavior.ClickCommandParameter" Value="{Binding}"/>
+    </Style>
+
+    <!-- AddToCategoryMenuStyle -->
+    <Style x:Key="AddToCategoryMenuStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource AddToCategoryMenuItemContainerStyle}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource CategoryTreeMenuItemTemplate}"/>
+    </Style>
+
+    <!-- MoveToMenuStyle -->
+    <Style x:Key="MoveToMenuItemContainerStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="b:MenuItemBehavior.ClickCommand" Value="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=DataContext.MoveToCommand}"/>
+        <Setter Property="b:MenuItemBehavior.ClickCommandParameter" Value="{Binding}"/>
+    </Style>
+
+    <!-- MoveToMenuStyle -->
+    <Style x:Key="MoveToMenuStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource MoveToMenuItemContainerStyle}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource CategoryTreeMenuItemTemplate}"/>
+    </Style>
+
+    <!-- NotesTreeListContextMenu -->
+    <ContextMenu x:Key="NotesTreeListContextMenu">
+        <MenuItem Header="Create Category" Command="{Binding Notebook.CreateCategoryCommand}" CommandParameter="Untitled">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/folder_add.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+
+    <ContextMenu x:Key="NotesTreeListContextMenu_SingleNote">
+        <MenuItem Header="Open" Command="{Binding OpenCommand}" InputGestureText="Enter">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/page_white_go.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Cut" Command="{Binding CutCommand}" InputGestureText="Ctrl+X" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/cut.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Copy" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/copy.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Delete" Command="{Binding DeleteCommand}" InputGestureText="Del">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem 
+            Header="Add to Category" 
+            InputGestureText="Ctrl+Drag" 
+            Visibility="{Binding Notebook.HasCategories, Converter={StaticResource BooleanToVisibleConverter}}"
+            ItemsSource="{Binding Notebook.Categories}" 
+            Style="{StaticResource AddToCategoryMenuStyle}" />
+        <MenuItem 
+            Header="Move to Category" 
+            InputGestureText="Drag" 
+            Visibility="{Binding Notebook.HasCategories, Converter={StaticResource BooleanToVisibleConverter}}"
+            ItemsSource="{Binding Notebook.Categories}" 
+            Style="{StaticResource MoveToMenuStyle}" />
+        <MenuItem Header="Remove from Category" Command="{Binding RemoveCommand}" InputGestureText="Minus (-)" />
+    </ContextMenu>
+
+    <ContextMenu x:Key="NotesTreeListContextMenu_SingleCategory">
+        <MenuItem Header="Add New Note" Command="{Binding CreateNoteCommand}">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/page_white_add.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Add New Category" Command="{Binding CreateCategoryCommand}">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/folder_add.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Cut" Command="{Binding CutCommand}" InputGestureText="Ctrl+X" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/cut.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Copy" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/copy.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Paste" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/paste.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Delete" Command="{Binding DeleteCommand}" InputGestureText="Del">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Rename" Command="{Binding RenameCommand}">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/rename.ico" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Search" Command="{Binding SearchCommand}">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/search.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Move to" InputGestureText="Drag" ItemsSource="{Binding Notebook.SelfAndChildren}" Style="{StaticResource MoveToMenuStyle}" />
+    </ContextMenu>
+
+    <ContextMenu x:Key="NotesTreeListContextMenu_PseudoCategory">
+        <MenuItem Header="Search" Command="{Binding SearchCommand}">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/search.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+    </ContextMenu>
+    
+    <ContextMenu x:Key="NotesTreeListContextMenu_MultipleNotes">
+        <MenuItem Header="Open" Command="{Binding OpenCommand}" InputGestureText="Enter">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/page_white_go.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Cut" Command="{Binding CutCommand}" InputGestureText="Ctrl+X" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/cut.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Copy" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C" >
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/copy.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Delete" Command="{Binding DeleteCommand}" InputGestureText="Del">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem 
+            Header="Add to Category" 
+            InputGestureText="Ctrl+Drag" 
+            Visibility="{Binding Notebook.HasCategories, Converter={StaticResource BooleanToVisibleConverter}}"
+            ItemsSource="{Binding Notebook.Categories}" 
+            Style="{StaticResource AddToCategoryMenuStyle}" />
+        <MenuItem 
+            Header="Move to Category" 
+            InputGestureText="Drag" 
+            Visibility="{Binding Notebook.HasCategories, Converter={StaticResource BooleanToVisibleConverter}}"
+            ItemsSource="{Binding Notebook.Categories}" 
+            Style="{StaticResource MoveToMenuStyle}" />
+        <MenuItem Header="Remove from Category" Command="{Binding RemoveCommand}" InputGestureText="Minus (-)" />
+    </ContextMenu>
+
+    <ContextMenu x:Key="NotesTreeListContextMenu_MultipleCategories">
+        <MenuItem Header="Delete" Command="{Binding DeleteCommand}" InputGestureText="Del">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Move to" InputGestureText="Drag" ItemsSource="{Binding Notebook.SelfAndChildren}" Style="{StaticResource MoveToMenuStyle}" />
+    </ContextMenu>
+
+    <ContextMenu x:Key="NotesTreeListContextMenu_NotesAndCategories">
+        <MenuItem Header="Open Note(s)" Command="{Binding OpenCommand}" InputGestureText="Enter">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/page_white_go.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Delete" Command="{Binding DeleteCommand}" InputGestureText="Del">
+            <MenuItem.Icon>
+                <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+            </MenuItem.Icon>
+        </MenuItem>
+        <Separator />
+        <MenuItem Header="Move to Category" InputGestureText="Drag" ItemsSource="{Binding Notebook.Categories}" Style="{StaticResource MoveToMenuStyle}" />
+    </ContextMenu>
+
+    <!-- NotesTreeListStyle -->
+    <Style x:Key="NotesTreeListStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="SelectionMode" Value="Extended" />
+        <Setter Property="b:ControlBehavior.MouseDoubleClickCommand" Value="{Binding OpenCommand}" />
+        <Setter Property="b:UIElementBehavior.EnterCommand" Value="{Binding OpenCommand}" />
+        <Setter Property="b:UIElementBehavior.CtrlXCommand" Value="{Binding CutCommand}" />
+        <Setter Property="b:UIElementBehavior.CtrlCCommand" Value="{Binding CopyCommand}" />
+        <Setter Property="b:UIElementBehavior.CtrlVCommand" Value="{Binding PasteCommand}" />
+        <Setter Property="b:UIElementBehavior.DeleteCommand" Value="{Binding DeleteCommand}" />
+        <Setter Property="b:UIElementBehavior.MinusKeyDownCommand" Value="{Binding RemoveCommand}" />
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True" />
+        <Setter Property="b:DragDropBehavior.DropEffects" Value="Move" />
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding DropCommand}" />
+        <Setter Property="ContextMenu" Value="{StaticResource NotesTreeListContextMenu}" />
+        <EventSetter Event="ContextMenuOpening" Handler="NotesTreeListStyle_ContextMenuOpening" />
+        <Setter Property="ItemContainerStyleSelector" Value="{StaticResource NotesTreeListStyleSelector}"/>
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource NotesTreeListTemplateSelector}"/>
+    </Style>
+</ResourceDictionary>

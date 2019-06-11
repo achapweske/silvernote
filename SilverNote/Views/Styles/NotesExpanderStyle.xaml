@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- NotesExpanderTemplate -->
+    <ControlTemplate x:Key="NotesExpanderTemplate" TargetType="{x:Type Expander}">
+        <!-- Layout Root -->
+        <Grid>
+            <!-- Border -->
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3" UseLayoutRounding="True">
+                <Border BorderBrush="White" BorderThickness="1" Background="{TemplateBinding Background}" CornerRadius="3" UseLayoutRounding="True"/>
+            </Border>
+            <!-- Expander -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Header -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Content -->
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Header -->
+                <ContentControl Grid.Row="0">
+                    <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Content Presenter -->
+                        <ContentPresenter Grid.Column="0" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}"/>
+                    </Grid>
+                </ContentControl>
+                <!-- Content -->
+                <ContentPresenter x:Name="Content" Grid.Row="1" Visibility="Collapsed" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"/>
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="True">
+                <Setter TargetName="Content" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- NotesExpanderStyle -->
+    <Style x:Key="NotesExpanderStyle" TargetType="{x:Type Expander}">
+        <Setter Property="Background" Value="#FFF0F0F0"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template" Value="{StaticResource NotesExpanderTemplate}" />
+    </Style>
+</ResourceDictionary>

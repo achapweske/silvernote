@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="bk5pxy241xg">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <polygon stroke-width="2" stroke="rgb(51,51,51)" fill="white" points="685,380 685,375 805,375 805,455 800,455 800,380 685,380" />
+    <polygon stroke-width="2" stroke="rgb(51,51,51)" fill="white" points="690,375 690,370 810,370 810,450 805,450 805,375 690,375" />
+    <path stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#bk5pxy241xg)" d="M680,380 L680,460 Q710,480 740,460 Q770,440 800,460 L800,380z" />
+    <text x="680" y="380" placeholder="Documents" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:120px;height:70px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="740" y1="380" x2="740" y2="380" />
+    <line class="snap" x1="760" y1="380" x2="760" y2="380" />
+    <line class="snap" x1="720" y1="380" x2="720" y2="380" />
+    <line class="snap" x1="680" y1="400" x2="680" y2="400" />
+    <line class="snap" x1="680" y1="420" x2="680" y2="420" />
+    <line class="snap" x1="680" y1="440" x2="680" y2="440" />
+    <line class="snap" x1="740" y1="460" x2="740" y2="460" />
+    <line class="snap" x1="710" y1="470" x2="710" y2="470" />
+    <line class="snap" x1="770" y1="450" x2="770" y2="450" />
+    <line class="snap" x1="800" y1="420" x2="800" y2="420" />
+    <line class="snap" x1="800" y1="400" x2="800" y2="400" />
+    <line class="snap" x1="800" y1="440" x2="800" y2="440" />
+  </g>
+</svg>

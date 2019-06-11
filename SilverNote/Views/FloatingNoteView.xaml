@@ -1,0 +1,21 @@
+﻿<Window x:Class="SilverNote.Views.FloatingNoteView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+        xmlns:v="clr-namespace:SilverNote.Views"
+        xmlns:local="clr-namespace:SilverNote"
+        xmlns:properties="clr-namespace:SilverNote.Properties"
+        Title="{Binding Title}" 
+        Topmost="True"
+        WindowStartupLocation="Manual"
+        UseLayoutRounding="True"
+        b:WindowBehavior.SavedSize="{Binding Source={x:Static properties:Settings.Default}, Path=QuickNoteSize}"
+        b:WindowBehavior.SavedPosition="{Binding Source={x:Static properties:Settings.Default}, Path=QuickNotePosition}"
+        b:WindowBehavior.SavedState="{Binding Source={x:Static properties:Settings.Default}, Path=QuickNoteState}"
+        b:WindowBehavior.SavedSettings="{Binding Source={x:Static properties:Settings.Default}}"
+        Style="{DynamicResource WindowStyle}"
+        Closing="Window_Closing">
+    <Grid>
+        <v:NoteView x:Name="NoteView" />        
+    </Grid>
+</Window>

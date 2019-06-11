@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+                    xmlns:vm="clr-namespace:SilverNote.ViewModels">
+
+    <!-- SearchCategoriesMenuItemContainerStyle-->
+    <Style x:Key="SearchCategoriesMenuItemContainerStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="b:MenuItemBehavior.ClickCommand" Value="{Binding Notebook.BrowseCategoryCommand}"/>
+        <Setter Property="b:MenuItemBehavior.ClickCommandParameter" Value="{Binding}"/>
+        <Setter Property="b:MenuItemBehavior.ShiftClickCommand" Value="{Binding Notebook.Search.AndCategoryCommand}"/>
+        <Setter Property="b:MenuItemBehavior.ShiftClickCommandParameter" Value="{Binding}"/>
+        <Setter Property="b:MenuItemBehavior.CtrlClickCommand" Value="{Binding Notebook.Search.OrCategoryCommand}"/>
+        <Setter Property="b:MenuItemBehavior.CtrlClickCommandParameter" Value="{Binding}"/>
+        <Setter Property="b:MenuItemBehavior.CtrlShiftClickCommand" Value="{Binding Notebook.Search.ExceptCategoryCommand}"/>
+        <Setter Property="b:MenuItemBehavior.CtrlShiftClickCommandParameter" Value="{Binding}"/>
+    </Style>
+    
+    <!-- SearchCategoriesMenuItemTemplate-->
+    <HierarchicalDataTemplate x:Key="SearchCategoriesMenuItemTemplate" DataType="vm:CategoryViewModel" ItemsSource="{Binding SelfAndChildren}">
+        <TextBlock FontWeight="Normal" Text="{Binding Name}" />
+    </HierarchicalDataTemplate>
+
+    <!-- SearchCategoriesMenuStyle -->
+    <Style x:Key="SearchCategoriesMenuStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource SearchCategoriesMenuItemContainerStyle}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource SearchCategoriesMenuItemTemplate}"/>
+    </Style>
+    
+</ResourceDictionary>

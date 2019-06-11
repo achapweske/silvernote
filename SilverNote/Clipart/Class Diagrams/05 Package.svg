@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="3b2nra32z10">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" layout="return uml_package.layout(this,bounds)">
+    <script>
+    var uml_package = {
+        layout: function (element, bounds) {
+            var headerHeight = Math.min(bounds.height, 20);
+            var headerWidth = bounds.width*.625;
+            this.headerRect = {
+                x: bounds.x,
+                y: bounds.y,
+                width: headerWidth,
+                height: headerHeight
+            };
+            this.headerText = {
+                x: this.headerRect.x,
+                y: this.headerRect.y,
+                style: {
+                    width: this.headerRect.width + 'px',
+                    height: this.headerRect.height + 'px'
+                }
+            };
+            this.bodyRect = {
+                x: bounds.x,
+                y: bounds.y + headerHeight,
+                width: bounds.width,
+                height: bounds.height - headerHeight
+            };
+            this.bodyText = {
+                x: this.bodyRect.x,
+                y: this.bodyRect.y,
+                style: {
+                    width: this.bodyRect.width + 'px',
+                    height: this.bodyRect.height + 'px'
+                }
+            };
+            return false;
+        }
+    };
+	</script>
+	<g class="thumb" style="display:none">
+		<rect stroke-width="2" stroke="#333" fill="white" filter="url(#3b2nra32z10)"  x="0" y="0" width="20" height="10" />
+		<text fill="black" x="0" y="0" style="padding-right:3px;padding-left:3px;width:100px;height:10px;vertical-align:middle;display:block;">
+		  <tspan x="3" y="15.5" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Pkg</tspan>
+		</text>
+		<rect stroke-width="2" stroke="#333" fill="white" filter="url(#3b2nra32z10)" x="0" y="10" width="30" height="20" />
+	</g>
+    <rect stroke-width="2" stroke="#333" fill="white" filter="url(#3b2nra32z10)" layout="layout.update(this,uml_package.headerRect)" x="0" y="0" width="100" height="20" />
+    <text class="autofocus" fill="black" layout="layout.update(this,uml_package.headerText)" x="0" y="0" placeholder="Package" style="padding-right:3px;padding-left:3px;width:100px;height:20px;vertical-align:middle;display:block;">
+      <tspan x="3" y="15.5" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Name</tspan>
+    </text>
+    <rect stroke-width="2" stroke="#333" fill="white" filter="url(#3b2nra32z10)" layout="layout.update(this,uml_package.bodyRect)" x="0" y="20" width="160" height="80" />
+    <text layout="layout.update(this,uml_package.bodyText)" x="0" y="20" placeholder="Attributes" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-right:3px;padding-left:3px;width:160px;height:80px;display:block;" />
+    <line class="snap" x1="80" y1="100" x2="80" y2="100" />
+    <line class="snap" x1="160" y1="60" x2="160" y2="60" />
+    <line class="snap" x1="0" y1="60" x2="0" y2="60" />
+    <line class="snap" x1="80" y1="0" x2="80" y2="0" />
+    <line class="snap" x1="160" y1="80" x2="160" y2="80" />
+    <line class="snap" x1="100" y1="100" x2="100" y2="100" />
+    <line class="snap" x1="60" y1="100" x2="60" y2="100" />
+    <line class="snap" x1="120" y1="100" x2="120" y2="100" />
+    <line class="snap" x1="40" y1="100" x2="40" y2="100" />
+    <line class="snap" x1="160" y1="40" x2="160" y2="40" />
+    <line class="snap" x1="0" y1="80" x2="0" y2="80" />
+    <line class="snap" x1="0" y1="40" x2="0" y2="40" />
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="40" y1="0" x2="40" y2="0" />
+    <line class="snap" x1="140" y1="100" x2="140" y2="100" />
+    <line class="snap" x1="20" y1="100" x2="20" y2="100" />
+    <line class="snap" x1="20" y1="0" x2="20" y2="0" />
+  </g>
+</svg>

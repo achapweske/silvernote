@@ -1,0 +1,93 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+    xmlns:c="clr-namespace:SilverNote.Controls"
+    xmlns:vm="clr-namespace:SilverNote.ViewModels">
+    
+    <!-- NotesListBoxItemContextMenu -->
+    <ContextMenu x:Key="NotesListBoxItemContextMenu">
+        <MenuItem Header="Open" Command="{Binding Search.Results.OpenNotesCommand}" CommandParameter="{Binding Note}"/>
+        <MenuItem Header="Delete" Command="{Binding Search.Results.DeleteNotesCommand}" CommandParameter="{Binding Note}"/>
+    </ContextMenu>
+    
+    <!-- NotesListBoxItemContainerStyle -->
+    <Style x:Key="NotesListBoxItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
+        <Setter Property="ToolTip" Value="{Binding Note.Details}"/>
+        <Setter Property="ContextMenu" Value="{StaticResource NotesListBoxItemContextMenu}"/>
+        <Setter Property="b:ListBoxItemBehavior.BringIntoViewWhenSelected" Value="True"/>
+        <Setter Property="b:UIElementBehavior.PreviewMouseDoubleClickCommand" Value="{Binding OpenCommand}"/>
+    </Style>
+    
+    <!-- NotesListBoxItemDataTemplate -->
+    <DataTemplate x:Key="NotesListBoxItemTemplate" DataType="{x:Type vm:SearchResultViewModel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Title -->
+                <TextBlock Grid.Column="0" FontSize="10pt" FontWeight="Bold" b:TextBlockBehavior.Xaml="{Binding Title, Mode=OneWay}" />
+                <!-- Categories -->
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="4,0">
+                    <!-- Icon-->
+                    <Image 
+                        VerticalAlignment="Center" 
+                        Width="16" Height="16" 
+                        Source="/SilverNote;component/Images/folder_closed.png" />
+                    <!-- "Uncategorized" -->
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontStyle="Italic"
+                        Text=" Uncategorized"
+                        Visibility="{Binding Note.Categories, Converter={StaticResource CollectionEmptyToVisibleConverter}}"/>
+                    <!-- Items -->
+                    <ItemsControl 
+                        x:Name="CategoriesControl"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding Note.Categories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="3,0,0,0">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource CommaSeparatedValuesConverter}" ConverterParameter="Name">
+                                          <Binding />
+                                          <Binding ElementName="CategoriesControl" Path="ItemsSource"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+            <!-- Text -->
+            <TextBlock Grid.Row="1" Margin="0,2,0,0" b:TextBlockBehavior.Xaml="{Binding Text, Mode=OneWay}" TextWrapping="Wrap" SnapsToDevicePixels="True"/>
+            <!-- Separator -->
+            <Separator Grid.Row="2" Margin="0,2,0,0" />
+        </Grid>
+    </DataTemplate>
+
+    <Style x:Key="NotesListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource NotesListBoxItemContainerStyle}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource NotesListBoxItemTemplate}"/>
+    </Style>
+    
+</ResourceDictionary>

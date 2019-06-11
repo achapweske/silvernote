@@ -1,0 +1,42 @@
+﻿<Window x:Class="SilverNote.Dialogs.ExceptionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+        Title="SilverNote"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Height"
+        Width="450"
+        ResizeMode="CanMinimize"
+        Style="{DynamicResource WindowStyle}"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Controls/Styles/LinkButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <!-- Root -->
+    <StackPanel Orientation="Vertical" Margin="10,15,10,10">
+        <TextBlock TextWrapping="Wrap">An error has occurred and SilverNote needs to be restarted.</TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <CheckBox Name="SendReportCheckBox" Margin="15">Send an error report so we can improve our product.</CheckBox>
+            <Button VerticalAlignment="Center" Margin="0,0,0,2" Style="{StaticResource LinkButtonStyle}" Click="ViewReportButton_Click">(view report)</Button>
+        </StackPanel>
+        <!-- DebugTextBox -->
+        <TextBox 
+            Name="DebugTextBox"
+                Margin="0,10,0,5"
+            Visibility="Collapsed"
+            Height="100" 
+            Background="Transparent"
+            VerticalScrollBarVisibility="Visible"  
+            IsReadOnly="True"/>
+        <!-- Buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="5,0" Content="Close" IsCancel="True"/>
+            <!-- Restart -->
+            <Button Margin="5,0" Content="Restart" IsDefault="True" b:ButtonBehavior.DialogResult="True" />
+        </StackPanel>
+    </StackPanel>
+</Window>

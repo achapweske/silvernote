@@ -1,0 +1,49 @@
+﻿<Window x:Class="SilverNote.Dialogs.NewTableDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+        Title="Insert Table..." 
+        Width="300"
+        SizeToContent="Height" 
+        ResizeMode="NoResize" 
+        ShowInTaskbar="False" 
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="ToolWindow"
+        TextOptions.TextFormattingMode="Display"
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        FocusManager.FocusedElement="{Binding ElementName=RowCountTextBox}">
+    <!-- Root -->
+    <Grid>
+        <StackPanel Margin="10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <!-- "Rows:" -->
+                <Label Content="Rows:"/>
+                <!-- TextBox -->
+                <TextBox 
+                    Name="RowCountTextBox" 
+                    VerticalAlignment="Center" 
+                    Width="25" 
+                    Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=RowCount}" 
+                    b:TextBoxBehavior.SelectAllWhenGotFocus="True"
+                    b:TextBoxBehavior.FilterExpression="{x:Static b:TextBoxBehavior.INT_FILTER}"/>
+                <!-- Columns -->
+                <Label Content=" Columns:" />
+                <!-- TextBox -->
+                <TextBox 
+                    Name="ColumnCountTextBox" 
+                    VerticalAlignment="Center" 
+                    Width="25" 
+                    Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=ColumnCount}" 
+                    b:TextBoxBehavior.SelectAllWhenGotFocus="True"
+                    b:TextBoxBehavior.FilterExpression="{x:Static b:TextBoxBehavior.INT_FILTER}"/>
+            </StackPanel>
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <!-- OK -->
+                <Button Content="OK" IsDefault="True" Margin="0,0,2,0" b:ButtonBehavior.DialogResult="True" />
+                <!-- Cancel -->
+                <Button Content="Cancel" IsCancel="True" Margin="2,0,0,0" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.1 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="crtxzixnbee">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none" layout="return uml_entity.layout(this,bounds)">
+    <script>
+      var uml_entity = {
+		    layout: function (element, bounds) {
+			    var headerHeight = Math.min(bounds.height, 20);
+			    this.headerText = {
+				    x: bounds.x,
+				    y: bounds.y,
+				    style: {
+				      width: bounds.width+'px',
+				      height: headerHeight+'px'
+				    }
+			    };
+			    this.headerLine = {
+				    x1: bounds.x,
+				    y1: bounds.y+headerHeight,
+				    x2: bounds.right,
+				    y2: bounds.y+headerHeight
+			    };
+			    this.attributesText = {
+				    x: bounds.x,
+				    y: bounds.y+headerHeight,
+				    style: {
+					    width: bounds.width+'px',
+					    height: (bounds.height-headerHeight)+'px'
+				    }
+			    };
+			    return false;
+		    }
+      };
+    </script>
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#crtxzixnbee)" x="0" y="0" width="30" height="30" />
+      <text fill="black" x="0" y="0" style="width:30px;height:10px;vertical-align:middle;display:block;text-align:center;">
+        <tspan x="5" y="8" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Entity</tspan>
+      </text>
+      <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" x1="30" y1="10" x2="0" y2="10" />
+    </g>
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#crtxzixnbee)" x="0" y="0" width="160" height="80" />
+    <text class="autofocus" fill="black" layout="layout.update(this,uml_entity.headerText)" x="0" y="0" placeholder="Name" style="width:160px;height:20px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="60" y="15.5" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Name</tspan>
+    </text>
+    <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" layout="layout.update(this,uml_entity.headerLine)" x1="0" y1="20" x2="160" y2="20" />
+    <text layout="layout.update(this,uml_entity.attributesText)" x="0" y="20" placeholder="Attributes" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-right:3px;padding-left:3px;width:160px;height:60px;display:block;" />
+    <line class="snap" x1="40" y1="0" x2="40" y2="0" />
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="80" y1="0" x2="80" y2="0" />
+    <line class="snap" x1="100" y1="0" x2="100" y2="0" />
+    <line class="snap" x1="120" y1="0" x2="120" y2="0" />
+    <line class="snap" x1="160" y1="20" x2="160" y2="20" />
+    <line class="snap" x1="160" y1="40" x2="160" y2="40" />
+    <line class="snap" x1="160" y1="60" x2="160" y2="60" />
+    <line class="snap" x1="0" y1="20" x2="0" y2="20" />
+    <line class="snap" x1="0" y1="40" x2="0" y2="40" />
+    <line class="snap" x1="0" y1="60" x2="0" y2="60" />
+    <line class="snap" x1="40" y1="80" x2="40" y2="80" />
+    <line class="snap" x1="60" y1="80" x2="60" y2="80" />
+    <line class="snap" x1="80" y1="80" x2="80" y2="80" />
+    <line class="snap" x1="100" y1="80" x2="100" y2="80" />
+    <line class="snap" x1="120" y1="80" x2="120" y2="80" />
+  </g>
+</svg>

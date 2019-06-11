@@ -1,0 +1,194 @@
+﻿<ToggleButton x:Class="SilverNote.Editor.SectionToggleButton"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:SilverNote"
+              xmlns:anim="clr-namespace:SilverNote;assembly=SilverNote.Common"
+              mc:Ignorable="d" 
+              Background="Transparent"
+              Cursor="Arrow"
+              Width="14"
+              Height="14">
+    <ToggleButton.Resources>
+        <ControlTemplate x:Key="SectionTemplate" TargetType="{x:Type ToggleButton}">
+            <Grid Background="{TemplateBinding Background}">
+                <Path Name="Glyph" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#333" Data="M0,0 9,4.5 0,9">
+                    <Path.RenderTransform>
+                        <RotateTransform x:Name="Transform" CenterX="4.5" CenterY="4.5" />
+                    </Path.RenderTransform>
+                </Path>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation 
+                                Storyboard.TargetName="Transform"
+                                Storyboard.TargetProperty="Angle"
+                                Duration="0:0:0.05"
+                                From="0"
+                                To="90" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                Storyboard.TargetName="Transform"
+                                Storyboard.TargetProperty="Angle"
+                                Duration="0:0:0.05"
+                                From="90"
+                                To="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.ExitActions>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter TargetName="Glyph" Property="Data" Value="M0,0 9,0 4.5,9" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation 
+                                Storyboard.TargetName="Glyph"
+                                Storyboard.TargetProperty="Fill.Color"
+                                Duration="0:0:0.1"
+                                From="#333333"
+                                To="#A0A0A0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                Storyboard.TargetName="Glyph"
+                                Storyboard.TargetProperty="Fill.Color"
+                                Duration="0:0:0.1"
+                                From="#A0A0A0"
+                                To="#333333" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.ExitActions>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter TargetName="Glyph" Property="Fill" Value="#A0A0A0" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SubsectionTemplate" TargetType="{x:Type ToggleButton}">
+            <Grid Background="{TemplateBinding Background}">
+                <Path Name="Glyph" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="#333" Fill="Transparent" Data="M1.5,1 8,4.5 1.5,8z">
+                    <Path.RenderTransform>
+                        <RotateTransform x:Name="Transform" CenterX="4.5" CenterY="4.5" />
+                    </Path.RenderTransform>
+                </Path>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="Transform"
+                                    Storyboard.TargetProperty="Angle"
+                                    Duration="0:0:0.05"
+                                    From="0"
+                                    To="90" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                Storyboard.TargetName="Transform"
+                                Storyboard.TargetProperty="Angle"
+                                Duration="0:0:0.05"
+                                From="90"
+                                To="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.ExitActions>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter TargetName="Glyph" Property="Data" Value="M1,1.5 8,1.5 4.5,8z" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation 
+                                    Storyboard.TargetName="Glyph"
+                                    Storyboard.TargetProperty="Stroke.Color"
+                                    Duration="0:0:0.1"
+                                    From="#333333"
+                                    To="#A0A0A0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.EnterActions>
+                    <MultiTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetName="Glyph"
+                                    Storyboard.TargetProperty="Stroke.Color"
+                                    Duration="0:0:0.1"
+                                    From="#A0A0A0"
+                                    To="#333333" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiTrigger.ExitActions>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="anim:AnimationSettings.IsAnimationEnabled" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter TargetName="Glyph" Property="Stroke" Value="#A0A0A0" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+    </ToggleButton.Resources>
+</ToggleButton>

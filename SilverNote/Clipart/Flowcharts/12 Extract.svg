@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="z2jqb5zgscz">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none">
+    <polygon stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#z2jqb5zgscz)" points="410,650 490,650 450,590" />
+    <text x="410" y="590" placeholder="Extract" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:80px;height:60px;vertical-align:bottom;display:block;text-align:center;" />
+    <line class="snap" x1="450" y1="650" x2="450" y2="650" />
+    <line class="snap" x1="450" y1="590" x2="450" y2="590" />
+    <line class="snap" x1="470" y1="620" x2="470" y2="620" />
+    <line class="snap" x1="430" y1="620" x2="430" y2="620" />
+    <line class="snap" x1="470" y1="650" x2="470" y2="650" />
+    <line class="snap" x1="430" y1="650" x2="430" y2="650" />
+  </g>
+</svg>

@@ -1,0 +1,217 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+                    xmlns:v="clr-namespace:SilverNote.Views"
+                    xmlns:vm="clr-namespace:SilverNote.ViewModels">
+
+    <!-- NotesTreeViewSelectionBackgroundBrush -->
+    <LinearGradientBrush x:Key="NotesTreeViewSelectionBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#B2B2B2" />
+        <GradientStop Offset="1" Color="#8D8D8D" />
+    </LinearGradientBrush>
+
+    <!-- NotesTreeViewToggleButtonTemplate -->
+    <ControlTemplate x:Key="NotesTreeViewToggleButtonTemplate" TargetType="{x:Type ToggleButton}">
+        <Grid Width="8" Height="8" VerticalAlignment="Center" Background="#00FFFFFF">
+            <Path Name="ExpandPath" HorizontalAlignment="Left" VerticalAlignment="Center" Stroke="#FF808080" Fill="#FF808080" Data="M0,0L7,4 0,8z" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter TargetName="ExpandPath" Property="Path.Data" Value="M0,0L4,7 8,0z" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- NotesTreeViewCategoryTemplate -->
+    <ControlTemplate x:Key="NotesTreeViewCategoryTemplate" TargetType="{x:Type TreeViewItem}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="15" Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ToggleButton Name="Expander" VerticalAlignment="Center" ClickMode="Press" Focusable="False" Template="{StaticResource NotesTreeViewToggleButtonTemplate}" IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+            <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="{TemplateBinding Control.BorderThickness}" CornerRadius="1" Padding="{TemplateBinding Control.Padding}" VerticalAlignment="Center">
+                <ContentPresenter Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="Center" />
+            </Border>
+            <ItemsPresenter Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Visibility="Collapsed" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="TreeViewItem.IsExpanded" Value="True">
+                <Setter TargetName="ItemsHost" Property="UIElement.Visibility" Value="Visible" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HeaderedItemsControl.HasHeader" Value="False" />
+                    <Condition Property="FrameworkElement.Width" Value="Auto" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_Header" Property="FrameworkElement.MinWidth" Value="75" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HeaderedItemsControl.HasHeader" Value="False" />
+                    <Condition Property="FrameworkElement.Height" Value="Auto" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_Header" Property="FrameworkElement.MinHeight" Value="19" />
+            </MultiTrigger>
+            <Trigger Property="TreeViewItem.IsSelected" Value="True">
+                <Setter TargetName="Bd" Value="{StaticResource NotesTreeViewSelectionBackgroundBrush}" Property="Border.Background" />
+                <Setter Property="Control.Foreground" Value="#FFFFFFFF" />
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled" Value="False">
+                <Setter Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Property="Control.Foreground" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- NotesTreeViewNoteTemplate -->
+    <ControlTemplate x:Key="NotesTreeViewNoteTemplate" TargetType="{x:Type TreeViewItem}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="15" Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="{TemplateBinding Control.BorderThickness}" CornerRadius="1" Padding="{TemplateBinding Control.Padding}" VerticalAlignment="Center">
+                <ContentPresenter Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HeaderedItemsControl.HasHeader" Value="False" />
+                    <Condition Property="FrameworkElement.Width" Value="Auto" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_Header" Property="FrameworkElement.MinWidth" Value="75" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="HeaderedItemsControl.HasHeader" Value="False" />
+                    <Condition Property="FrameworkElement.Height" Value="Auto" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_Header" Property="FrameworkElement.MinHeight" Value="19" />
+            </MultiTrigger>
+            <Trigger Property="TreeViewItem.IsSelected" Value="True">
+                <Setter TargetName="Bd" Value="{StaticResource NotesTreeViewSelectionBackgroundBrush}" Property="Border.Background" />
+                <Setter Property="Control.Foreground" Value="#FFFFFFFF" />
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled" Value="False">
+                <Setter Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" Property="Control.Foreground" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- NotesTreeViewSubItemContextMenu -->
+    <ContextMenu x:Key="NotesTreeViewSubItemContextMenu">
+        <MenuItem Header="Create Category" CommandParameter="Untitled" Command="{Binding CreateCategoryCommand}" />
+        <MenuItem Header="Delete Category" Command="{Binding Parent.DeleteCategoryCommand}" CommandParameter="{Binding}" />
+        <MenuItem Header="Rename Category" Command="{Binding RenameCommand}" />
+    </ContextMenu>
+
+    <!-- NotesTreeViewItemContainerStyle -->
+    <Style x:Key="NotesTreeViewItemContainerStyle" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="Control.Padding" Value="0,1.5" />
+    </Style>
+
+    <!-- NotesTreeViewCategoryStyle -->
+    <Style x:Key="NotesTreeViewCategoryStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource NotesTreeViewItemContainerStyle}">
+        <Setter Property="TreeViewItem.IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+        <Setter Property="b:TreeViewItemBehavior.SelectWhen" Value="{Binding IsEditable}" />
+        <Setter Property="b:TreeViewItemBehavior.SelectParentWhenEnterPressed" Value="True" />
+        <Setter Property="b:UIElementBehavior.FocusWhenMouseRightButtonDown" Value="True" />
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True" />
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding ID}" />
+        <Setter Property="b:DragDropBehavior.DragEffects" Value="Move" />
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True" />
+        <Setter Property="b:DragDropBehavior.DropDataFormat" Value="Text"/>
+        <Setter Property="b:DragDropBehavior.DropEffects" Value="Move" />
+        <Setter Property="b:DragDropBehavior.DropControlEffects" Value="Copy" />
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding AddChildCommand}" />
+        <Setter Property="b:DragDropBehavior.DropCopyCommand" Value="{Binding AddChildCommand}" />
+        <Setter Property="FrameworkElement.ContextMenu" Value="{StaticResource NotesTreeViewSubItemContextMenu}" />
+        <Setter Property="Control.Template" Value="{StaticResource NotesTreeViewCategoryTemplate}" />
+    </Style>
+
+    <!-- NotesTreeViewNoteContextMenu -->
+    <ContextMenu x:Key="NotesTreeViewNoteContextMenu">
+        <MenuItem Header="Delete Note" Command="{Binding Note.DeleteCommand}" />
+        <MenuItem Header="Remove from Category" Command="{Binding Note.RemoveFromCategoryCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem, AncestorLevel=2}, Path=DataContext}" />
+    </ContextMenu>
+
+    <!-- NotesTreeViewNoteStyle -->
+    <Style x:Key="NotesTreeViewNoteStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource NotesTreeViewItemContainerStyle}">
+        <Setter Property="b:ControlBehavior.MouseDoubleClickCommand" Value="{Binding OpenCommand}" />
+        <Setter Property="b:UIElementBehavior.EnterCommand" Value="{Binding OpenCommand}" />
+        <Setter Property="b:UIElementBehavior.DeleteCommand" Value="{Binding Note.DeleteCommand}" />
+        <Setter Property="b:UIElementBehavior.MinusKeyDownCommand" Value="{Binding Note.RemoveFromCategoryCommand}" />
+        <Setter Property="b:UIElementBehavior.MinusKeyDownCommandParameter" Value="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem, AncestorLevel=1}, Path=DataContext}" />
+        <Setter Property="b:UIElementBehavior.FocusWhenMouseRightButtonDown" Value="True" />
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True" />
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding Note.ID}" />
+        <Setter Property="b:DragDropBehavior.DragEffects" Value="Move, Copy" />
+        <Setter Property="b:DragDropBehavior.DragMoveCommand" Value="{Binding Note.RemoveFromCategoryCommand}" />
+        <Setter Property="b:DragDropBehavior.DragMoveCommandParameter" Value="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem, AncestorLevel=1}, Path=DataContext}" />
+        <Setter Property="FrameworkElement.ContextMenu" Value="{StaticResource NotesTreeViewNoteContextMenu}" />
+        <Setter Property="Control.Template" Value="{StaticResource NotesTreeViewNoteTemplate}" />
+    </Style>
+
+    <!-- NotesTreeViewTemplateSelector -->
+    <v:NotesTreeViewTemplateSelector x:Key="NotesTreeViewTemplateSelector" />
+
+    <!-- NotesTreeViewStyleSelector -->
+    <v:NotesTreeViewStyleSelector x:Key="NotesTreeViewStyleSelector" />
+
+    <!-- NotesTreeViewCategoryDataTemplate -->
+    <HierarchicalDataTemplate x:Key="NotesTreeViewCategoryDataTemplate" DataType="{x:Type vm:CategoryViewModel}" ItemTemplateSelector="{StaticResource NotesTreeViewTemplateSelector}" ItemContainerStyleSelector="{StaticResource NotesTreeViewStyleSelector}" ItemsSource="{Binding Content}">
+        <Grid Margin="2,0,5,0" VerticalAlignment="Center">
+            <TextBlock Text="{Binding Name}" Visibility="{Binding IsEditable, Converter={StaticResource BooleanToCollapsedConverter}}" />
+            <TextBox BorderThickness="0" Margin="-2,0" Padding="0" MinWidth="60" b:TextBoxBehavior.WeakFocus="True" b:TextBoxBehavior.HandleEnter="False" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibleConverter}}" b:UIElementBehavior.IsFocused="{Binding IsEditable}" b:TextBoxBehavior.SelectAllWhen="{Binding IsEditable}" b:UIElementBehavior.LostKeyboardFocusCommand="{Binding RenameCommand}" xmlns:p7="clr-namespace:SilverNote.Behaviors;assembly=SilverNote,Version=1.0.4858.16005,Culture=neutral,PublicKeyToken=null" />
+        </Grid>
+    </HierarchicalDataTemplate>
+
+    <!-- NotesTreeViewNoteDataTemplate -->
+    <DataTemplate x:Key="NotesTreeViewNoteDataTemplate" DataType="{x:Type vm:SearchResultViewModel}">
+        <TextBlock Margin="2,0,5,0" Text="{Binding Title}" />
+    </DataTemplate>
+
+    <!-- NotesTreeViewItemContextMenu -->
+    <ContextMenu x:Key="NotesTreeViewItemContextMenu">
+        <MenuItem Header="Add Category" CommandParameter="Untitled" Command="{Binding CreateCategoryCommand}" />
+        <MenuItem Header="Remove Category" Command="{Binding Notebook.DeleteCategoryCommand}" CommandParameter="{Binding}" />
+        <MenuItem Header="Rename Category" Command="{Binding RenameCommand}" />
+    </ContextMenu>
+
+    <!-- NotesTreeViewTopLevelCategoryStyle -->
+    <Style x:Key="NotesTreeViewTopLevelCategoryStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource NotesTreeViewCategoryStyle}">
+        <Setter Property="FrameworkElement.ContextMenu" Value="{StaticResource NotesTreeViewItemContextMenu}" />
+    </Style>
+
+    <!-- NotesTreeViewContextMenu -->
+    <ContextMenu x:Key="NotesTreeViewContextMenu">
+        <MenuItem Header="Add Category" CommandParameter="Untitled" Command="{Binding CreateCategoryCommand}" />
+    </ContextMenu>
+
+    <!-- NotesTreeViewStyle -->
+    <Style x:Key="NotesTreeViewStyle" TargetType="{x:Type TreeView}">
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Standard" />
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True" />
+        <Setter Property="b:DragDropBehavior.DropDataFormat" Value="Text"/>
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding AddTopLevelCategoryCommand}" />
+        <Setter Property="b:TreeViewBehavior.WeakSelection" Value="True" />
+        <Setter Property="FrameworkElement.ContextMenu" Value="{StaticResource NotesTreeViewContextMenu}" />
+        <Setter Property="ItemsControl.ItemTemplate" Value="{StaticResource NotesTreeViewCategoryDataTemplate}" />
+        <Setter Property="ItemsControl.ItemContainerStyle" Value="{StaticResource NotesTreeViewTopLevelCategoryStyle}" />
+        <Setter Property="ItemsControl.ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

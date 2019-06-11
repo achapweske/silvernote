@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g class="locked" fill="none">
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" x="0" y="0" width="50" height="20" />
+    <text class="autofocus" x="0" y="0" placeholder="#" font-family="Comic Sans MS, Cursive" font-size="13.3333333333333" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:50px;height:20px;padding-top:2px;padding-left:4px;display:block;" />
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" layout="var c = Math.min(bounds.width,bounds.height);this.setAttribute('x',bounds.x+bounds.width-c);this.setAttribute('y',bounds.y);this.setAttribute('width',c);this.setAttribute('height',c)" x="30" y="0" width="20" height="20" />
+    <polygon class="fill-locked stroke-locked" stroke-width="0" stroke="none" fill="rgb(51,51,51)" layout="var c = Math.min(bounds.width,bounds.height);this.setAttribute('points',(bounds.x+bounds.width-c*.75)+','+(bounds.y+c*.45)+' '+(bounds.x+bounds.width-c*.25)+','+(bounds.y+c*.45)+' '+(bounds.x+bounds.width-c/2)+','+(bounds.y+c*.2))" points="35,9 45,9 40,4" />
+    <polygon class="fill-locked stroke-locked" stroke-width="0" stroke="none" fill="rgb(51,51,51)" layout="var c = Math.min(bounds.width,bounds.height);this.setAttribute('points',(bounds.x+bounds.width-c*.75)+','+(bounds.y+c*.55)+' '+(bounds.x+bounds.width-c*.25)+','+(bounds.y+c*.55)+' '+(bounds.x+bounds.width-c/2)+','+(bounds.y+c*.8))" points="35,11 45,11 40,16" />
+    <line class="snap" x1="0" y1="0" x2="0" y2="0" />
+    <line class="snap" x1="50" y1="0" x2="50" y2="0" />
+    <line class="snap" x1="0" y1="20" x2="0" y2="20" />
+    <line class="snap" x1="50" y1="20" x2="50" y2="20" />
+  </g>
+</svg>

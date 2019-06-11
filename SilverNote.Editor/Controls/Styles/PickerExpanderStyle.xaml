@@ -1,0 +1,215 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- PickerHeaderBackgroundBrush -->
+    <LinearGradientBrush x:Key="PickerHeaderBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#F8F8F8" Offset="0.0"/>
+        <GradientStop Color="#E8E8E8" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <!-- PickerHeaderTextBoxTemplate -->
+    <ControlTemplate x:Key="PickerHeaderTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <!-- Layout Root -->
+        <Grid>
+            <!-- Border -->
+            <Border 
+                x:Name="Border" 
+                CornerRadius="3" />
+            <!-- Content -->
+            <ScrollViewer 
+                x:Name="PART_ContentHost" 
+                Background="Transparent" 
+                VerticalAlignment="Center" />
+            <!-- Watermark -->
+            <TextBlock 
+                x:Name="Watermark" 
+                Margin="4,0,0,0"
+                Foreground="#222" 
+                FontStyle="Italic"
+                Visibility="Collapsed" 
+                VerticalAlignment="Center" 
+                Text="New Group"  />
+        </Grid>
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsKeyboardFocused" Value="False" />
+                    <Condition Property="Text" Value="" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="Watermark" Property="Visibility" Value="Visible"></Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="White"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerHeaderTextBoxStyle -->
+    <Style x:Key="PickerHeaderTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Cursor" Value="IBeam"/>
+        <Setter Property="MaxLines" Value="1"/>
+        <Setter Property="Template" Value="{StaticResource PickerHeaderTextBoxTemplate}"/>
+    </Style>
+
+    <!-- PickerHeaderButtonTemplate -->
+    <ControlTemplate x:Key="PickerHeaderButtonTemplate" TargetType="{x:Type Button}">
+        <!-- Layout Root -->
+        <Grid x:Name="Grid">
+            <Border 
+                x:Name="Border" 
+                Background="Transparent" 
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                CornerRadius="3"/>
+            <Border 
+                x:Name="Glow" 
+                Background="Transparent" 
+                BorderBrush="Transparent" 
+                BorderThickness="3" 
+                CornerRadius="3"/>
+            <ContentPresenter 
+                HorizontalAlignment="Center"                             
+                VerticalAlignment="Center"
+                Margin="{TemplateBinding Padding}" />
+        </Grid>
+        <!--Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsDefault" Value="True">
+                <Setter Property="BorderBrush" Value="Blue" TargetName="Glow"/>
+                <Setter Property="Opacity" Value="0.25" TargetName="Glow"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Orange" TargetName="Glow"/>
+                <Setter Property="Opacity" Value="0.5" TargetName="Glow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#CCC" TargetName="Border"/>
+                <Setter Property="BorderBrush" Value="Transparent" TargetName="Glow"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush" Value="#AAA" TargetName="Border"/>
+                <Setter Property="Foreground" Value="#888"/>
+                <Setter Property="BorderBrush" Value="Transparent" TargetName="Glow"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerHeaderButtonStyle-->
+    <Style x:Key="PickerHeaderButtonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Template" Value="{StaticResource PickerHeaderButtonTemplate}"/>
+    </Style>
+    
+    <!-- PickerHeaderCloseButtonTemplate -->
+    <ControlTemplate x:Key="PickerHeaderCloseButtonTemplate" TargetType="{x:Type Button}">
+        <!-- Layout Root -->
+        <Border x:Name="Border" Width="14" Height="14" CornerRadius="2" Background="{TemplateBinding Background}">
+            <Grid>
+                <Line x:Name="criss" X1="4" Y1="4" X2="10" Y2="10" StrokeThickness="2" Stroke="{TemplateBinding Foreground}"/>
+                <Line x:Name="cross" X1="10" Y1="4" X2="4" Y2="10" StrokeThickness="2" Stroke="{TemplateBinding Foreground}"/>
+            </Grid>
+        </Border>
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#666"/>
+                <Setter Property="Background" Value="#DDD"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Stroke" Value="#DDD" TargetName="criss"/>
+                <Setter Property="Stroke" Value="#DDD" TargetName="cross"/>
+                <Setter Property="Background" Value="#AAA"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerHeaderCloseButtonStyle -->
+    <Style x:Key="PickerHeaderCloseButtonStyle" TargetType="{x:Type Button}" BasedOn="{x:Null}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#AAA"/>
+        <Setter Property="Template" Value="{StaticResource PickerHeaderCloseButtonTemplate}"/>
+    </Style>
+
+    <!-- PickerExpanderHeaderTemplate -->
+    <ControlTemplate x:Key="PickerExpanderHeaderTemplate" TargetType="{x:Type ToggleButton}">
+        <Grid Background="Transparent">
+            <Grid Margin="{TemplateBinding Padding}">
+                <Grid.ColumnDefinitions>
+                    <!-- Arrow -->
+                    <ColumnDefinition Width="19"/>
+                    <!-- Title -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Arrow -->
+                <Path 
+                    x:Name="arrow" 
+                    Data="M 1,1  L 4.5,4.5  L 1,8" 
+                    Stroke="#222" 
+                    StrokeThickness="2" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"/>
+                <!-- Title -->
+                <ContentPresenter 
+                    Grid.Column="1" 
+                    Margin="4,0,0,0" 
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Center" 
+                    RecognizesAccessKey="True" 
+                    SnapsToDevicePixels="True" />
+            </Grid>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="true">
+                <Setter Property="Data" TargetName="arrow" Value="M 1,1.5 L 4.5,5 L 8,1.5"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerExpanderHeaderStyle -->
+    <Style x:Key="PickerExpanderHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Template" Value="{StaticResource PickerExpanderHeaderTemplate}" />
+    </Style>
+
+    <!-- PickerExpanderTemplate -->
+    <ControlTemplate x:Key="PickerExpanderTemplate" TargetType="{x:Type Expander}">
+        <!-- Root -->
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <!-- Header -->
+                <RowDefinition Height="Auto"/>
+                <!-- Content -->
+                <RowDefinition Height="*" x:Name="ContentRow"/>
+            </Grid.RowDefinitions>
+            <!-- Header -->
+            <Border CornerRadius="2" Background="{StaticResource PickerHeaderBackgroundBrush}">
+                <ToggleButton 
+                    Content="{TemplateBinding Header}" 
+                    Style="{DynamicResource PickerExpanderHeaderStyle}" 
+                    IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </Border>
+            <!-- Content -->
+            <ContentPresenter 
+                x:Name="ContentSite" 
+                Grid.Row="1" 
+                Visibility="Collapsed" 
+                Focusable="false"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="True">
+                <Setter Property="Visibility" Value="Visible" TargetName="ContentSite"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!-- PickerExpanderStyle -->
+    <Style x:Key="PickerExpanderStyle" TargetType="{x:Type Expander}">
+        <Setter Property="Template" Value="{StaticResource PickerExpanderTemplate}" />
+    </Style>
+
+</ResourceDictionary>

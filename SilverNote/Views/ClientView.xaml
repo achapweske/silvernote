@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="SilverNote.Views.ClientView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/SilverNote.Editor;component/Controls/Styles/PickerExpanderStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Name="RequestExpanderRow" Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Name="ResponseExpanderRow" Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Request List -->
+        <ListView Name="RequestList"  AlternationCount="2" ItemsSource="{Binding Log}" SelectedItem="{Binding SelectedItem}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="Transparent"></Setter>
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter Property="Background" Value="#F0F0F0"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Padding" Value="5, 0, 10, 0" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Header="Method">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Method}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Uri" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Resource}" ToolTip="{Binding Uri}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Response" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Response.StatusCode}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Type" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Response.ContentType}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Time (ms)" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RoundTripTime}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!-- Splitter -->
+        <GridSplitter 
+            Grid.Row="1" 
+            Height="3"       
+            Background="Transparent"
+            Focusable="False"
+            IsEnabled="{Binding ElementName=RequestExpander, Path=IsExpanded}"
+            HorizontalAlignment="Stretch" 
+            ResizeDirection="Rows" 
+            ResizeBehavior="PreviousAndNext" />
+        <!-- Request -->
+        <Expander 
+            Name="RequestExpander"
+            Grid.Row="2" 
+            Header="Request" 
+            DataContext="{Binding ElementName=RequestList, Path=SelectedItem}" 
+            Style="{StaticResource PickerExpanderStyle}"
+            Expanded="RequestExpander_Expanded"
+            Collapsed="RequestExpander_Collapsed">
+            <ScrollViewer Background="White" Padding="5">
+                <TextBlock Text="{Binding Summary}" />
+            </ScrollViewer>
+        </Expander>
+        <!-- Splitter -->
+        <Thumb
+            Name="ResponseSplitter"
+            Grid.Row="3"
+            Cursor="SizeNS"
+            Height="3"
+            Background="Transparent"
+            Focusable="False"
+            IsEnabled="{Binding ElementName=ResponseExpander, Path=IsExpanded}"
+            HorizontalAlignment="Stretch" 
+            DragDelta="ResponseSplitter_DragDelta" />
+        <!-- Response -->
+        <Expander 
+            Name="ResponseExpander"
+            Grid.Row="4" 
+            Header="Response" 
+            DataContext="{Binding ElementName=RequestList, Path=SelectedItem.Response}" 
+            Style="{StaticResource PickerExpanderStyle}"
+            Expanded="ResponseExpander_Expanded"
+            Collapsed="ResponseExpander_Collapsed">
+            <ScrollViewer Background="White" Padding="5">
+                <TextBlock Text="{Binding Summary}" />
+            </ScrollViewer>
+        </Expander>
+    </Grid>
+</UserControl>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  
+  <!-- 
+    Product: describes the product being installed
+      Id - the ProductCode; "*" tells the compiler to generate a new GUID each time this file is compiled.
+      Name, Version, Manufacturer - these populate the MSI file's "Properties" page, and are displayed in the installer UI
+      Language - 1033 = "English-United States" 
+      UpgradCode - identifies product across releases (this should never change).
+  -->
+  <Product Id="*" 
+           Name="SilverNote" 
+           Version="!(bind.FileVersion.SilverNote.Output)" 
+           Manufacturer="Adam Chapweske" 
+           Language="1033" 
+           UpgradeCode="54FFD0A0-177B-4595-9048-3D9E23720324">
+    
+    <!--
+      Package: describes the installer (msi file) itself
+        InstallerVersion - the required version of msiexec.exe (the Windows service that installs .msi files)
+        InstallScope - "perMachine" or "perUser"
+    -->
+    <Package InstallerVersion="200"  
+             InstallScope="perMachine" 
+             Manufacturer="Adam Chapweske"
+             Description="This program installs SilverNote for Windows"
+             Compressed="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    
+    <!-- 
+      MediaTemplate: controls packaging of the files to be installed
+         EmbedCab - "yes" to embed files within the installer; "no" to package them into separate .cab files
+    -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Properties for the "Add/Remove Programs" control panel -->
+    <Icon Id="SilverNote.ico" SourceFile="$(var.SilverNote.ProjectDir)SilverNote.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="SilverNote.ico" />
+
+    <!--
+      Feature: defines a node in the feature tree
+        Title - user-friendly title
+        Level - "1" = selected by default
+    -->
+    <Feature Id="ProductFeature" Title="SilverNote" Level="1">
+      <Component Id="SilverNote.Output" 
+                 Guid="BD02A461-8218-4BBD-AB1B-38A045A12799" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Output"
+              Source="$(var.SilverNote.TargetPath)"
+              KeyPath="yes" />
+        
+        <!-- Register .nbk file extension-->
+        <ProgId Id="SilverNote.Notebook" Description="SilverNote Notebook">
+          <Extension Id="nbk">
+            <Verb Id="open" TargetFile="SilverNote.Output" Argument='"%1"' />
+          </Extension>
+        </ProgId>
+        
+      </Component>
+      <Component Id="SilverNote.Behaviors.Output" 
+                 Guid="B1ACC809-1D21-49FF-ABB5-7F20DAF578D3" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Behaviors.Output"
+              Source="$(var.SilverNote.Behaviors.TargetPath)"
+              KeyPath="yes"/>
+      </Component>
+      <Component Id="SilverNote.Client.Output" 
+                 Guid="8511D7B5-9F41-4E3A-B249-7DE9EEF43DC5" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Client.Output"
+              Source="$(var.SilverNote.Client.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.Common.Output" 
+                 Guid="200517D9-5723-45B6-9D54-0B0E208B7643" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Common.Output"
+              Source="$(var.SilverNote.Common.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.Converters.Output" 
+                 Guid="DCF63DD7-E758-445B-8714-FBCA162B3E0C" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Converters.Output"
+              Source="$(var.SilverNote.Converters.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.Data.Output" 
+                 Guid="7772A395-960B-4A8D-9C25-A3C2872B9009" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Data.Output"
+              Source="$(var.SilverNote.Data.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.DOM.Output" 
+                 Guid="AA4B6FC8-7B67-4936-9C19-058CC29F6A82" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.DOM.Output"
+              Source="$(var.SilverNote.DOM.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.Editor.Output" 
+                 Guid="B7115DAB-8E17-4C39-9048-BEDD899BD907" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Editor.Output"
+              Source="$(var.SilverNote.Editor.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="SilverNote.Server.Output" 
+                 Guid="BE1F24A6-83A3-4611-BCCA-C49238386C42" 
+                 Directory="INSTALLFOLDER">
+        <File Id="SilverNote.Server.Output"
+              Source="$(var.SilverNote.Server.TargetPath)"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="HtmlAgilityPack.dll" 
+                 Guid="A447181D-AD39-4EC6-8A9B-942E0B7E2195" 
+                 Directory="INSTALLFOLDER">
+        <File Id="HtmlAgilityPack.dll"
+              Source="$(var.SolutionDir)\packages\HtmlAgilityPack.1.11.7\lib\Net40\HtmlAgilityPack.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Jurassic.dll" 
+                 Guid="6C7B37F3-E365-43A6-AF04-605AC684D907" 
+                 Directory="INSTALLFOLDER">
+        <File Id="Jurassic.dll"
+              Source="$(var.SolutionDir)\packages\Jurassic.2.2.1\lib\net35\Jurassic.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" 
+                 Guid="3751DC04-2252-4680-BF89-36670B5B39DB" 
+                 Directory="INSTALLFOLDER">
+        <File Id="Newtonsoft.Json.dll"
+              Source="$(var.SolutionDir)\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="System.Data.SQLite" 
+                 Guid="BC8B19D0-18B3-4614-A1A7-687D28F36E09" 
+                 Directory="INSTALLFOLDER">
+        <File Id="System.Data.SQLite"
+              Source="$(var.SolutionDir)packages\System.Data.SQLite.Core.1.0.110.0\lib\net40\System.Data.SQLite.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="x86_SQLite.Interop.dll" 
+                 Guid="D1D4C35A-0095-479C-9020-559657FCF212" 
+                 Directory="X86FOLDER">
+        <File Id="x86_SQLite.Interop.dll"
+              Source="$(var.SolutionDir)packages\System.Data.SQLite.Core.1.0.110.0\build\net40\x86\SQLite.Interop.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="x64_SQLite.Interop.dll" 
+                 Guid="C4EC7113-C0B8-43DB-9B19-737C26E93F42" 
+                 Directory="X64FOLDER">
+        <File Id="x64_SQLite.Interop.dll"
+              Source="$(var.SolutionDir)packages\System.Data.SQLite.Core.1.0.110.0\build\net40\x64\SQLite.Interop.dll"
+              KeyPath="yes" />
+      </Component>
+      
+      <ComponentRef Id="ApplicationStartMenuShortcut"/>
+    </Feature>
+  </Product>
+
+  <!-- Directory Structure -->
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Program Files -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="SilverNote">
+          <Directory Id="X86FOLDER" Name="x86" />
+          <Directory Id="X64FOLDER" Name="x64" />
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder" />
+    </Directory>
+  </Fragment>
+  
+  <!-- Start Menu -->
+  <Fragment>
+    <DirectoryRef Id="ProgramMenuFolder">
+      <Component Id="ApplicationStartMenuShortcut" Guid="6BC28808-0D32-4142-8E04-EB66BC22CF3B">
+        
+        <!-- Shortcut to SilverNote.exe -->
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="SilverNote"
+                  Target="[INSTALLFOLDER]SilverNote.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+                
+        <!-- Define a registry entry to use as the KeyPath for this component-->
+        <RegistryValue Root="HKCU" 
+                       Key="Software\SilverNote\SilverNote" 
+                       Name="installed" 
+                       Type="integer" 
+                       Value="1" 
+                       KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
+

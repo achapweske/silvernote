@@ -1,0 +1,2 @@
+﻿ALTER TABLE Repository ADD version INTEGER;
+UPDATE Repository SET version=1;

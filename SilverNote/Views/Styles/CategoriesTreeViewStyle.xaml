@@ -1,0 +1,94 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+                    xmlns:vm="clr-namespace:SilverNote.ViewModels">
+    
+    <!-- CategoriesTreeViewSubItemContextMenu -->
+    <ContextMenu x:Key="CategoriesTreeViewSubItemContextMenu">
+        <MenuItem Header="Create Category" Command="{Binding CreateCategoryCommand}" CommandParameter="Untitled"/>
+        <MenuItem Header="Delete Category" Command="{Binding Parent.DeleteCategoryCommand}" CommandParameter="{Binding}"/>
+        <MenuItem Header="Rename Category" Command="{Binding RenameCommand}"/>
+    </ContextMenu>
+    
+    <!-- CategoriesTreeViewSubItemContainerStyle -->
+    <Style x:Key="CategoriesTreeViewSubItemContainerStyle" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+        <Setter Property="b:TreeViewItemBehavior.SelectWhen" Value="{Binding IsEditable}"/>
+        <Setter Property="b:TreeViewItemBehavior.SelectParentWhenEnterPressed" Value="True"/>
+        <Setter Property="b:DragDropBehavior.AllowDrag" Value="True"/>
+        <Setter Property="b:DragDropBehavior.DragData" Value="{Binding Uri}"/>
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True"/>
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding DropCommand}"/>
+        <Setter Property="ContextMenu" Value="{StaticResource CategoriesTreeViewSubItemContextMenu}"/>
+    </Style>
+    
+    <!-- CategoriesTreeViewItemTemplate -->
+    <HierarchicalDataTemplate 
+        x:Key="CategoriesTreeViewItemTemplate" 
+        DataType="{x:Type vm:CategoryViewModel}" 
+        ItemsSource="{Binding Children, Converter={StaticResource SortCollectionConverter}, ConverterParameter='Name'}"
+        ItemContainerStyle="{StaticResource CategoriesTreeViewSubItemContainerStyle}">
+        <StackPanel Orientation="Horizontal">
+            <!-- Folder Icon -->
+            <Image 
+                Width="16" 
+                Height="16"
+                Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToCollapsedConverter}}"
+                Source="/SilverNote;component/Images/folder_closed.png" />
+            <Image 
+                Width="16" 
+                Height="16"
+                Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibleConverter}}"
+                Source="/SilverNote;component/Images/folder_open.png" />
+            <!-- Category Name -->
+            <Grid Margin="2,0,5,0" VerticalAlignment="Center" TextBlock.FontWeight="Bold">
+                <!-- IsEditable = false -->
+                <TextBlock 
+                    Text="{Binding Name}" 
+                    Visibility="{Binding IsEditable, Converter={StaticResource BooleanToCollapsedConverter}}"/>
+                <!-- IsEditable = true -->
+                <TextBox 
+                    BorderThickness="0"
+                    Margin="-2,0"
+                    Padding="0"
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                    Visibility="{Binding IsEditable, Converter={StaticResource BooleanToVisibleConverter}}"
+                    b:UIElementBehavior.IsFocused="{Binding IsEditable}"
+                    b:TextBoxBehavior.SelectAllWhen="{Binding IsEditable}"
+                    b:TextBoxBehavior.WeakFocus="True"
+                    b:TextBoxBehavior.HandleEnter="False"
+                    b:UIElementBehavior.LostKeyboardFocusCommand="{Binding RenameCommand}"/>
+            </Grid>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    
+    <!-- CategoriesTreeViewItemContextMenu-->
+    <ContextMenu x:Key="CategoriesTreeViewItemContextMenu">
+        <MenuItem Header="Add Category" Command="{Binding CreateCategoryCommand}" CommandParameter="Untitled"/>
+        <MenuItem Header="Remove Category" Command="{Binding Notebook.DeleteCategoryCommand}" CommandParameter="{Binding}"/>
+        <MenuItem Header="Rename Category" Command="{Binding RenameCommand}"/>
+    </ContextMenu>
+
+    <!-- CategoriesTreeViewItemContainerStyle -->
+    <Style x:Key="CategoriesTreeViewItemContainerStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource CategoriesTreeViewSubItemContainerStyle}">
+        <Setter Property="Margin" Value="0,1"/>
+        <Setter Property="ContextMenu" Value="{StaticResource CategoriesTreeViewItemContextMenu}"/>
+        <Setter Property="b:TreeViewItemBehavior.SelectParentWhenEnterPressed" Value="True"/>
+    </Style>
+    
+    <!-- CategoriesTreeViewContextMenu -->
+    <ContextMenu x:Key="CategoriesTreeViewContextMenu">
+        <MenuItem Header="Add Category" Command="{Binding CreateCategoryCommand}" CommandParameter="Untitled"/>
+    </ContextMenu>
+    
+    <!-- CategoriesTreeViewStyle -->
+    <Style x:Key="CategoriesTreeViewStyle" TargetType="{x:Type TreeView}">
+        <Setter Property="b:DragDropBehavior.AllowDrop" Value="True"/>
+        <Setter Property="b:DragDropBehavior.DropMoveCommand" Value="{Binding DropCommand}"/>
+        <Setter Property="b:TreeViewBehavior.WeakSelection" Value="True"/>
+        <Setter Property="ContextMenu" Value="{StaticResource CategoriesTreeViewContextMenu}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource CategoriesTreeViewItemTemplate}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource CategoriesTreeViewItemContainerStyle}"/>
+    </Style>
+    
+</ResourceDictionary>

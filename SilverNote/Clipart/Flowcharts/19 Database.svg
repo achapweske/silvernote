@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="3kufzqrdfba">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <path stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#3kufzqrdfba)" d="M900,309.999999925494 A50,10 0 1,1 1000,309.999999925494 L1000,399.999999925494 A50,10 0 1,1 900,399.999999925494z" />
+    <path class="semiEllipse" stroke-width="2" stroke="rgb(51,51,51)" fill="white" d="M1000,310.000000028974 A50,9.9999999627471 0 1 1 900,310.000000029802" />
+    <text x="900" y="320" placeholder="Database" class="autofocus" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="width:100px;height:80px;vertical-align:middle;display:block;text-align:center;" />
+    <line class="snap" x1="950" y1="300" x2="950" y2="300" />
+    <line class="snap" x1="950" y1="410" x2="950" y2="410" />
+    <line class="snap" x1="900" y1="360" x2="900" y2="360" />
+    <line class="snap" x1="900" y1="340" x2="900" y2="340" />
+    <line class="snap" x1="900" y1="380" x2="900" y2="380" />
+    <line class="snap" x1="1000" y1="360" x2="1000" y2="360" />
+    <line class="snap" x1="1000" y1="340" x2="1000" y2="340" />
+    <line class="snap" x1="1000" y1="380" x2="1000" y2="380" />
+    <line class="snap" x1="970" y1="408.75" x2="970" y2="408.75" />
+    <line class="snap" x1="930" y1="408.75" x2="930" y2="408.75" />
+  </g>
+</svg>

@@ -1,0 +1,503 @@
+﻿<UserControl x:Class="SilverNote.Views.NoteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:SilverNote"
+             xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+             xmlns:ec="clr-namespace:SilverNote.Controls;assembly=SilverNote.Editor"
+             xmlns:c="clr-namespace:SilverNote.Controls"
+             xmlns:cmd="clr-namespace:SilverNote.Commands;assembly=SilverNote.Editor"
+             xmlns:e="clr-namespace:SilverNote.Editor;assembly=SilverNote.Editor"
+             xmlns:v="clr-namespace:SilverNote.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="769" d:DesignWidth="1024"
+             TextOptions.TextFormattingMode="Display"
+             b:UIElementBehavior.PreviewMouseLeftButtonDownCommand="{Binding Notebook.ActivateNoteCommand}"
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <!-- HandleThumb (see NAdorner) -->
+        <ControlTemplate x:Key="HandleThumb" TargetType="{x:Type Thumb}">
+            <Rectangle 
+                x:Name="Border" 
+                Width="{TemplateBinding Width}" 
+                Height="{TemplateBinding Height}" 
+                Stroke="{TemplateBinding BorderBrush}" 
+                Fill="{TemplateBinding Background}" 
+                StrokeThickness="{TemplateBinding BorderThickness}" />
+        </ControlTemplate>
+        <!-- MoverThumb (see NAdorner) -->
+        <ControlTemplate x:Key="MoverThumb" TargetType="{x:Type Thumb}">
+            <Grid>
+                <Rectangle 
+                    x:Name="Border" 
+                    Width="{TemplateBinding Width}" 
+                    Height="{TemplateBinding Height}" 
+                    Stroke="{TemplateBinding BorderBrush}" 
+                    Fill="{TemplateBinding Background}" 
+                    StrokeThickness="{TemplateBinding BorderThickness}" />
+                <Image 
+                    Panel.ZIndex="1" 
+                    Width="16" 
+                    Height="16"
+                    Source="/SilverNote;component/Images/move.png"/>
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="cmd:NEditingCommands.Find" Executed="FindCommand_Executed"/>
+        <CommandBinding Command="cmd:NEditingCommands.Replace" Executed="ReplaceCommand_Executed"/>
+    </UserControl.CommandBindings>
+    <!-- Layout Root -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Toolbar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!-- Toolbar -->
+            <ColumnDefinition Width="*"/>
+            <!-- Delete -->
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <!-- Content -->
+        <!-- By making this the 1st child, its parent TabControl will give it focus -->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="4" ClipToBounds="True">
+            <!-- Find/Replace Control-->
+            <c:FindReplaceControl 
+                x:Name="FindReplace"
+                Panel.ZIndex="2" 
+                Width="300" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Top" 
+                Visibility="Collapsed"
+                FindText="{Binding ElementName=_Editor, Path=FindText, Mode=OneWayToSource}"
+                ReplaceText="{Binding ElementName=_Editor, Path=ReplaceText, Mode=OneWayToSource}"
+                FindTextChanged="FindReplace_FindTextChanged"
+                FindNextCommand="cmd:NEditingCommands.FindNext"
+                FindPreviousCommand="cmd:NEditingCommands.FindPrevious"
+                ReplaceOnceCommand="cmd:NEditingCommands.ReplaceOnce"
+                ReplaceAllCommand="cmd:NEditingCommands.ReplaceAll"
+                Closed="FindReplace_Closed"
+                CommandTarget="{Binding ElementName=_Editor}"/>
+            <!-- ScrollViewer -->
+            <!-- WARNING: Setting HorizontalScrollBarVisibility="Auto" here causes a really nasty bug (http://social.msdn.microsoft.com/Forums/en-US/windowsuidevelopment/thread/545461b5-cf62-48e2-bcfb-2e872ecea639/)-->
+            <ScrollViewer 
+                x:Name="Scroller" 
+                Background="White" 
+                Padding="0,6"
+                HorizontalScrollBarVisibility="Visible"
+                b:DragDropBehavior.AutoScroll="True"
+                ScrollChanged="Scroller_ScrollChanged">
+                <Grid>
+                    <!-- Categories -->
+                    <v:NoteCategoriesView 
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="0,2,0,0"
+                        Panel.ZIndex="1000">
+                    </v:NoteCategoriesView>
+                    <!-- Editor -->
+                    <e:NoteEditor 
+                        x:Name="_Editor"
+                        Background="Transparent" 
+                        MinHeight="{Binding ElementName=Scroller, Path=ViewportHeight}"
+                        Url="{Binding Url}"
+                        Title="{Binding Title}"
+                        Content="{Binding Content}"
+                        Text="{Binding Text, Mode=OneWayToSource}"
+                        PathSmoothness="{Binding Source={x:Static local:App.Current}, Path=DrawingSmoothness}"
+                        b:UIElementBehavior.IsFocused="{Binding IsActive}"
+                        b:UIElementBehavior.IsFocusedTwoWay="True"
+                        b:UIElementBehavior.ScrollOnDrag="True">
+                    </e:NoteEditor>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+        <!-- Toolbar -->
+        <ToolBarTray Grid.Column="0" Margin="4,4,4,0" Background="Transparent" DataContext="{Binding ElementName=_Editor}">
+            <!-- Text Tools -->
+            <ToolBar Band="1" BandIndex="1" Margin="0" Background="Transparent">
+                <Image Height="16" Width="16" UseLayoutRounding="True" Source="/SilverNote;component/Images/font.png" Margin="3"/>
+                <!-- Font -->
+                <ComboBox 
+                    Name="FontComboBox" 
+                    Width="115" 
+                    Margin="3,0" 
+                    IsEditable="True" 
+                    TextSearch.TextPath="{}"
+                    SelectedItem="{Binding FontClass}"
+                    b:ComboBoxBehavior.FocusWhenDropDownClosed="{Binding ElementName=_Editor}"
+                    b:UIElementBehavior.FocusWhenEnterReleased="{Binding ElementName=_Editor}"
+                    ToolTip="Font">
+                    <!-- ItemsSource -->
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <CollectionContainer Collection="{x:Static e:FontClass.CommonStyles}" />
+                            <Separator/>
+                            <CollectionContainer Collection="{x:Static e:FontClass.SystemStyles}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                    <!-- ItemContainerStyleSelector -->
+                    <ComboBox.ItemContainerStyleSelector>
+                        <v:SimpleContainerStyleSelector>
+                            <v:SimpleContainerStyle DataType="{x:Type e:FontClass}">
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="b:ListBoxItemBehavior.Command" Value="cmd:NFormattingCommands.SetFontFamily" />
+                                    <Setter Property="b:ListBoxItemBehavior.CommandParameter" Value="{Binding}" />
+                                </Style>
+                           </v:SimpleContainerStyle>
+                        </v:SimpleContainerStyleSelector>
+                    </ComboBox.ItemContainerStyleSelector>
+                    <!-- ItemTemplate -->
+                    <ComboBox.ItemTemplateSelector>
+                        <v:SimpleDataTemplateSelector>
+                            <DataTemplate DataType="{x:Type e:FontClass}">
+                                <TextBlock Text="{Binding Path=Name}" FontFamily="{Binding Path=FontFamily}" FontSize="9pt"/>
+                            </DataTemplate>
+                        </v:SimpleDataTemplateSelector>
+                    </ComboBox.ItemTemplateSelector>
+                </ComboBox>
+                <!-- Size -->
+                <ComboBox 
+                    Name="TextSizeList" 
+                    Margin="3,0" 
+                    IsEditable="True" 
+                    IsTextSearchEnabled="True" 
+                    IsTextSearchCaseSensitive="False" 
+                    StaysOpenOnEdit="True" 
+                    TextSearch.TextPath="{}"          
+                    Text="{Binding FontSize}"
+                    b:ComboBoxBehavior.FocusWhenDropDownClosed="{Binding ElementName=_Editor}"
+                    b:UIElementBehavior.FocusWhenEnterReleased="{Binding ElementName=_Editor}"
+                    ToolTip="Size">
+                    <!-- ItemContainerStyleSelector -->
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="b:ListBoxItemBehavior.Command" Value="cmd:NFormattingCommands.SetFontSize" />
+                            <Setter Property="b:ListBoxItemBehavior.CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                    <!-- ItemTemplate -->
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="9pt" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <!-- Items -->
+                    <sys:Int32>6</sys:Int32>
+                    <sys:Int32>8</sys:Int32>
+                    <sys:Int32>10</sys:Int32>
+                    <sys:Int32>12</sys:Int32>
+                    <sys:Int32>14</sys:Int32>
+                    <sys:Int32>16</sys:Int32>
+                    <sys:Int32>18</sys:Int32>
+                    <sys:Int32>24</sys:Int32>
+                    <sys:Int32>36</sys:Int32>
+                    <sys:Int32>48</sys:Int32>
+                    <sys:Int32>72</sys:Int32>
+                </ComboBox>
+                <!-- Symbols -->
+                <c:PopupButton x:Name="SymbolButton" Height="20" Margin="2,0,0,0" FocusManager.IsFocusScope="True" ToolTip="Symbols">
+                    <c:PopupButton.Header>
+                        <Image Width="16" Height="16" Source="/SilverNote;component/Images/symbol.png"/>
+                    </c:PopupButton.Header>
+                    <c:PopupButton.Content>
+                        <c:SymbolPicker Width="286" Command="cmd:NInsertionCommands.InsertSymbol" />
+                    </c:PopupButton.Content>
+                </c:PopupButton>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Bold -->
+                <ToggleButton Name="BoldButton" ToolTip="Bold" IsChecked="{Binding Bold}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/bold.png"/>
+                </ToggleButton>
+                <!-- Italic -->
+                <ToggleButton Name="ItalicButton" ToolTip="Italic" IsChecked="{Binding Italic}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/italic.png"/>
+                </ToggleButton>
+                <!-- Underline -->
+                <ToggleButton Name="UnderlineButton" ToolTip="Underline" IsChecked="{Binding Underline}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/underline.png"/>
+                </ToggleButton>
+                <!-- Superscript -->
+                <ToggleButton Name="SuperscriptButton" ToolTip="Superscript" IsChecked="{Binding Superscript}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/superscript.png">
+                        <Image.RenderTransform>
+                            <TranslateTransform Y="-1" />
+                        </Image.RenderTransform>
+                    </Image>
+                </ToggleButton>
+                <!-- Subscript -->
+                <ToggleButton Name="SubscriptButton" ToolTip="Subscript" IsChecked="{Binding Subscript}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/subscript.png">
+                        <Image.RenderTransform>
+                            <TranslateTransform Y="1" />
+                        </Image.RenderTransform>
+                    </Image>
+                </ToggleButton>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Align Left -->
+                <ToggleButton Name="AlignLeftButton" ToolTip="Align left" IsChecked="{Binding Path=Alignment, Converter={StaticResource EqualsParameterConverter}, ConverterParameter={x:Static TextAlignment.Left}}">
+                    <Image Height="16" Width="16" Source="/SilverNote;component/Images/alignleft.png"/>
+                </ToggleButton>
+                <!-- Align Center -->
+                <ToggleButton Name="AlignCenterButton" ToolTip="Align center" IsChecked="{Binding Path=Alignment, Converter={StaticResource EqualsParameterConverter}, ConverterParameter={x:Static TextAlignment.Center}}">
+                    <Image Height="16" Width="16" Source="/SilverNote;component/Images/aligncenter.png"/>
+                </ToggleButton>
+                <!-- Align Right -->
+                <ToggleButton Name="AlignRightButton" ToolTip="Align right" IsChecked="{Binding Path=Alignment, Converter={StaticResource EqualsParameterConverter}, ConverterParameter={x:Static TextAlignment.Right}}">
+                    <Image Height="16" Width="16" Source="/SilverNote;component/Images/alignright.png"/>
+                </ToggleButton>
+                <Separator/>
+                <!-- Bullets -->
+                <ToggleButton Name="BulletButton" ToolTip="List" Padding="2,0,0,0" IsChecked="{Binding Bulleted}">
+                    <StackPanel Orientation="Horizontal">
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Height="16" Width="16" Source="/SilverNote;component/Images/bullets.png" Visibility="{Binding ElementName=_Editor, Path=DefaultListStyle.IsOrdered, Converter={StaticResource BooleanToCollapsedConverter}, FallbackValue=Visible}"/>
+                            <Image Height="16" Width="16" Source="/SilverNote;component/Images/numbering.png" Visibility="{Binding ElementName=_Editor, Path=DefaultListStyle.IsOrdered, Converter={StaticResource BooleanToVisibleConverter}, FallbackValue=Collapsed}"/>
+                        </Canvas>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <ItemsControl>
+                                <!-- ItemsSource -->
+                                <ItemsControl.ItemsSource>
+                                    <CompositeCollection>
+                                        <CollectionContainer Collection="{x:Static e:ListStyles.FilledStyles}" />
+                                        <Separator/>
+                                        <CollectionContainer Collection="{x:Static e:ListStyles.OpenStyles}" />
+                                        <Separator/>
+                                        <CollectionContainer Collection="{x:Static e:ListStyles.UnorderedStyles}" />
+                                    </CompositeCollection>
+                                </ItemsControl.ItemsSource>
+                                <!-- ItemTemplate -->
+                                <ItemsControl.ItemTemplateSelector>
+                                    <v:SimpleDataTemplateSelector>
+                                        <DataTemplate DataType="{x:Type e:IListStyle}">
+                                            <MenuItem 
+                                                Header="{Binding Description}" 
+                                                Command="cmd:NFormattingCommands.SetListStyle"
+                                                CommandParameter="{Binding}"
+                                                c:PopupButton.CloseOnClick="True">
+                                            </MenuItem>
+                                        </DataTemplate>
+                                    </v:SimpleDataTemplateSelector>
+                                </ItemsControl.ItemTemplateSelector>
+                                <!-- ItemsPanel -->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </c:PopupButton>
+                    </StackPanel>
+                </ToggleButton>
+                <!-- Outdent -->
+                <Button Name="OutdentButton" ToolTip="Outdent" Command="cmd:NFormattingCommands.DecreaseIndentation" >
+                    <Image Height="16" Width="16" Source="/SilverNote;component/Images/outdent.png"/>
+                </Button>
+                <!-- Indent -->
+                <Button Name="IndentButton" ToolTip="Indent" Command="cmd:NFormattingCommands.IncreaseIndentation" >
+                    <Image Height="16" Width="16" Source="/SilverNote;component/Images/indent.png"/>
+                </Button>
+                <Separator/>
+                <!-- Text Color -->
+                <Button Name="TextBrushButton" ToolTip="Color" Padding="2,0,0,0" Command="cmd:NFormattingCommands.SetTextColor">
+                    <StackPanel Orientation="Horizontal">
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/textcolor.png"/>
+                            <Rectangle Canvas.Top="12" Width="16" Height="4" Fill="{Binding TextBrush }" />
+                        </Canvas>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <ec:ColorPicker Margin="2" SelectedBrush="{Binding Path=TextBrush, Mode=TwoWay}" />
+                        </c:PopupButton>
+                    </StackPanel>
+                </Button>
+                <!-- Highlight -->
+                <ToggleButton Name="HighlightBrushButton" ToolTip="Highlight" Padding="2,0,0,0" IsChecked="{Binding IsHighlighting, Mode=TwoWay}" Command="cmd:NFormattingCommands.Highlight" >
+                    <StackPanel Orientation="Horizontal">
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/highlight.png"/>
+                            <Rectangle Canvas.Top="12" Width="16" Height="4" Fill="{Binding HighlightBrush}" />
+                        </Canvas>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <ec:HighlighterPicker SelectedItem="{Binding HighlightBrush, Mode=TwoWay}"/>
+                        </c:PopupButton>
+                    </StackPanel>
+                </ToggleButton>
+            </ToolBar>
+            <!-- Drawing Tools -->
+            <ToolBar Band="1" BandIndex="1" Background="Transparent">
+                <!-- Select -->
+                <ToggleButton Name="SelectButton" ToolTip="Select" IsChecked="{Binding IsSelecting}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/select.png"/>
+                </ToggleButton>
+                <!-- Pencil -->
+                <ToggleButton Name="PencilButton" ToolTip="Draw" IsChecked="{Binding IsDrawingPath}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/pencil.png"/>
+                </ToggleButton>
+                <!-- Eraser -->
+                <ToggleButton Name="EraserButton" ToolTip="Erase" IsChecked="{Binding IsErasing}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/eraser.png"/>
+                </ToggleButton>
+                <!-- Lines -->
+                <ToggleButton Name="LineButton" ToolTip="Lines" IsChecked="{Binding IsDrawingLine}" Padding="2,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <e:NCanvas 
+                                x:Name="LinePreview" 
+                                Width="16" 
+                                Height="16" 
+                                VerticalAlignment="Center" 
+                                IsEnabled="False"
+                                Drawing="{Binding SelectedLine.ThumbSmall}"/>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <c:LinePicker 
+                                IsLinesExpanded="True"
+                                IsConnectorsExpanded="True"
+                                Lines="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.Lines.Items}"
+                                Markers="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.Markers.Items}"
+                                CreateLineCommand="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.Lines.CreateClipartCommand}"
+                                DeleteLineCommand="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.Lines.DeleteClipartCommand}"
+                                SelectLineCommand="cmd:NDrawingCommands.InsertLine" 
+                                SelectedLine="{Binding SelectedLine}" />
+                        </c:PopupButton>
+                    </StackPanel>
+                </ToggleButton>
+                <!-- Clipart Button -->
+                <ToggleButton Name="ClipartButton" ToolTip="Shapes" IsChecked="{Binding IsDrawingClipart}" Padding="2,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <e:NCanvas 
+                                x:Name="ClipartThumbnail" 
+                                Width="16" 
+                                Height="16" 
+                                VerticalAlignment="Center" 
+                                IsEnabled="False" 
+                                Drawing="{Binding SelectedClipart.ThumbSmall}"/>
+                        <c:PopupButton 
+                                x:Name="ClipartPopup"
+                                Width="12" 
+                                Height="20" 
+                                Margin="2,0,0,0">
+                            <c:ClipartPicker 
+                                Width="300"
+                                ClipartGroups="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.ClipartGroups}"
+                                CreateGroupCommand="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.CreateClipartGroupCommand}"
+                                DeleteGroupCommand="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.Repository.DeleteClipartGroupCommand}"
+                                SelectClipartCommand="cmd:NDrawingCommands.InsertClipart"
+                                
+                                SelectedClipart="{Binding SelectedClipart}" />
+                        </c:PopupButton>
+                    </StackPanel>
+                </ToggleButton>
+                <!-- Text -->
+                <ToggleButton Name="TextButton" ToolTip="Text box" IsChecked="{Binding IsDrawingText}">
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/textbox.png"/>
+                </ToggleButton>
+                <!-- Stroke -->
+                <ToggleButton 
+                    Name="StrokeButton" 
+                    Padding="2,0,0,0" 
+                    IsChecked="{Binding IsStroking}"
+                    Focusable="False"
+                    ToolTip="Line style">
+                    <StackPanel Orientation="Horizontal">
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/linecolor.png"/>
+                            <Rectangle Canvas.Top="12" Width="16" Height="4" Fill="{Binding Path=StrokeBrush}" />
+                        </Canvas>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <ec:StrokeControl 
+                                Width="120"
+                                Margin="2"
+                                AllowsDash="True"
+                                SelectedBrush="{Binding StrokeBrush}"
+                                SelectedWidth="{Binding StrokeWidth}"
+                                SelectedDashArray="{Binding StrokeDashArray}"
+                                SelectedDashCap="{Binding StrokeDashCap}" 
+                                SelectBrushCommand="cmd:NDrawingCommands.Stroke"/>
+                        </c:PopupButton>
+                    </StackPanel>
+                    </ToggleButton>
+                <!-- Fill -->
+                <ToggleButton 
+                    Name="FillColorButton"  
+                    Padding="2,0,0,0" 
+                    IsChecked="{Binding IsFilling}"
+                    ToolTip="Fill style">
+                    <StackPanel Orientation="Horizontal">
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/bgndcolor.png"/>
+                            <Rectangle Canvas.Top="12" Width="16" Height="4" Fill="{Binding Path=FillBrush}" />
+                        </Canvas>
+                        <c:PopupButton Width="12" Height="20" Margin="2,0,0,0">
+                            <ec:ColorPicker 
+                                Width="120"
+                                Margin="2"
+                                AllowsNone="True" 
+                                AllowsGradient="True" 
+                                SelectedBrush="{Binding FillBrush}" 
+                                Command="cmd:NDrawingCommands.Fill"/>
+                        </c:PopupButton>
+                    </StackPanel>
+                </ToggleButton>
+            </ToolBar>
+            <!-- View Tools -->
+            <ToolBar Band="1" BandIndex="1" Background="Transparent">
+                <!-- Zoom in -->
+                <Button Name="ZoomInButton" ToolTip="Zoom in" Command="cmd:NViewCommands.ZoomIn" >
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/zoomin.png"/>
+                </Button>
+                <!-- Zoom out -->
+                <Button Name="ZoomOutButton" ToolTip="Zoom out" Command="cmd:NViewCommands.ZoomOut" >
+                    <Image Width="16" Height="16" Source="/SilverNote;component/Images/zoomout.png"/>
+                </Button>
+                <!-- Zoom -->
+                <ComboBox 
+                    Name="ZoomComboBox" 
+                    Margin="3,0" 
+                    IsEditable="True" 
+                    ToolTip="Zoom"
+                    IsTextSearchEnabled="True" 
+                    IsTextSearchCaseSensitive="False" 
+                    StaysOpenOnEdit="True" 
+                    TextSearch.TextPath="{}"
+                    Text="{Binding Zoom, Converter={StaticResource PercentConverter}}">
+                    <sys:String>25 %</sys:String>
+                    <sys:String>50 %</sys:String>
+                    <sys:String>75 %</sys:String>
+                    <sys:String>100 %</sys:String>
+                    <sys:String>150 %</sys:String>
+                    <sys:String>200 %</sys:String>
+                    <sys:String>400 %</sys:String>
+                    <sys:String>800 %</sys:String>
+                </ComboBox>
+                <!-- Grid -->
+                <ToggleButton Name="GridButton" ToolTip="{Binding IsGridVisible, Converter={StaticResource SelectConverter}, ConverterParameter='Show grid|Hide grid'}" IsChecked="{Binding IsGridVisible}">
+                    <Path 
+                        Width="16" 
+                        Height="16" 
+                        Stroke="Blue" 
+                        StrokeThickness="1" 
+                        Fill="{x:Null}" 
+                        Data="M3.5,0.5 3.5,14.5 M7.5,0.5 7.5,14.5 M11.5,0.5 11.5,14.5 M0.5,3.5 14.5,3.5 M0.5,7.5 14.5,7.5 M0.5,11.5 14.5,11.5"/>
+                </ToggleButton>
+            </ToolBar>
+        </ToolBarTray>
+        <!-- Etc. -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <!-- Delete -->
+            <Button 
+                Margin="0,0,4,0" 
+                ToolTip="Delete note"
+                Command="{Binding DeleteCommand}"
+                Focusable="False"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Image Width="16" Height="16" Source="/SilverNote;component/Images/delete2.png"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

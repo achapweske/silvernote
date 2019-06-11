@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="crtxzixnbee">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none" layout="return uml_enumeration.layout(this,bounds)">
+    <script>
+      var uml_enumeration = {
+      layout: function (element, bounds) {
+      var topPadding = Math.min(bounds.height, 2);
+      var headerText2Height = Math.min(bounds.height-topPadding, 21);
+      var headerText1Height = Math.min(bounds.height-headerText2Height-topPadding, 12);
+      var headerHeight = topPadding+headerText1Height+headerText2Height;
+      this.headerText1 = {
+      x: bounds.x,
+      y: bounds.y+topPadding,
+      style: {
+      width: bounds.width+'px',
+      height: headerText1Height+'px'
+      }
+      };
+      this.headerText2 = {
+      x: bounds.x,
+      y: bounds.y+topPadding+headerText1Height-1,
+      style: {
+      width: bounds.width+'px',
+      height: headerText2Height+'px'
+      }
+      };
+      this.headerLine = {
+      x1: bounds.x,
+      y1: bounds.y+headerHeight,
+      x2: bounds.right,
+      y2: bounds.y+headerHeight
+      };
+      this.literalsText = {
+      x: bounds.x,
+      y: bounds.y+headerHeight,
+      style: {
+      width: bounds.width+'px',
+      height: (bounds.height-headerHeight)+'px'
+      }
+      };
+      return false;
+      }
+      };
+    </script>
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#crtxzixnbee)" x="0" y="0" width="30" height="30" />
+      <text fill="black" x="0" y="0" style="width:30px;height:10px;vertical-align:middle;display:block;text-align:center;">
+        <tspan x="6" y="8" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Enum</tspan>
+      </text>
+      <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" x1="30" y1="10" x2="0" y2="10" />
+    </g>
+    <rect stroke-width="2" stroke="rgb(51,51,51)" fill="white" filter="url(#crtxzixnbee)" x="0" y="0" width="160" height="80" />
+    <text fill="black" layout="layout.update(this,uml_enumeration.headerText1)" x="0" y="2" placeholder="type" style="width:160px;height:12px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="42" y="12" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="11" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">« enumeration »</tspan>
+    </text>
+    <text class="autofocus" fill="black" layout="layout.update(this,uml_enumeration.headerText2)" x="0" y="13" placeholder="Name" style="width:160px;height:21px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="60" y="29" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Name</tspan>
+    </text>
+    <line stroke-width="2" stroke="rgb(51,51,51)" fill="none" layout="layout.update(this,uml_enumeration.headerLine)" x1="0" y1="35" x2="160" y2="35" />
+    <text layout="layout.update(this,uml_enumeration.literalsText)" x="0" y="35" placeholder="Literals" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="normal" font-style="normal" text-decoration="none" baseline-shift="baseline" href="" style="padding-right:3px;padding-left:3px;width:160px;height:45px;display:block;" />
+    <line class="snap" x1="40" y1="0" x2="40" y2="0" />
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="80" y1="0" x2="80" y2="0" />
+    <line class="snap" x1="100" y1="0" x2="100" y2="0" />
+    <line class="snap" x1="120" y1="0" x2="120" y2="0" />
+    <line class="snap" x1="160" y1="20" x2="160" y2="20" />
+    <line class="snap" x1="160" y1="40" x2="160" y2="40" />
+    <line class="snap" x1="160" y1="60" x2="160" y2="60" />
+    <line class="snap" x1="0" y1="20" x2="0" y2="20" />
+    <line class="snap" x1="0" y1="40" x2="0" y2="40" />
+    <line class="snap" x1="0" y1="60" x2="0" y2="60" />
+    <line class="snap" x1="40" y1="80" x2="40" y2="80" />
+    <line class="snap" x1="60" y1="80" x2="60" y2="80" />
+    <line class="snap" x1="80" y1="80" x2="80" y2="80" />
+    <line class="snap" x1="100" y1="80" x2="100" y2="80" />
+    <line class="snap" x1="120" y1="80" x2="120" y2="80" />
+  </g>
+</svg>

@@ -1,0 +1,1751 @@
+﻿<Window x:Class="SilverNote.Views.RepositoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:b="clr-namespace:SilverNote.Behaviors;assembly=SilverNote.Behaviors"
+        xmlns:c="clr-namespace:SilverNote.Controls"
+        xmlns:ec="clr-namespace:SilverNote.Controls;assembly=SilverNote.Editor"
+        xmlns:cmd="clr-namespace:SilverNote.Commands;assembly=SilverNote.Editor"
+        xmlns:e="clr-namespace:SilverNote.Editor;assembly=SilverNote.Editor"
+        xmlns:v="clr-namespace:SilverNote.Views"
+        xmlns:vm="clr-namespace:SilverNote.ViewModels"
+        xmlns:el="clr-namespace:SilverNote;assembly=SilverNote.Editor"
+        xmlns:local="clr-namespace:SilverNote"
+        xmlns:common="clr-namespace:SilverNote.Common;assembly=SilverNote.Common"
+        xmlns:properties="clr-namespace:SilverNote.Properties"
+        Title="{Binding SelectedNotebook.Name, FallbackValue=SilverNote}" 
+        WindowStartupLocation="Manual"
+        Background="#E6E6E6" 
+        UseLayoutRounding="True"
+        Style="{DynamicResource WindowStyle}"
+        e:FileDropHandler.FileDropped="Editor_FileDropped"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+    <!-- Resources -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/AddNoteButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/AutoHideCheckBoxStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NotesTabControlStyle.xaml"/>
+                <ResourceDictionary Source="Styles/ContainerMenuItemStyle.xaml"/>
+                <ResourceDictionary Source="Styles/MessagesListBoxStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NotesExpanderStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NotesListBoxStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NotesTreeViewStyle.xaml"/>
+                <ResourceDictionary Source="Styles/NotesTreeListStyle.xaml"/>
+                <ResourceDictionary Source="Styles/SearchCategoriesItemsControlStyle.xaml"/>
+                <ResourceDictionary Source="Styles/SearchCategoriesMenuStyle.xaml"/>
+                <ResourceDictionary Source="Styles/SearchFilterComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="Styles/WidgetExpanderStyle.xaml"/>
+                <ResourceDictionary Source="/Controls/Styles/WatermarkTextBoxStyle.xaml"/>
+                <ResourceDictionary>
+                    <CollectionViewSource x:Key="Notebooks" Source="{Binding Notebooks}"/>
+                    <CollectionViewSource x:Key="NotesTabViewSource" Source="{Binding SelectedNotebook.OpenNotes}" Filter="NotesTabViewSource_Filter"/>
+                    <v:NoteViewGenerator x:Key="NoteViewGenerator" />
+                    <CollectionViewSource x:Key="RealCategories" Source="{Binding SelectedNotebook.Categories}" />
+                    <CollectionViewSource x:Key="SpecialCategories" Source="{Binding SelectedNotebook.SpecialCategories}" />
+                    <CompositeCollection x:Key="AllCategories">
+                        <CollectionContainer Collection="{Binding Source={StaticResource SpecialCategories}}"/>
+                        <CollectionContainer Collection="{Binding Source={StaticResource RealCategories}}"/>
+                    </CompositeCollection>
+                    <CompositeCollection x:Key="SearchableCategories">
+                        <CollectionContainer CollectionContainer.Collection="{Binding Source={StaticResource RealCategories}}" />
+                        <CollectionContainer CollectionContainer.Collection="{Binding Source={StaticResource SpecialCategories}}" />
+                        <Separator />
+                        <MenuItem UIElement.IsEnabled="False">
+                            <HeaderedItemsControl.Header>
+                                <TextBlock TextBlock.Foreground="#FF444444" TextBlock.FontWeight="Bold" TextBlock.Text="Multiple (Shift+Click)" />
+                            </HeaderedItemsControl.Header>
+                        </MenuItem>
+                    </CompositeCollection>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <!-- Command Bindings -->
+    <Window.CommandBindings>
+        <CommandBinding Command="cmd:NApplicationCommands.NewNote" Executed="NewNoteCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.NewNotebook" Executed="NewNotebookCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.OpenNotebook" Executed="OpenNotebookCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.DeleteNotebook" Executed="DeleteNotebookCommand_Executed" CanExecute="DeleteNotebookCommand_CanExecute" />
+        <CommandBinding Command="cmd:NApplicationCommands.RenameNotebook" Executed="RenameNotebookCommand_Executed" CanExecute="RenameNotebookCommand_CanExecute" />
+        <CommandBinding Command="cmd:NApplicationCommands.ChangePassword" Executed="ChangePasswordCommand_Executed" CanExecute="ChangePasswordCommand_CanExecute" />
+        <CommandBinding Command="cmd:NApplicationCommands.Save" Executed="SaveCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveAsDOCX" Executed="SaveAsDOCXCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveAsRTF" Executed="SaveAsRTFCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveAsTXT" Executed="SaveAsTXTCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveAsHTML" Executed="SaveAsHTMLCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveImage" Executed="SaveImageCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.SaveFile" Executed="SaveFileCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.Print" Executed="PrintCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.PrintPreview" Executed="PrintPreviewCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.Settings" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="cmd:NApplicationCommands.About" Executed="AboutCommand_Executed"/>
+        <CommandBinding Command="cmd:NViewCommands.NewTab" Executed="NewNoteCommand_Executed" CanExecute="NewNoteCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NViewCommands.FloatTab" Executed="FloatTabCommand_Executed" CanExecute="FloatTabCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NViewCommands.CloseTab" Executed="CloseTabCommand_Executed" CanExecute="CloseTabCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NViewCommands.CloseOtherTabs" Executed="CloseOtherTabsCommand_Executed" CanExecute="CloseOtherTabsCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NViewCommands.ToggleLeftPane" Executed="ToggleLeftPaneCommand_Executed" />
+        <CommandBinding Command="cmd:NViewCommands.ToggleRightPane" Executed="ToggleRightPaneCommand_Executed" />
+        <CommandBinding Command="cmd:NViewCommands.SearchNotebook" Executed="SearchNotebookCommand_Executed" CanExecute="SearchNotebookCommand_CanExecute" />
+        <CommandBinding Command="Close" Executed="Close_Executed"/>
+        <CommandBinding Command="cmd:NDrawingCommands.AddToLibrary" Executed="AddToLibraryCommand_Executed" />
+        <CommandBinding Command="cmd:NInsertionCommands.InsertScreenshot" Executed="InsertScreenshotCommand_Executed" CanExecute="InsertScreenshotCommand_CanExecute" />
+        <CommandBinding Command="cmd:NInsertionCommands.CaptureRegion" Executed="CaptureRegionCommand_Executed" CanExecute="InsertScreenshotCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NInsertionCommands.CaptureWindow" Executed="CaptureWindowCommand_Executed" CanExecute="InsertScreenshotCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NInsertionCommands.CaptureScreen" Executed="CaptureScreenCommand_Executed" CanExecute="InsertScreenshotCommand_CanExecute"/>
+        <CommandBinding Command="cmd:NDevelopmentCommands.EditSource" Executed="EditSourceCommand_Executed"/>
+        <CommandBinding Command="cmd:NDevelopmentCommands.ViewRequests" Executed="ViewRequestsCommand_Executed"/>
+        <CommandBinding Command="cmd:NDevelopmentCommands.Debug" Executed="DebugCommand_Executed"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="CTRL+ALT+SHIFT+D" Command="cmd:NDevelopmentCommands.Debug" />
+        <KeyBinding Gesture="CTRL+ALT+SHIFT+X" Command="{Binding CrashCommand}" />
+    </Window.InputBindings>
+    <!-- Layout Root-->
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <!-- Menu -->
+            <RowDefinition Name="MenuRow" Height="Auto"/>
+            <!-- Notes -->
+            <RowDefinition Name="NotesRow"/>
+            <!-- Splitter -->
+            <RowDefinition Name="SearchSplitterRow" Height="Auto"/>
+            <!-- Search -->
+            <RowDefinition Name="SearchRow" Height="Auto"/>
+            <!-- Splitter -->
+            <RowDefinition Name="DebugSplitterRow" Height="Auto" />
+            <!-- Developer tools -->
+            <RowDefinition Name="DebugPaneRow" Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- Menu -->
+        <Menu>
+            <!-- File -->
+            <MenuItem Header="_File">
+                <!-- New Note -->
+                <MenuItem 
+                    Header="New Note" 
+                    Command="{Binding SelectedNotebook.CreateNoteCommand, FallbackValue={x:Static common:NullCommand.Value}}"
+                    InputGestureText="{Binding Source={x:Static cmd:NApplicationCommands.NewNote}, Path=InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/page_white_add.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Delete Note -->
+                <MenuItem 
+                    Header="Delete Note" 
+                    Command="{Binding SelectedNotebook.DeleteNoteCommand, FallbackValue={x:Static common:NullCommand.Value}}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/page_white_delete.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Notebooks -->
+                <MenuItem Style="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Header>
+                        <ItemsControl ItemsSource="{Binding Notebooks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:NotebookViewModel}">
+                                    <MenuItem Header="{Binding Name}" ToolTip="{Binding Description}" Command="{Binding Repository.SelectNotebookCommand}" CommandParameter="{Binding}" IsCheckable="False" IsChecked="{Binding IsSelected}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </MenuItem.Header>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator Visibility="{Binding HasNotebooks, Converter={StaticResource BooleanToVisibleConverter}}" />
+                <!-- New Notebook -->
+                <MenuItem Header="New Notebook..." Command="cmd:NApplicationCommands.NewNotebook">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/book_add.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Open Notebook -->
+                <MenuItem Header="Open Notebook..." Command="cmd:NApplicationCommands.OpenNotebook" Visibility="{Binding Source={x:Static local:App.Current}, Path=RepositoryManager.CurrentLocation.IsLegacy, Converter={StaticResource BooleanToCollapsedConverter}}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/book_open.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Delete Notebook -->
+                <MenuItem Command="cmd:NApplicationCommands.DeleteNotebook">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/book_delete.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <TextBlock Text="{Binding SelectedNotebook.Name, StringFormat='Delete &quot;{0}&quot;', FallbackValue='Delete Notebook'}" IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=MenuItem}, Path=IsEnabled}">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <!-- Rename Notebook -->
+                <MenuItem Command="cmd:NApplicationCommands.RenameNotebook">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/book_edit.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <TextBlock Text="{Binding SelectedNotebook.Name, StringFormat='Rename &quot;{0}&quot;', FallbackValue='Rename Notebook'}" IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=MenuItem}, Path=IsEnabled}">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </MenuItem.Header>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Save -->
+                <MenuItem
+                    Header="{Binding Editor.IsDirty, Converter={StaticResource SelectConverter}, ConverterParameter='Saved|Save', FallbackValue='Save'}" 
+                    Command="{x:Static cmd:NApplicationCommands.Save}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" 
+                    IsEnabled="{Binding Editor.IsDirty}"
+                    DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/save.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Save as -->
+                <MenuItem Header="Save as">
+                    <MenuItem Header="Word Document (.docx)" Command="cmd:NApplicationCommands.SaveAsDOCX" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/page_white_word.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Rich Text Format (.rtf)" Command="cmd:NApplicationCommands.SaveAsRTF" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/page_white_picture.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Plain Text (.txt)" Command="cmd:NApplicationCommands.SaveAsTXT" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/page_white_text.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Web Page (.html)" Command="cmd:NApplicationCommands.SaveAsHTML" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/page_white_world.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <!-- Save Image -->
+                <MenuItem Header="Export Selected Drawing..." Command="cmd:NApplicationCommands.SaveImage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/imagefile.ico" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <!-- Print Preview -->
+                <MenuItem Header="Print Pre_view" Command="cmd:NApplicationCommands.PrintPreview" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/printpreview.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Print -->
+                <MenuItem Header="_Print" Command="cmd:NApplicationCommands.Print" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/print.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Change Password -->
+                <MenuItem 
+                    Header="{Binding SelectedNotebook.HasPassword, Converter={StaticResource SelectConverter}, ConverterParameter='Set Password|Change Password', FallbackValue='Set Password'}" 
+                    Command="cmd:NApplicationCommands.ChangePassword" 
+                    Visibility="{Binding CanChangePassword, Converter={StaticResource BooleanToVisibleConverter}}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/key.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <!-- Exit -->
+                <MenuItem Header="E_xit" Command="ApplicationCommands.Close">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/cancel.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Edit -->
+            <MenuItem Header="_Edit">
+                <!-- Undo -->
+                <MenuItem Header="_Undo" Command="{x:Static cmd:NEditingCommands.Undo}" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/undo.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Redo -->
+                <MenuItem Header="_Redo" Command="cmd:NEditingCommands.Redo" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/redo.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Cut -->
+                <MenuItem Header="Cu_t" Command="cmd:NEditingCommands.Cut" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/cut.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Copy -->
+                <MenuItem Header="_Copy" Command="cmd:NEditingCommands.Copy" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/copy.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Paste -->
+                <MenuItem Header="_Paste" Command="cmd:NEditingCommands.Paste" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/paste.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Paste Special -->
+                <MenuItem Header="Paste Special" >
+                    <MenuItem Header="Keep Format" Command="{x:Static cmd:NEditingCommands.Paste}" CommandParameter="{x:Static e:PasteMode.KeepFormatting}" InputGestureText=" " />
+                    <MenuItem Header="Clear Format" Command="{x:Static cmd:NEditingCommands.Paste}" CommandParameter="{x:Static e:PasteMode.ClearFormatting}" InputGestureText=" " />
+                    <MenuItem Header="Match Format" Command="{x:Static cmd:NEditingCommands.Paste}" CommandParameter="{x:Static e:PasteMode.MatchFormatting}" InputGestureText=" " />
+                </MenuItem>
+                <!-- Delete -->
+                <MenuItem Header="_Delete" Command="cmd:NEditingCommands.DeleteForward" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/delete.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Text -->
+                <MenuItem Header="Text">
+                    <MenuItem Command="cmd:NTextCommands.InsertParagraphBefore" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.InsertParagraphAfter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NEditingCommands.DeleteForward" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NEditingCommands.DeleteBack" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DeleteForwardByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DeleteForwardByParagraph" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DeleteBackByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DeleteBackByParagraph" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NTextCommands.MoveParagraphUp" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.MoveParagraphDown" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NTextCommands.SelectParagraph" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DuplicateParagraph" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NTextCommands.DeleteParagraph" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                </MenuItem>
+                <!-- Navigate -->
+                <MenuItem Header="Navigate">
+                    <MenuItem Command="cmd:NNavigationCommands.MoveUpByLine" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveDownByLine" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveLeftByCharacter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveRightByCharacter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveUpByPage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveDownByPage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveLeftByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveRightByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToLineStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToLineEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToParagraphStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToParagraphEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToDocumentStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.MoveToDocumentEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                </MenuItem>
+                <!-- Select -->
+                <MenuItem Header="Select">
+                    <MenuItem Command="cmd:NNavigationCommands.SelectUpByLine" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectDownByLine" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectLeftByCharacter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectRightByCharacter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectUpByPage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectDownByPage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectLeftByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectRightByWord" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+
+                    <Separator/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToLineStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToLineEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToParagraphStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToParagraphEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToDocumentStart" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Command="cmd:NNavigationCommands.SelectToDocumentEnd" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                </MenuItem>
+                <!-- Select All -->
+                <MenuItem Header="Select A_ll" Command="cmd:NEditingCommands.SelectAll" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Find -->
+                <MenuItem Header="_Find" Command="cmd:NEditingCommands.Find" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/find.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Replace -->
+                <MenuItem Header="R_eplace" Command="cmd:NEditingCommands.Replace" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/text_replace.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- View -->
+            <MenuItem Header="_View">
+                <!-- New Tab -->
+                <MenuItem 
+                    Header="New Tab" 
+                    Command="{x:Static cmd:NViewCommands.NewTab}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/tab_add.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Float Tab -->
+                <MenuItem 
+                    Header="Float Tab" 
+                    Command="{x:Static cmd:NViewCommands.FloatTab}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/tab_go.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Close Tab -->
+                <MenuItem 
+                    Header="Close Tab" 
+                    Command="{x:Static cmd:NViewCommands.CloseTab}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/tab_delete.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Close Other Tabs -->
+                <MenuItem 
+                    Header="Close Other Tabs" 
+                    Command="{x:Static cmd:NViewCommands.CloseOtherTabs}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Toggle left pane -->
+                <MenuItem 
+                    Header="{Binding IsLeftPaneVisible, Converter={StaticResource SelectConverter}, ConverterParameter='Show Left Sidebar|Hide Left Sidebar', FallbackValue='Toggle Left Sidebar'}" 
+                    Command="{x:Static cmd:NViewCommands.ToggleLeftPane}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" 
+                    DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <Image Source="/SilverNote;component/Images/left_pane_expand.png" Width="16" Height="16" Visibility="{Binding IsLeftPaneVisible, Converter={StaticResource BooleanToCollapsedConverter}}"/>
+                            <Image Source="/SilverNote;component/Images/left_pane_collapse.png" Width="16" Height="16" Visibility="{Binding IsLeftPaneVisible, Converter={StaticResource BooleanToVisibleConverter}}"/>
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Toggle right pane -->
+                <MenuItem 
+                    Header="{Binding IsRightPaneVisible, Converter={StaticResource SelectConverter}, ConverterParameter='Show Right Sidebar|Hide Right Sidebar', FallbackValue='Toggle Right Sidebar'}" 
+                    Command="{x:Static cmd:NViewCommands.ToggleRightPane}" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" 
+                    DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <Image Source="/SilverNote;component/Images/right_pane_expand.png" Width="16" Height="16" Visibility="{Binding IsRightPaneVisible, Converter={StaticResource BooleanToCollapsedConverter}}"/>
+                            <Image Source="/SilverNote;component/Images/right_pane_collapse.png" Width="16" Height="16" Visibility="{Binding IsRightPaneVisible, Converter={StaticResource BooleanToVisibleConverter}}"/>
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Search Results -->
+                <MenuItem Header="Search Results" Command="{x:Static cmd:NViewCommands.SearchNotebook}" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/search.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Grid -->
+                <MenuItem 
+                    Header="{Binding Editor.IsGridVisible, Converter={StaticResource SelectConverter}, ConverterParameter='Show Grid|Hide Grid', FallbackValue='Toggle Grid'}" 
+                    Command="{x:Static cmd:NViewCommands.ToggleGrid}"
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"
+                    DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                    <MenuItem.Icon>
+                        <Path 
+                            Width="16" 
+                            Height="16" 
+                            Stroke="Blue" 
+                            StrokeThickness="1" 
+                            Fill="{x:Null}" 
+                            Data="M3.5,0.5 3.5,14.5 M7.5,0.5 7.5,14.5 M11.5,0.5 11.5,14.5 M0.5,3.5 14.5,3.5 M0.5,7.5 14.5,7.5 M0.5,11.5 14.5,11.5"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Guidelines -->
+                <MenuItem 
+                    Header="{Binding Editor.IsGuidelinesEnabled, Converter={StaticResource SelectConverter}, ConverterParameter='Show Guidelines|Hide Guidelines', FallbackValue='Toggle Guidelines'}" 
+                    Command="{x:Static cmd:NViewCommands.ToggleGuidelines}"
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"
+                    DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                    <MenuItem.Icon>
+                        <Path 
+                            Width="16" 
+                            Height="16" 
+                            Stroke="#FFC8C8FF" 
+                            StrokeThickness="1" 
+                            Fill="{x:Null}" 
+                            Data="M2.5,1 2.5,15 M7.5,1 7.5,15 M12.5,1 12.5,15"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Zoom In -->
+                <MenuItem Header="Zoom In" Command="cmd:NViewCommands.ZoomIn" InputGestureText="Ctrl+MouseWheel">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/zoomin.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Zoom Out -->
+                <MenuItem Header="Zoom Out" Command="cmd:NViewCommands.ZoomOut" InputGestureText="Ctrl+MouseWheel">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/zoomout.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Format -->
+            <MenuItem Header="F_ormat" DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Font -->
+                <MenuItem Header="Font" IsEnabled="{Binding Editor.HasTextProperties, FallbackValue=false}" ItemsSource="{x:Static Fonts.SystemFontFamilies}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/font.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding}" />
+                            <Setter Property="FontFamily" Value="{Binding}" />
+                            <Setter Property="Command" Value="cmd:NFormattingCommands.SetFontFamily"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <!-- Size -->
+                <MenuItem Header="Size" IsEnabled="{Binding Editor.HasTextProperties, FallbackValue=false}">
+                    <!-- Icon -->
+                    <MenuItem.Icon>
+                        <Grid Width="16" Height="16">
+                            <TextBlock 
+                                Panel.ZIndex="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="8pt" 
+                                FontFamily="Arial"
+                                FontWeight="Bold"
+                                Foreground="Black" 
+                                Text="{Binding Editor.FontSize}"/>
+                            <TextBlock 
+                                Panel.ZIndex="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                FontSize="6pt" 
+                                FontFamily="Arial" 
+                                Foreground="Blue" 
+                                Text="pt" />
+                        </Grid>
+                    </MenuItem.Icon>
+                    <!-- ItemContainerStyleSelector -->
+                    <MenuItem.ItemContainerStyleSelector>
+                        <v:SimpleContainerStyleSelector>
+                            <v:SimpleContainerStyle DataType="{x:Type sys:Int32}">
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="IsCheckable" Value="True"/>
+                                    <Setter Property="IsChecked">
+                                        <Setter.Value>
+                                            <MultiBinding Mode="OneWay" Converter="{StaticResource EqualsConverter}">
+                                                <Binding />
+                                                <Binding RelativeSource="{RelativeSource AncestorType=Window}" Path="NoteView.Editor.FontSize" />
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="b:ListBoxItemBehavior.Command" Value="cmd:NFormattingCommands.SetFontSize" />
+                                    <Setter Property="b:ListBoxItemBehavior.CommandParameter" Value="{Binding}" />
+                                </Style>
+                            </v:SimpleContainerStyle>
+                        </v:SimpleContainerStyleSelector>
+                    </MenuItem.ItemContainerStyleSelector>
+                    <!-- ItemTemplate -->
+                    <MenuItem.ItemTemplateSelector>
+                        <v:SimpleDataTemplateSelector>
+                            <DataTemplate DataType="{x:Type sys:Int32}">
+                                <TextBlock Text="{Binding StringFormat='{}{0} pt'}" />
+                            </DataTemplate>
+                        </v:SimpleDataTemplateSelector>
+                    </MenuItem.ItemTemplateSelector>
+                    <!-- Items -->
+                    <MenuItem Header="+1 pt" Command="cmd:NFormattingCommands.IncreaseFontSize" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Header="-1 pt" Command="cmd:NFormattingCommands.DecreaseFontSize" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <Separator />
+                    <sys:Int32>6</sys:Int32>
+                    <sys:Int32>8</sys:Int32>
+                    <sys:Int32>10</sys:Int32>
+                    <sys:Int32>12</sys:Int32>
+                    <sys:Int32>14</sys:Int32>
+                    <sys:Int32>16</sys:Int32>
+                    <sys:Int32>18</sys:Int32>
+                    <sys:Int32>24</sys:Int32>
+                    <sys:Int32>36</sys:Int32>
+                    <sys:Int32>48</sys:Int32>
+                    <sys:Int32>72</sys:Int32>
+                </MenuItem>
+                <!-- Text Color -->
+                <MenuItem Header="Color" IsEnabled="{Binding Editor.HasTextProperties, FallbackValue=false}" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/textcolor.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.TextBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <ec:ColorPicker SelectedBrush="{Binding Editor.TextBrush, Mode=TwoWay}" />
+                </MenuItem>
+                <!-- Highlight -->
+                <MenuItem 
+                    Header="Highlight" 
+                    InputGestureText="{Binding Source={x:Static cmd:NFormattingCommands.Highlight}, Path=InputGestureText}"
+                    IsEnabled="{Binding Editor.HasTextProperties, FallbackValue=false}" 
+                    ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/highlight.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.HighlightBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <ec:HighlighterPicker SelectedItem="{Binding Path=Editor.HighlightBrush, Mode=TwoWay}"/>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Bold -->
+                <MenuItem Header="_Bold" Command="cmd:NFormattingCommands.ToggleBold" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/bold.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Italic -->
+                <MenuItem Header="_Italic" Command="cmd:NFormattingCommands.ToggleItalic" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/italic.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Underline -->
+                <MenuItem Header="_Underline" Command="cmd:NFormattingCommands.ToggleUnderline" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/underline.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Strikethrough -->
+                <MenuItem Header="St_rikethrough" Command="cmd:NFormattingCommands.ToggleStrikethrough" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/strikethrough.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Superscript -->
+                <MenuItem Header="S_uperscript" Command="cmd:NFormattingCommands.ToggleSuperscript" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/superscript.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Subscript -->
+                <MenuItem Header="_Subscript" Command="cmd:NFormattingCommands.ToggleSubscript" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/subscript.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Align -->
+                <MenuItem Header="Align" IsEnabled="{Binding Editor.HasParagraphProperties, FallbackValue=false}">
+                    <!-- Icon -->
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/alignleft.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <!-- Left -->
+                    <MenuItem Header="Left" Command="cmd:NFormattingCommands.AlignLeft" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/alignleft.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <!-- Center -->
+                    <MenuItem Header="Center" Command="cmd:NFormattingCommands.AlignCenter" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/aligncenter.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <!-- Right -->
+                    <MenuItem Header="Right" Command="cmd:NFormattingCommands.AlignRight" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/alignright.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <!-- Justify -->
+                    <MenuItem Header="Justify" Command="cmd:NFormattingCommands.AlignJustify" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                        <MenuItem.Icon>
+                            <Image Source="/SilverNote;component/Images/justify.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <!-- Line Spacing -->
+                <MenuItem Header="Line Spacing" IsEnabled="{Binding Editor.HasParagraphProperties, FallbackValue=false}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/spacing.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="1" Command="cmd:NFormattingCommands.SetLineSpacing1"  InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Header="1.5" Command="cmd:NFormattingCommands.SetLineSpacing15"  InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                    <MenuItem Header="2" Command="cmd:NFormattingCommands.SetLineSpacing2"  InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                </MenuItem>
+                <!-- List Style -->
+                <MenuItem 
+                    Header="List Style"
+                    IsEnabled="{Binding Editor.HasParagraphProperties, FallbackValue=false}"
+                    InputGestureText="{Binding Source={x:Static cmd:NFormattingCommands.ToggleList}, Path=InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/bullets.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <!-- ItemsSource -->
+                    <MenuItem.ItemsSource>
+                        <CompositeCollection>
+                            <MenuItem Header="None" Command="cmd:NFormattingCommands.SetListStyle" CommandParameter="{x:Null}"/>
+                            <Separator/>
+                            <CollectionContainer Collection="{x:Static e:ListStyles.FilledStyles}" />
+                            <Separator/>
+                            <CollectionContainer Collection="{x:Static e:ListStyles.OpenStyles}" />
+                            <Separator/>
+                            <CollectionContainer Collection="{x:Static e:ListStyles.UnorderedStyles}" />
+                        </CompositeCollection>
+                    </MenuItem.ItemsSource>
+                    <!-- ItemContainerStyle -->
+                    <MenuItem.ItemContainerStyleSelector>
+                        <v:SimpleContainerStyleSelector>
+                            <v:SimpleContainerStyle DataType="{x:Type e:IListStyle}">
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Header" Value="{Binding Description}"/>
+                                    <Setter Property="Command" Value="cmd:NFormattingCommands.SetListStyle"/>
+                                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                                    <Setter Property="c:PopupButton.CloseOnClick" Value="True"/>
+                                </Style>
+                            </v:SimpleContainerStyle>
+                        </v:SimpleContainerStyleSelector>
+                    </MenuItem.ItemContainerStyleSelector>
+                </MenuItem>
+                <!-- Indent -->
+                <MenuItem Header="Indent" Command="cmd:NFormattingCommands.IncreaseIndentation" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/indent.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Outdent -->
+                <MenuItem  Header="Outdent" Command="cmd:NFormattingCommands.DecreaseIndentation" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/outdent.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Clear Formatting -->
+                <MenuItem Header="Clear Formatting" Command="cmd:NFormattingCommands.ClearFormatting" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Ellipse 
+                            Width="8" 
+                            Height="8" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Stroke="Black" 
+                            StrokeThickness="1" 
+                            Fill="Transparent"
+                            SnapsToDevicePixels="True"/>
+                    </MenuItem.Icon>
+                    <MenuItem.IsEnabled>
+                        <MultiBinding Converter="{StaticResource BooleanOrConverter}">
+                            <Binding Path="Editor.HasTextProperties" FallbackValue="false" />
+                            <Binding Path="Editor.HasParagraphProperties" FallbackValue="false" />
+                        </MultiBinding>
+                    </MenuItem.IsEnabled>
+                </MenuItem>
+            </MenuItem>
+            <!-- Drawing -->
+            <MenuItem Header="_Drawing" DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Select -->
+                <MenuItem Header="Select" Command="cmd:NDrawingCommands.Select" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/select.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Pencil -->
+                <MenuItem Header="Pencil" Command="cmd:NDrawingCommands.InsertPath" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/pencil.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Eraser -->
+                <MenuItem Header="Eraser" Command="cmd:NDrawingCommands.Erase" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/eraser.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Lines -->
+                <MenuItem Header="Lines" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <e:NCanvas 
+                            Width="14" 
+                            Height="14" 
+                            Margin="1"
+                            VerticalAlignment="Center" 
+                            IsEnabled="False" 
+                            Drawing="{Binding Editor.SelectedLine.ThumbSmall}">
+                            <e:NCanvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.875" ScaleY="0.875" />
+                            </e:NCanvas.RenderTransform>
+                        </e:NCanvas>
+                    </MenuItem.Icon>
+                    <c:LinePicker 
+                        IsLinesExpanded="True"
+                        IsConnectorsExpanded="True"
+                        Lines="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Lines.Items}"
+                        Markers="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Markers.Items}"
+                        CreateLineCommand="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Lines.CreateClipartCommand}"
+                        DeleteLineCommand="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Lines.DeleteClipartCommand}"
+                        SelectLineCommand="cmd:NDrawingCommands.InsertLine"                       
+                        SelectedLine="{Binding Editor.SelectedLine}" />
+                </MenuItem>
+                <!-- Shapes -->
+                <MenuItem Header="Shapes" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <e:NCanvas 
+                            Width="14" 
+                            Height="14" 
+                            Margin="1"
+                            VerticalAlignment="Center" 
+                            IsEnabled="False" 
+                            Drawing="{Binding Editor.SelectedClipart.ThumbSmall}">
+                            <e:NCanvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.875" ScaleY="0.875" />
+                            </e:NCanvas.RenderTransform>
+                        </e:NCanvas>
+                    </MenuItem.Icon>
+                    <c:ClipartPicker 
+                        Width="250"
+                        ClipartGroups="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ClipartGroups}"
+                        CreateGroupCommand="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.CreateClipartGroupCommand}"
+                        DeleteGroupCommand="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DeleteClipartGroupCommand}"
+                        SelectClipartCommand="cmd:NDrawingCommands.InsertClipart"
+                        SelectedClipart="{Binding Editor.SelectedClipart}" />
+                </MenuItem>
+                <!-- Text Box -->
+                <MenuItem Header="Text Box" Command="cmd:NDrawingCommands.InsertTextBox" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/textbox.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator/>
+                <!-- Stroke -->
+                <MenuItem Header="Stroke" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/linecolor.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.StrokeBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <Grid Background="White">
+                        <ec:StrokeControl 
+                            AllowsDash="True"
+                            SelectedBrush="{Binding Editor.StrokeBrush}"
+                            SelectedWidth="{Binding Editor.StrokeWidth}"
+                            SelectedDashArray="{Binding Editor.StrokeDashArray}"
+                            SelectedDashCap="{Binding Editor.StrokeDashCap}" 
+                            SelectBrushCommand="cmd:NDrawingCommands.Stroke"/>
+                    </Grid>
+                </MenuItem>
+                <!-- Fill -->
+                <MenuItem Header="Fill" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/bgndcolor.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.FillBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <Grid Background="White">
+                        <ec:ColorPicker 
+                            AllowsNone="True" 
+                            AllowsGradient="True" 
+                            SelectedBrush="{Binding Editor.FillBrush}" 
+                            Command="cmd:NDrawingCommands.Fill" />
+                    </Grid>
+                </MenuItem>
+                <!-- Effects -->
+                <MenuItem Header="Effects">
+                    <MenuItem.Icon>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="E" Foreground="DarkBlue" FontSize="10pt" FontWeight="Bold">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Direction="330" ShadowDepth="2" BlurRadius="2" Opacity="0.25" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </MenuItem.Icon>
+                    <MenuItem Header="None" Command="cmd:NDrawingCommands.SetEffect" CommandParameter="{x:Null}"/>
+                    <MenuItem Header="Shadow" Command="cmd:NDrawingCommands.SetEffect">
+                        <MenuItem.CommandParameter>
+                            <DropShadowEffect ShadowDepth="3" Opacity="0.5" />
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Rotate Right -->
+                <MenuItem Header="Rotate _Right" InputGestureText="R" Command="cmd:NDrawingCommands.RotateRight">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/rotate_right.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Rotate Left -->
+                <MenuItem Header="Rotate _Left" InputGestureText="L" Command="cmd:NDrawingCommands.RotateLeft">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/rotate_left.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Flip Horizontal -->
+                <MenuItem Header="Flip _Horizontal" InputGestureText="H" Command="cmd:NDrawingCommands.FlipHorizontal">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/fliphorizontal.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Flip Vertical -->
+                <MenuItem Header="Flip _Vertical" InputGestureText="V" Command="cmd:NDrawingCommands.FlipVertical">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/flipvertical.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Group -->
+                <MenuItem Header="_Group" InputGestureText="G" Command="cmd:NDrawingCommands.Group">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/group.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Ungroup -->
+                <MenuItem Header="_Ungroup" InputGestureText="U" Command="cmd:NDrawingCommands.Ungroup">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/ungroup.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Separator -->
+                <Separator />
+                <!-- Add to Library -->
+                <MenuItem Header="Add to Library..." Command="cmd:NDrawingCommands.AddToLibrary">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/plus.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Insert -->
+            <MenuItem Header="_Insert" DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Section -->
+                <MenuItem Header="Section" Command="cmd:NInsertionCommands.InsertSection" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="#333" Data="M0,0 9,4.5 0,9" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Sub-section -->
+                <MenuItem Header="Sub-section" Command="cmd:NInsertionCommands.InsertSubsection" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Path HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="#333" Fill="Transparent" Data="M1.5,1 8,4.5 1.5,8z" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <!-- Symbol -->
+                <MenuItem Header="Symbol" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/symbol.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <c:SymbolPicker Width="286" Command="cmd:NInsertionCommands.InsertSymbol" />
+                </MenuItem>
+                <!-- Hyperlink -->
+                <MenuItem Header="Hyperlink" Command="cmd:NInsertionCommands.InsertHyperlink" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/link.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Sticky note -->
+                <MenuItem Header="Sticky Note" Command="cmd:NInsertionCommands.InsertStickyNote" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/note.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Table -->
+                <MenuItem Header="Table" Command="cmd:NInsertionCommands.InsertTable" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/table.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Image -->
+                <MenuItem Header="Image" Command="cmd:NInsertionCommands.InsertImage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/image.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Screenshot -->
+                <MenuItem Header="Screenshot" Command="cmd:NInsertionCommands.InsertScreenshot" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Image.Source="/SilverNote;component/Images/screen.png" FrameworkElement.Width="16" FrameworkElement.Height="16" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- File -->
+                <MenuItem Header="File" Command="cmd:NInsertionCommands.InsertFile" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/attachfile.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Tools -->
+            <MenuItem Header="_Tools">
+                <!-- Bold -->
+                <MenuItem Header="_Drill through" Command="cmd:NUtilityCommands.DrillThrough" InputGestureText="Ctrl+Click">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/link_go.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!-- Lookup -->
+                <MenuItem Header="_Lookup">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/websearch.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                    <!-- Items -->
+                    <MenuItem Style="{StaticResource ContainerMenuItemStyle}">
+                        <MenuItem.Header>
+                            <ItemsControl ItemsSource="{Binding Source={x:Static properties:Settings.Default}, Path=LookupCommands}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type el:LookupService}">
+                                        <MenuItem Header="{Binding Name}" Command="cmd:NUtilityCommands.Lookup" CommandParameter="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <!-- Separator -->
+                    <Separator />
+                    <MenuItem Header="Customize..." Command="cmd:NApplicationCommands.Settings" CommandParameter="Lookup" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    </MenuItem>
+                </MenuItem>
+                <!-- Word Count -->
+                <MenuItem Header="Word _Count" Command="cmd:NUtilityCommands.WordCount" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}"/>
+                <Separator/>
+                <!-- Settings -->
+                <MenuItem Name="SettingsMenuItem" Header="_Settings..." Command="cmd:NApplicationCommands.Settings" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                    <MenuItem.Icon>
+                        <Image Source="/SilverNote;component/Images/cog.png" Width="16" Height="16"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <!-- Image -->
+            <MenuItem 
+                Header="Image" 
+                Background="LightBlue" 
+                Visibility="{Binding Editor.IsImageSelected, Converter={StaticResource BooleanToVisibleConverter}, FallbackValue=Collapsed}"
+                DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Open -->
+                <MenuItem Header="Open" Command="cmd:NImageCommands.Open" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Edit -->
+                <MenuItem Header="Edit" Command="cmd:NImageCommands.Edit" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Open with -->
+                <MenuItem Header="Open with" SubmenuOpened="OpenImageWith_SubmenuOpened">
+                    <MenuItem Style="{StaticResource ContainerMenuItemStyle}">
+                        <MenuItem.Header>
+                            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=ImageApplications}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type common:FileAssociation}">
+                                        <MenuItem 
+                                            Header="{Binding FriendlyAppName}" 
+                                            Icon="{Binding DefaultIconImage}"
+                                            Command="cmd:NImageCommands.OpenWith" 
+                                            CommandParameter="{Binding AppCommand}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Choose program..." Command="cmd:NImageCommands.OpenWith" />
+                </MenuItem>
+                <!-- Save as... -->
+                <MenuItem Header="Save as..." Command="cmd:NApplicationCommands.SaveImage" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <Separator />
+                <!-- Reset size -->
+                <MenuItem 
+                    Header="Reset size" 
+                    Command="cmd:NImageCommands.ResetSize" 
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Preserve aspect ratio -->
+                <MenuItem 
+                    Header="Preserve aspect ratio"
+                    IsCheckable="True"
+                    IsChecked="{Binding Editor.PreserveAspectRatio, Mode=OneWay}"
+                    Command="cmd:NImageCommands.TogglePreserveAspectRatio"
+                    InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+            </MenuItem>
+            <!-- File -->
+            <MenuItem 
+                Header="File" 
+                Background="LightBlue" 
+                Visibility="{Binding Editor.IsFileSelected, Converter={StaticResource BooleanToVisibleConverter}, FallbackValue=Collapsed}"
+                DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Open -->
+                <MenuItem Header="Open" Command="cmd:NFileCommands.Open" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Save as... -->
+                <MenuItem Header="Save as..." Command="cmd:NApplicationCommands.SaveFile" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+            </MenuItem>
+            <!-- Table -->
+            <MenuItem 
+                Header="Table" 
+                Background="LightBlue" 
+                Visibility="{Binding Editor.IsTableSelected, Converter={StaticResource BooleanToVisibleConverter}, FallbackValue=Collapsed}"
+                DataContext="{Binding SelectedNotebook.SelectedNote, Converter={StaticResource NoteViewGenerator}}">
+                <!-- Insert row above -->
+                <MenuItem Header="Insert row above" Command="cmd:NTableCommands.InsertRowAbove" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Insert row below -->
+                <MenuItem Header="Insert row below" Command="cmd:NTableCommands.InsertRowBelow" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Insert column left -->
+                <MenuItem Header="Insert column left" Command="cmd:NTableCommands.InsertColumnLeft" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Insert column right -->
+                <MenuItem Header="Insert column right" Command="cmd:NTableCommands.InsertColumnRight" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Separator -->
+                <Separator />
+                <!-- Delete row -->
+                <MenuItem Header="Delete row" Command="cmd:NTableCommands.DeleteRow" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Delete column -->
+                <MenuItem Header="Delete column" Command="cmd:NTableCommands.DeleteColumn" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Delete table -->
+                <MenuItem Header="Delete table" Command="cmd:NTableCommands.DeleteTable" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Separator -->
+                <Separator />
+                <!-- Select -->
+                <MenuItem Header="Select">
+                    <!-- Row -->
+                    <MenuItem Header="Row" Command="cmd:NTableCommands.SelectRow" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                    <!-- Column -->
+                    <MenuItem Header="Column" Command="cmd:NTableCommands.SelectColumn" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                    <!-- Table -->
+                    <MenuItem Header="Table" Command="cmd:NTableCommands.SelectTable" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                </MenuItem>
+                <!-- Background -->
+                <MenuItem Header="Background" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/bgndcolor.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.FillBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <ec:ColorPicker 
+                        Width="120"
+                        AllowsNone="True" 
+                        AllowsGradient="False" 
+                        Command="cmd:NTableCommands.SetBackground"/>
+                </MenuItem>
+                <!-- Borders -->
+                <MenuItem Header="Borders" ItemContainerStyle="{StaticResource ContainerMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <Canvas Width="16" Height="16" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Source="/SilverNote;component/Images/linecolor.png"/>
+                            <Rectangle Width="16" Height="4" Canvas.Top="12" Fill="{Binding Editor.StrokeBrush}" />
+                        </Canvas>
+                    </MenuItem.Icon>
+                    <ec:StrokeControl 
+                        Width="120"
+                        AllowsDash="False"
+                        SelectBrushCommand="cmd:NTableCommands.SetBorderBrush"
+                        SelectWidthCommand="cmd:NTableCommands.SetBorderWidth"/>
+                </MenuItem>
+                <!-- Merge cells -->
+                <MenuItem Header="Merge cells" Command="cmd:NTableCommands.MergeCells" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <!-- Split cells -->
+                <MenuItem Header="Split cells" Command="cmd:NTableCommands.SplitCells" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+            </MenuItem>
+            <!-- Help -->
+            <MenuItem Header="_Help">
+                <MenuItem Name="AboutMenuItem" Header="About SilverNote" Command="cmd:NApplicationCommands.About" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}">
+                </MenuItem>
+            </MenuItem>
+            <!-- Debug -->
+            <MenuItem 
+                Header="Debu_g"
+                Background="LightGreen" 
+                Visibility="{Binding Source={x:Static local:App.IsDebug}, Converter={StaticResource BooleanToVisibleConverter}}">
+                <MenuItem Header="Edit Source" Command="cmd:NDevelopmentCommands.EditSource" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <MenuItem Header="Network" Command="cmd:NDevelopmentCommands.ViewRequests" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+                <Separator />
+                <MenuItem Header="Tools" Command="cmd:NDevelopmentCommands.Debug" InputGestureText="{Binding RelativeSource={RelativeSource Self}, Path=Command.InputGestureText}" />
+            </MenuItem>
+        </Menu>
+        <!-- Notes/Sidebars -->
+        <Grid Grid.Row="1" Visibility="{Binding IsNotebookSelected, Converter={StaticResource BooleanToVisibleConverter}}">
+            <Grid.ColumnDefinitions>
+                <!-- Left expander button -->
+                <ColumnDefinition Name="LeftExpanderColumn" Width="Auto" />
+                <!-- Left sidebar -->
+                <ColumnDefinition Name="LeftPaneColumn" Width="Auto" />
+                <!-- Splitter -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Notes -->
+                <ColumnDefinition />
+                <!-- Splitter -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Right sidebar -->
+                <ColumnDefinition Name="RightPaneColumn" Width="Auto" />
+                <!-- Right expander button -->
+                <ColumnDefinition Name="RightExpanderColumn" Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!-- Notes -->
+            <Grid Name="NotesGrid" Grid.Column="3" Margin="0,5,0,0">
+                <Grid.RowDefinitions>
+                    <!-- Tab area -->
+                    <RowDefinition Name="NoteTabRow" Height="Auto" SharedSizeGroup="NoteTabPanelHeight"/>
+                    <!-- Content area -->
+                    <RowDefinition Name="NoteContentRow" Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <!-- "+" Button -->
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="NoteTabControlTrayWidth"/>
+                    <!-- Tabs -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Add Note Button -->
+                <Button 
+                    Margin="4,1,-4,1"
+                    ToolTip="Add Note"
+                    Command="{Binding SelectedNotebook.CreateNoteCommand, FallbackValue={x:Static common:NullCommand.Value}}"
+                    Style="{StaticResource AddNoteButtonStyle}">
+                    <!-- "+" -->
+                    <Path 
+                    Margin="6, 3" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 
+                    StrokeThickness="2" 
+                    Data="M0,5 L10,5 M5,0 L5,10" 
+                    SnapsToDevicePixels="True" />
+                </Button>
+                <!-- Note tab control -->
+                <TabControl 
+                    Name="NotesTabControl"
+                    Grid.RowSpan="2" 
+                    Grid.ColumnSpan="2"
+                    Visibility="{Binding SelectedNotebook.HasTabbedNotes, Converter={StaticResource BooleanToVisibleConverter}}"
+			        ItemsSource="{Binding SelectedNotebook.TabbedNotes}"
+			        SelectedItem="{Binding SelectedNotebook.SelectedNote}"
+                    Style="{StaticResource NotesTabControlStyle}"
+                    b:TabControlBehavior.IsRearrangeEnabled="True"
+                    b:TabControlBehavior.Rearranged="NotesTabControl_Rearranged">
+                    <!-- NoteViews -->
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <ContentPresenter Content="{Binding Converter={StaticResource NoteViewGenerator}}" />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+                <!-- "No open notes" placeholder -->
+                <Grid 
+                    Grid.Row="1" 
+                    Grid.ColumnSpan="2"
+                    Visibility="{Binding SelectedNotebook.HasTabbedNotes, Converter={StaticResource BooleanToCollapsedConverter}}">
+                    <Border BorderThickness="1" BorderBrush="#969A9E" CornerRadius="3" Background="#DFDFDF">
+                        <FlowDocumentScrollViewer
+                            Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            VerticalScrollBarVisibility="Hidden">
+                            <FlowDocument 
+                                Foreground="#333"
+                                PagePadding="0" 
+                                FontFamily="Verdana" 
+                                FontSize="12pt" 
+                                TextAlignment="Center">
+                                <Paragraph>
+                                    There are no open notes at the moment.
+                                </Paragraph>
+                                <Paragraph>
+                                    You may want to
+                                    <Hyperlink Command="cmd:NApplicationCommands.NewNote">add a new note</Hyperlink> or
+                                    <Hyperlink Command="cmd:NViewCommands.SearchNotebook">open existing notes</Hyperlink>.
+                                </Paragraph>
+                            </FlowDocument>
+                        </FlowDocumentScrollViewer>
+                    </Border>
+                </Grid>
+            </Grid>
+            <!-- Left Pane Expander -->
+            <Grid Name="LeftPaneExpander" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="True" Opacity="0.5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="#666" Fill="#A9A9A9" Data="M0,0 A 15,15 0 0 1 0,30" />
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="White" StrokeThickness="2" Data="M7,10 L7,20 M2,15 L12,15" Visibility="{Binding IsLeftPaneVisible,Converter={StaticResource BooleanToCollapsedConverter}}" />
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="White" StrokeThickness="2" Data="M3,15 L11,15" Visibility="{Binding IsLeftPaneVisible,Converter={StaticResource BooleanToVisibleConverter}}" />
+            </Grid>
+            <!-- Left Pane -->
+            <Grid 
+                Name="LeftPane" 
+                Grid.Column="1" 
+                Margin="0,30,2,0" 
+                FocusManager.IsFocusScope="True" 
+                Visibility="{Binding IsLeftPaneVisible, Converter={StaticResource BooleanToVisibleConverter}}" 
+                DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <ScrollViewer 
+                    Padding="0,0,10,0" 
+                    VerticalScrollBarVisibility="Auto" 
+                    DataContext="{Binding DataContext.SelectedNotebook}">
+                    <StackPanel 
+                        Name="LeftPanePanel"
+                        Orientation="Vertical">
+                        <Expander 
+                            Header="CATEGORIES" 
+                            IsExpanded="True" 
+                            Background="#FFEAECEF" 
+                            b:DragDropBehavior.AllowDrop="True"
+                            b:DragDropBehavior.DropEffects="Move"
+                            b:DragDropBehavior.DropMoveCommand="{Binding CategoryTree.DropCommand}"
+                            b:DragDropBehavior.DropFeedbackProvider="{StaticResource NotesTreeListDropFeedbackProvider}"
+                            Style="{StaticResource WidgetExpanderStyle}">
+                            <StackPanel 
+                                StackPanel.Orientation="Vertical">
+                                <ListBox
+                                    Name="NotesTreeList"
+                                    Margin="5"
+                                    MinHeight="20"
+                                    MaxHeight="{Binding RelativeSource={RelativeSource AncestorType=ScrollViewer}, Path=ViewportHeight, Converter={StaticResource AddConverter}, ConverterParameter=-90}" 
+                                    BorderThickness="0" 
+                                    Background="#00FFFFFF" 
+                                    DataContext="{Binding CategoryTree}"
+                                    ItemsSource="{Binding}"
+                                    b:ListBoxBehavior.SelectedItems="{Binding SelectedItems}"
+                                    Style="{StaticResource NotesTreeListStyle}" >
+                                </ListBox>
+                                <Button 
+                                    Content="New" 
+                                    HorizontalAlignment="Right" 
+                                    MinWidth="55" 
+                                    Height="20" 
+                                    Margin="5"
+                                    ToolTip="New category"
+                                    Command="{Binding CreateCategoryCommand}">
+                                </Button>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+            <!-- Splitter -->
+            <GridSplitter 
+                Name="LeftPaneSplitter"
+                Grid.Column="2" 
+                Width="1" 
+                Margin="0,30,0,0" 
+                Background="Transparent"
+                IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsLeftPaneVisible}"
+                VerticalAlignment="Stretch" 
+                ResizeDirection="Columns" 
+                ResizeBehavior="PreviousAndNext" />
+            <!-- Splitter -->
+            <GridSplitter 
+                Name="RightPaneSplitter"
+                Grid.Column="4" 
+                Width="1" 
+                Margin="0,30,0,0" 
+                Background="Transparent"
+                IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsRightPaneVisible}"
+                VerticalAlignment="Stretch" 
+                ResizeDirection="Columns" 
+                ResizeBehavior="PreviousAndNext" />
+            <!-- Right Pane -->
+            <Grid 
+                Name="RightPane" 
+                Grid.Column="5" 
+                Margin="2,30,5,0" 
+                FocusManager.IsFocusScope="True" 
+                Visibility="{Binding IsRightPaneVisible, Converter={StaticResource BooleanToVisibleConverter}}" 
+                DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <ScrollViewer 
+                    Padding="10,0"
+                    VerticalScrollBarVisibility="Auto" 
+                    DataContext="{Binding DataContext.SelectedNotebook}">
+                    <StackPanel 
+                        Name="RightPanePanel" 
+                        Orientation="Vertical">
+                        <!-- Symbols -->
+                        <Expander Header="SYMBOLS" IsExpanded="True" Style="{StaticResource WidgetExpanderStyle}">
+                            <c:SymbolPicker Command="cmd:NInsertionCommands.InsertSymbol"/>
+                        </Expander>
+                        <!-- Shapes -->
+                        <Expander Header="SHAPES" IsExpanded="True" Style="{StaticResource WidgetExpanderStyle}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
+                            <c:ClipartPicker 
+                                ClipartGroups="{Binding ClipartGroups}"  
+                                CreateGroupCommand="{Binding CreateClipartGroupCommand}"
+                                DeleteGroupCommand="{Binding DeleteClipartGroupCommand}"
+                                SelectClipartCommand="cmd:NDrawingCommands.InsertClipart">
+                            </c:ClipartPicker>
+                        </Expander>
+                        <!-- Lines -->
+                        <Expander Header="LINES" IsExpanded="True" Style="{StaticResource WidgetExpanderStyle}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext}">
+                            <c:LinePicker 
+                                Lines="{Binding Lines.Items}"
+                                Markers="{Binding Markers.Items}"
+                                CreateLineCommand="{Binding Lines.CreateClipartCommand}"
+                                DeleteLineCommand="{Binding Lines.DeleteClipartCommand}"
+                                SelectLineCommand="cmd:NDrawingCommands.InsertLine">
+                            </c:LinePicker>
+                        </Expander>
+                        <!-- Stroke -->
+                        <Expander Header="STROKE" IsExpanded="True" Style="{StaticResource WidgetExpanderStyle}">
+                            <ec:StrokeControl 
+                                AllowsDash="True"
+                                Width="Auto"
+                                MinWidth="120"
+                                MaxWidth="180"
+                                Margin="4"
+                                SelectedBrush="{Binding Editor.StrokeBrush}"
+                                SelectedWidth="{Binding Editor.StrokeWidth}"
+                                SelectedDashArray="{Binding Editor.StrokeDashArray}"
+                                SelectedDashCap="{Binding Editor.StrokeDashCap}" 
+                                SelectBrushCommand="cmd:NDrawingCommands.Stroke"
+                                DataContext="{Binding SelectedNote, Converter={StaticResource NoteViewGenerator}}"/>
+                        </Expander>
+                        <!-- Fill -->
+                        <Expander Header="FILL" IsExpanded="True" Style="{StaticResource WidgetExpanderStyle}">
+                            <ec:ColorPicker 
+                                Width="Auto"
+                                MinWidth="120"
+                                MaxWidth="180"
+                                Margin="4"
+                                AllowsNone="True" 
+                                AllowsGradient="True" 
+                                SelectedBrush="{Binding Editor.FillBrush}" 
+                                Command="cmd:NDrawingCommands.Fill" 
+                                DataContext="{Binding SelectedNote, Converter={StaticResource NoteViewGenerator}}"/>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+            <!-- Left Pane Expander -->
+            <Grid Name="RightPaneExpander" Grid.Column="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="1,0,0,0" IsHitTestVisible="True" Opacity="0.5" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}}">
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="#666" Fill="#A9A9A9" Data="M15,0 A 15,15 0 0 0 15,30" />
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="White" StrokeThickness="2" Data="M8,10 L8,20 M3,15L13,15" Visibility="{Binding IsRightPaneVisible,Converter={StaticResource BooleanToCollapsedConverter}}" />
+                <Path Width="16" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="White" StrokeThickness="2" Data="M4,15 L12,15" Visibility="{Binding IsRightPaneVisible,Converter={StaticResource BooleanToVisibleConverter}}" />
+            </Grid>
+        </Grid>
+        <!-- Widgets -->
+        <Canvas 
+            Name="WidgetCanvas" 
+            Grid.Row="0" 
+            Grid.RowSpan="3" 
+            FocusManager.IsFocusScope="True" 
+            DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SelectedNotebook}" />
+        <!-- Splitter -->
+        <GridSplitter 
+            Name="Splitter" 
+            Grid.Row="2" 
+            Height="3"       
+            Background="Transparent"
+            Focusable="False"
+            IsEnabled="{Binding ElementName=SearchExpander, Path=IsExpanded}"
+            HorizontalAlignment="Stretch" 
+            ResizeDirection="Rows" 
+            ResizeBehavior="PreviousAndNext" />
+        <!-- Search Expander -->
+        <Expander 
+            x:Name="SearchExpander"
+            Grid.Row="3"
+            Style="{StaticResource NotesExpanderStyle}"
+            DataContext="{Binding SelectedNotebook}"
+            IsEnabled="{Binding Converter={StaticResource NotNullConverter}}"
+            IsExpanded="{Binding IsSearching}"
+            FocusManager.IsFocusScope="True"
+            GotKeyboardFocus="SearchExpander_GotKeyboardFocus"
+            Expanded="SearchExpander_Expanded"
+            Collapsed="SearchExpander_Collapsed">
+            <!-- Header -->
+            <Expander.Header>
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Search Icon -->
+                    <Image 
+                        Grid.Column="0"
+                        Margin="6,0,0,0" 
+                        Width="16" 
+                        Height="16" 
+                        Source="/SilverNote;component/Images/search.png" />
+                    <!-- Category List -->
+                    <Menu 
+                        Name="CategoriesMenu" 
+                        Grid.Column="1" 
+                        Margin="-2,0,0,0"
+                        VerticalAlignment="Center"
+                        Background="Transparent">
+                        <MenuItem ItemsSource="{StaticResource SearchableCategories}" Style="{StaticResource SearchCategoriesMenuStyle}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <!-- Category Name -->
+                                    <TextBlock VerticalAlignment="Center" FontSize="10pt" FontWeight="Bold" Text="{Binding Search.Category.Name}"/>
+                                    <!-- Drop-down Arrow -->
+                                    <Path Margin="6,0,0,0" VerticalAlignment="Center" Fill="Black" Data="M0,0 L4,4 L8,0 Z" />
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
+                    <!-- Additional Categories -->
+                    <ItemsControl 
+                        Grid.Column="2"
+                        Margin="-2,0,0,0"
+                        ItemsSource="{Binding Search.AdditionalCategories}"
+                        Style="{StaticResource SearchCategoriesItemsControlStyle}">
+                    </ItemsControl>
+                    <!-- Keyword Box -->
+                    <TextBox 
+                        x:Name="SearchTextBox"
+                        Grid.Column="3" 
+                        Margin="4,0,0,0" 
+                        Height="21"
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        MaxLines="1" 
+                        ToolTip="Search (Ctrl+Space)"
+                        Tag="{Binding Source={x:Static cmd:NViewCommands.SearchNotebook}, Path=InputGestureText, Converter={StaticResource StringFormatConverter}, ConverterParameter='Search ({0})'}"
+                        Text="{Binding Search.SearchString}"
+                        b:UIElementBehavior.IsFocused="{Binding IsSearching}"
+                        b:UIElementBehavior.PreviewEscapeCommand="{x:Static cmd:NViewCommands.SearchNotebook}"
+                        b:UIElementBehavior.PreviewDownCommand="{Binding Search.Results.NextResultCommand}"
+                        b:UIElementBehavior.PreviewUpCommand="{Binding Search.Results.PreviousResultCommand}"
+                        b:UIElementBehavior.PreviewShiftDownCommand="{Binding Search.Results.NextTermCommand}"
+                        b:UIElementBehavior.PreviewShiftUpCommand="{Binding Search.Results.PreviousTermCommand}"
+                        b:UIElementBehavior.PreviewEnterCommand="{Binding Search.Results.OpenNotesCommand}"
+                        Style="{StaticResource WatermarkTextBoxStyle}"
+                        TextChanged="SearchTextBox_TextChanged"/>
+                    
+                    <!-- Previous/Next Buttons -->
+                    <StackPanel 
+                        Grid.Column="4" 
+                        Margin="5,0"
+                        Orientation="Horizontal">
+                        <!-- Previous -->
+                        <Button 
+                            Margin="2,0"
+                            MinWidth="0"
+                            Width="17"
+                            Height="17"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            ToolTip="Previous (Shift+Up)"
+                            Focusable="False"
+                            Command="{Binding Search.Results.PreviousTermCommand}">
+                            <Path 
+                                Width="6"
+                                Height="10"
+                                Data="M 5,1 1,5, 5,9" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Stroke="#222" 
+                                StrokeThickness="2"/>
+                        </Button>
+                        <!-- Next -->
+                        <Button 
+                            Margin="2,0"
+                            MinWidth="0"
+                            Width="17"
+                            Height="17"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            ToolTip="Next (Shift+Down)"
+                            Focusable="False"
+                            Command="{Binding Search.Results.NextTermCommand}">
+                            <Path 
+                                Width="6"
+                                Height="10"
+                                Data="M 1,1 5,5, 1,9" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Stroke="#222" 
+                                StrokeThickness="2" />
+                        </Button>
+                    </StackPanel>
+                    
+                    <!-- Auto-hide -->
+                    <CheckBox
+                        Name="AutoHideCheckBox"
+                        Grid.Column="5"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource AutoHideCheckBoxStyle}"
+                        Checked="AutoHideCheckBox_Checked"
+                        Unchecked="AutoHideCheckBox_Unchecked">
+                        <CheckBox.Content>
+                            <TextBlock Margin="2,0,0,1" FontWeight="SemiBold" Text="auto-hide"/>
+                        </CheckBox.Content>
+                    </CheckBox>
+                </Grid>
+            </Expander.Header>
+            <!-- Content -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="185"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <!-- Horizontal Line-->
+                <Path Data="M0,0 L1,0" Height="1" Stretch="Fill" Stroke="#FFC4C4C4" VerticalAlignment="Top" Margin="5,0" Grid.ColumnSpan="3" />
+                <!-- Left Column -->
+                <ScrollViewer Grid.Column="0" Margin="0,3" Grid.IsSharedSizeScope="True">
+                    <Grid Margin="12,4,4,4" TextBlock.FontWeight="Bold">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Added -->
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" Text="Added:"/>
+                        <ComboBox 
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            SelectedValuePath="Content"
+                            SelectedValue="{Binding Search.CreatedTimeFilter}" 
+                            Style="{StaticResource SearchFilterComboBoxStyle}">
+                            <ComboBoxItem>Any time</ComboBoxItem>
+                            <ComboBoxItem>Today</ComboBoxItem>
+                            <ComboBoxItem>Yesterday</ComboBoxItem>
+                            <ComboBoxItem>Past week</ComboBoxItem>
+                            <ComboBoxItem>Past month</ComboBoxItem>
+                            <ComboBoxItem>Past year</ComboBoxItem>
+                        </ComboBox>
+                        <!-- Modified -->
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Edited:"/>
+                        <ComboBox 
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            SelectedValuePath="Content"
+                            SelectedValue="{Binding Search.ModifiedTimeFilter}" 
+                            Style="{StaticResource SearchFilterComboBoxStyle}">
+                            <ComboBoxItem>Any time</ComboBoxItem>
+                            <ComboBoxItem>Today</ComboBoxItem>
+                            <ComboBoxItem>Yesterday</ComboBoxItem>
+                            <ComboBoxItem>Past week</ComboBoxItem>
+                            <ComboBoxItem>Past month</ComboBoxItem>
+                            <ComboBoxItem>Past year</ComboBoxItem>
+                        </ComboBox>
+                        <!-- Viewed -->
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Viewed:"/>
+                        <ComboBox 
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            SelectedValuePath="Content"
+                            SelectedValue="{Binding Search.ViewedTimeFilter}" 
+                            Style="{StaticResource SearchFilterComboBoxStyle}">
+                            <ComboBoxItem>Any time</ComboBoxItem>
+                            <ComboBoxItem>Today</ComboBoxItem>
+                            <ComboBoxItem>Yesterday</ComboBoxItem>
+                            <ComboBoxItem>Past week</ComboBoxItem>
+                            <ComboBoxItem>Past month</ComboBoxItem>
+                            <ComboBoxItem>Past year</ComboBoxItem>
+                        </ComboBox>
+                        <!-- Sort by -->
+                        <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="Sort by:"/>
+                        <ComboBox 
+                            Grid.Row="3" 
+                            Grid.Column="1" 
+                            SelectedValue="{Binding Search.SortBy}" 
+                            ItemsSource="{Binding Search.SortByOptions}" 
+                            Style="{StaticResource SearchFilterComboBoxStyle}" />
+                        <!-- Order -->
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="Order:"/>
+                        <ComboBox 
+                            Grid.Row="4" 
+                            Grid.Column="1" 
+                            ItemsSource="{Binding Search.OrderOptions}" 
+                            Style="{StaticResource SearchFilterComboBoxStyle}" Selector.SelectedValue="{Binding Search.Order}" />
+                    </Grid>
+                </ScrollViewer>
+                <!-- Splitter -->
+                <GridSplitter 
+                    Grid.Column="1" 
+                    Width="1" 
+                    Margin="0,5" 
+                    Background="#FFC4C4C4"
+                    VerticalAlignment="Stretch" 
+                    ResizeDirection="Columns" 
+                    ResizeBehavior="PreviousAndNext" />
+                <!-- Search Results -->
+                <ListBox 
+                    Name="SearchResults" 
+                    Grid.Column="2" 
+                    Margin="3,3,0,0" 
+                    BorderBrush="{x:Null}"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    SelectionMode="Extended"
+                    ItemsSource="{Binding Search.Results}"
+                    SelectedItem="{Binding Search.Results.SelectedResult}"
+                    Style="{StaticResource NotesListBoxStyle}">
+                </ListBox>
+            </Grid>
+        </Expander>
+        <!-- Splitter -->
+        <Thumb
+            Name="DebugPaneSplitter"
+            Grid.Row="4"
+            Cursor="SizeNS"
+            Height="2"
+            Background="Transparent"
+            Focusable="False"
+            IsEnabled="{Binding ElementName=DebugPane, Path=Visibility, Converter={StaticResource EqualsParameterConverter}, ConverterParameter={x:Static Visibility.Visible}}"
+            HorizontalAlignment="Stretch" 
+            DragDelta="DebugPaneSplitter_DragDelta" />
+        <!-- Developer tools -->
+        <Grid 
+            x:Name="DebugPane"
+            Grid.Row="5" 
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=IsDebugPaneVisible, Converter={StaticResource BooleanToVisibleConverter}}">
+            <!-- Buttons -->
+            <StackPanel 
+                Panel.ZIndex="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <!-- Maximize -->
+                <Button 
+                    Margin="4"
+                    Style="{StaticResource MaximizeNoteButtonStyle}"
+                    Click="MaximizeDebugPane_Click" />
+                <!-- Close -->
+                <Button 
+                    Margin="4"
+                    Style="{StaticResource CloseNoteButtonStyle}"
+                    Command="cmd:NDevelopmentCommands.Debug" />
+            </StackPanel>
+            <!-- DeveloperTools -->
+            <v:DeveloperTools />
+        </Grid>
+    </Grid>
+</Window>

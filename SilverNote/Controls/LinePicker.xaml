@@ -1,0 +1,226 @@
+﻿<UserControl x:Class="SilverNote.Controls.LinePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:SilverNote.Controls"
+             xmlns:e="clr-namespace:SilverNote.Editor;assembly=SilverNote.Editor"
+             xmlns:vm="clr-namespace:SilverNote.ViewModels"
+             mc:Ignorable="d"
+             MinWidth="120"
+             HorizontalAlignment="Stretch"
+             Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Styles -->
+                <ResourceDictionary Source="pack://application:,,,/SilverNote.Editor;component/Controls/Styles/PickerExpanderStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/SilverNote.Editor;component/Controls/Styles/PickerItemStyle.xaml"/>
+                <ResourceDictionary Source="Styles/LinePickerComboBoxStyle.xaml"/>
+                <ResourceDictionary>
+                    <!-- LineConverter -->
+                    <c:LineConverter x:Key="LineConverter"/>
+                    <!-- StartMarkerConverter -->
+                    <c:StartMarkerConverter x:Key="StartMarkerConverter"/>
+                    <!-- EndMarkerConverter-->
+                    <c:EndMarkerConverter x:Key="EndMarkerConverter"/>
+                    <!-- UserDefinedMarkers -->
+                    <CollectionViewSource x:Key="UserDefinedMarkers" Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Markers}"/>
+                    <!-- StandardMarkers -->
+                    <CollectionViewSource x:Key="StandardMarkers" Source="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=StandardMarkers}"/>
+                    <!-- Markers -->
+                    <CompositeCollection x:Key="Markers">
+                        <CollectionContainer Collection="{Binding Source={StaticResource StandardMarkers}}"/>
+                        <CollectionContainer Collection="{Binding Source={StaticResource UserDefinedMarkers}}"/>
+                    </CompositeCollection>
+                    <!-- LinesListBoxItemsPanel -->
+                    <ItemsPanelTemplate x:Key="LinesListBoxItemsPanel">
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                    <!-- LinesListBoxItemContextMenu -->
+                    <ContextMenu x:Key="LinesListBoxItemContextMenu">
+                        <MenuItem Header="Delete" Command="{Binding ClipartGroup.DeleteClipartCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                    <!-- LinesListBoxItemContainerStyle -->
+                    <Style x:Key="LinesListBoxItemContainerStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource PickerItemStyle}">
+                        <Setter Property="ContextMenu" Value="{StaticResource LinesListBoxItemContextMenu}"/>
+                        <EventSetter Event="MouseLeftButtonUp" Handler="Line_MouseLeftButtonUp"/>
+                    </Style>
+                    <!-- LinesListBoxItemTemplate -->
+                    <DataTemplate x:Key="LinesListBoxItemTemplate" DataType="{x:Type e:Line}">
+                        <Grid Height="20">
+                            <e:NCanvas 
+                                Width="100" 
+                                Height="15"
+                                Margin="5,5,5,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" 
+                                IsEnabled="False" 
+                                Drawing="{Binding Drawing, Converter={StaticResource LineConverter}}"/>
+                        </Grid>
+                    </DataTemplate>
+                    <!-- LinesListBoxStyle -->
+                    <Style x:Key="LinesListBoxStyle" TargetType="{x:Type ListBox}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Property="ItemsPanel" Value="{StaticResource LinesListBoxItemsPanel}"/>
+                        <Setter Property="ItemContainerStyle" Value="{StaticResource LinesListBoxItemContainerStyle}"/>
+                        <Setter Property="ItemTemplate" Value="{StaticResource LinesListBoxItemTemplate}"/>
+                    </Style>
+                    <!-- MarkersComboBoxItemContextMenu -->
+                    <ContextMenu x:Key="MarkersComboBoxItemContextMenu">
+                        <MenuItem Header="Delete" Command="{Binding ClipartGroup.DeleteClipartCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                    <!-- MarkersComboBoxItemContainerStyle -->
+                    <Style x:Key="MarkersComboBoxItemContainerStyle" TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="ContextMenu" Value="{StaticResource MarkersComboBoxItemContextMenu}"/>
+                    </Style>
+                    <!-- MarkersComboBoxStyle -->
+                    <Style x:Key="MarkersComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource LinePickerComboBoxStyle}">
+                        <Setter Property="ClipToBounds" Value="True"/>
+                        <Setter Property="ItemContainerStyle" Value="{StaticResource MarkersComboBoxItemContainerStyle}"/>
+                    </Style>
+                    <!-- StartMarkerComboBoxItemTemplate -->
+                    <DataTemplate x:Key="StartMarkerComboBoxItemTemplate" DataType="{x:Type vm:ClipartViewModel}">
+                        <e:NCanvas 
+                            Height="8"
+                            Margin="5,8,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" 
+                            IsEnabled="False" 
+                            Drawing="{Binding Drawing, Converter={StaticResource StartMarkerConverter}}"/>
+                    </DataTemplate>
+                    <!-- EndMarkerComboBoxItemTemplate -->
+                    <DataTemplate x:Key="EndMarkerComboBoxItemTemplate" DataType="{x:Type vm:ClipartViewModel}">
+                        <e:NCanvas 
+                            Height="8"
+                            Margin="5,8,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" 
+                            IsEnabled="False" 
+                            Drawing="{Binding Drawing, Converter={StaticResource EndMarkerConverter}}"/>
+                    </DataTemplate>
+                    <!-- LineStylesComboBoxItemContainerStyle -->
+                    <Style x:Key="LineStylesComboBoxItemContainerStyle" TargetType="{x:Type ComboBoxItem}">
+                    </Style>
+                    <!-- LineStylesComboBoxStyle -->
+                    <Style x:Key="LineStylesComboBoxStyle" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource LinePickerComboBoxStyle}">
+                        <Setter Property="ClipToBounds" Value="True"/>
+                        <Setter Property="ItemContainerStyle" Value="{StaticResource LineStylesComboBoxItemContainerStyle}"/>
+                    </Style>
+                    <!-- LineStylesComboBoxItemTemplate -->
+                    <DataTemplate x:Key="LineStylesComboBoxItemTemplate" DataType="{x:Type vm:ClipartViewModel}">
+                        <e:NCanvas
+                            Height="16"
+                            Margin="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsEnabled="False"
+                            Drawing="{Binding Drawing}"/>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!-- Root -->
+    <StackPanel 
+        Orientation="Vertical" 
+        DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <!-- Lines -->
+        <Expander 
+            IsExpanded="{Binding IsLinesExpanded}" 
+            Style="{StaticResource PickerExpanderStyle}">
+            <!-- Header -->
+            <Expander.Header>
+                <TextBlock Text="Lines" />
+            </Expander.Header>
+            <!-- Content -->
+            <Expander.Content>
+                <ListBox 
+                    x:Name="LinesListBox"
+                    ItemsSource="{Binding NonConnectors}"
+                    Style="{StaticResource LinesListBoxStyle}">
+                </ListBox>
+            </Expander.Content>
+        </Expander>
+        <!-- Connectors -->
+        <Expander IsExpanded="{Binding IsConnectorsExpanded}" Style="{StaticResource PickerExpanderStyle}">
+            <!-- Header -->
+            <Expander.Header>
+                <TextBlock Text="Connectors" />
+            </Expander.Header>
+            <!-- Content -->
+            <Expander.Content>
+                <ListBox 
+                    x:Name="ConnectorsListBox"
+                    ItemsSource="{Binding Connectors}"
+                    Style="{StaticResource LinesListBoxStyle}">
+                </ListBox>
+            </Expander.Content>
+        </Expander>
+        <!-- Connectors -->
+        <Expander IsExpanded="False" Style="{StaticResource PickerExpanderStyle}">
+            <!-- Header -->
+            <Expander.Header>
+                <TextBlock Text="Custom" />
+            </Expander.Header>
+            <!-- Content -->
+            <Expander.Content>
+                <StackPanel Orientation="Vertical">
+                    <Border Margin="5,10" HorizontalAlignment="Center" BorderThickness="1" BorderBrush="Gray" CornerRadius="2">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Start marker -->
+                            <ComboBox
+                                x:Name="StartMarkerComboBox"
+                                Margin="0"
+                                Padding="0,5"
+                                SelectedIndex="0"
+                                ItemsSource="{StaticResource Markers}"
+                                ItemTemplate="{StaticResource StartMarkerComboBoxItemTemplate}"
+                                Style="{StaticResource MarkersComboBoxStyle}">
+                            </ComboBox>
+                            <!-- Separator -->
+                            <Line VerticalAlignment="Stretch" Stretch="Fill" X1="0" Y1="0" X2="0" Y2="1" Stroke="Gray" StrokeThickness="1" />
+                            <!-- Line Styles -->
+                            <ComboBox
+                                x:Name="LineStylesComboBox"
+                                Margin="0"
+                                Padding="5"
+                                SelectedIndex="0"
+                                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LineStyles}"
+                                ItemTemplate="{StaticResource LineStylesComboBoxItemTemplate}"
+                                Style="{StaticResource LineStylesComboBoxStyle}">
+                            </ComboBox>
+                            <!-- Separator -->
+                            <Line VerticalAlignment="Stretch" Stretch="Fill" X1="0" Y1="0" X2="0" Y2="1" Stroke="Gray" StrokeThickness="1" />
+                            <!-- End Marker -->
+                            <ComboBox
+                                x:Name="EndMarkerComboBox"
+                                Margin="0"
+                                Padding="0,5"
+                                SelectedIndex="0"
+                                ItemsSource="{StaticResource Markers}"
+                                ItemTemplate="{StaticResource EndMarkerComboBoxItemTemplate}"
+                                Style="{StaticResource MarkersComboBoxStyle}">
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                    <!-- "Connector" CheckBox -->
+                    <CheckBox 
+                        x:Name="ConnectorCheckBox" 
+                        Margin="0,0,0,10"
+                        Padding="4,0,0,0"
+                        HorizontalAlignment="Center"
+                        Content="Connector" />
+                    <!-- Create Line -->
+                    <Button
+                        x:Name="CreateLineButton"
+                        Width="75"
+                        Margin="0,0,0,5"
+                        Content="Create"
+                        Click="CreateLineButton_Click"/>
+                </StackPanel>
+            </Expander.Content>
+        </Expander>
+    </StackPanel>
+</UserControl>

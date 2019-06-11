@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.0 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="drmudge3vo2">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <g class="thumb" fill="none" style="display:none;">
+      <rect stroke-width="2" stroke="black" fill="white" filter="url(#drmudge3vo2)" x="0" y="0" width="30" height="20" />
+      <text fill="black" x="0" y="0" placeholder="Class" style="width:30px;height:20px;vertical-align:middle;display:block;text-align:center;">
+        <tspan x="7" y="13" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="8" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Class</tspan>
+      </text>
+    </g>
+    <rect stroke-width="2" stroke="#333" fill="white" filter="url(#drmudge3vo2)" x="0" y="0" width="120" height="60" />
+    <text class="autofocus" fill="black" x="0" y="0" placeholder="Class" style="padding-right:3px;padding-left:3px;width:120px;height:60px;vertical-align:middle;display:block;text-align:center;">
+      <tspan x="44" y="35.5" class="" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" fill="rgb(0,0,0)" href="">Class</tspan>
+    </text>
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="60" y1="60" x2="60" y2="60" />
+    <line class="snap" x1="80" y1="0" x2="80" y2="0" />
+    <line class="snap" x1="40" y1="0" x2="40" y2="0" />
+    <line class="snap" x1="80" y1="60" x2="80" y2="60" />
+    <line class="snap" x1="40" y1="60" x2="40" y2="60" />
+    <line class="snap" x1="120" y1="30" x2="120" y2="30" />
+    <line class="snap" x1="120" y1="10" x2="120" y2="10" />
+    <line class="snap" x1="120" y1="50" x2="120" y2="50" />
+    <line class="snap" x1="0" y1="50" x2="0" y2="50" />
+    <line class="snap" x1="0" y1="30" x2="0" y2="30" />
+    <line class="snap" x1="0" y1="10" x2="0" y2="10" />
+    <line class="snap" x1="100" y1="0" x2="100" y2="0" />
+    <line class="snap" x1="100" y1="60" x2="100" y2="60" />
+    <line class="snap" x1="20" y1="0" x2="20" y2="0" />
+    <line class="snap" x1="20" y1="60" x2="20" y2="60" />
+  </g>
+</svg>

@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11971764-59FF-4901-9F9E-0885B1367B92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SilverNote.Editor</RootNamespace>
+    <AssemblyName>SilverNote.Editor</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Jurassic, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jurassic.2.2.1\lib\net35\Jurassic.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Clipboard\DataConverters\BitmapDataConverter.cs" />
+    <Compile Include="Clipboard\DataConverters\FileDataConverter.cs" />
+    <Compile Include="Clipboard\DataConverters\HtmlDataConverter.cs" />
+    <Compile Include="Clipboard\DataConverters\InternalDataConverter.cs" />
+    <Compile Include="Clipboard\DataConverters\TextDataConverter.cs" />
+    <Compile Include="Clipboard\IDataConverter.cs" />
+    <Compile Include="Clipboard\NClipboard.cs" />
+    <Compile Include="Clipboard\NDataObject.cs" />
+    <Compile Include="Clipboard\NHtmlData.cs" />
+    <Compile Include="Commands\CommandClassConverter.cs" />
+    <Compile Include="Commands\CommandGroupConverter.cs" />
+    <Compile Include="Commands\CommandNameConverter.cs" />
+    <Compile Include="Commands\CommandTextConverter.cs" />
+    <Compile Include="Commands\NApplicationCommands.cs" />
+    <Compile Include="Commands\NCommands.cs" />
+    <Compile Include="Commands\NDevelopmentCommands.cs" />
+    <Compile Include="Commands\NDrawingCommands.cs" />
+    <Compile Include="Commands\NEditingCommands.cs" />
+    <Compile Include="Commands\NFileCommands.cs" />
+    <Compile Include="Commands\NFormattingCommands.cs" />
+    <Compile Include="Commands\NImageCommands.cs" />
+    <Compile Include="Commands\NInsertionCommands.cs" />
+    <Compile Include="Commands\NNavigationCommands.cs" />
+    <Compile Include="Commands\NShortcut.cs" />
+    <Compile Include="Commands\NShortcutCollection.cs" />
+    <Compile Include="Commands\NTableCommands.cs" />
+    <Compile Include="Commands\NTextCommands.cs" />
+    <Compile Include="Commands\NUtilityCommands.cs" />
+    <Compile Include="Commands\NViewCommands.cs" />
+    <Compile Include="Controls\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\HighlighterPicker.xaml.cs">
+      <DependentUpon>HighlighterPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StrokeControl.xaml.cs">
+      <DependentUpon>StrokeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DecoratorDrawingVisual.cs" />
+    <Compile Include="Dialogs\DOMEditor.xaml.cs">
+      <DependentUpon>DOMEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\NewTableDialog.xaml.cs">
+      <DependentUpon>NewTableDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentElement.cs" />
+    <Compile Include="DocumentPanel.cs" />
+    <Compile Include="DragAndDrop\DefaultDropHandler.cs" />
+    <Compile Include="DragAndDrop\DrawingDropHandler.cs" />
+    <Compile Include="DragAndDrop\DropHandlerBase.cs" />
+    <Compile Include="DragAndDrop\FileDropHandler.cs" />
+    <Compile Include="DragAndDrop\FileDroppedEventHandler.cs" />
+    <Compile Include="DragAndDrop\IDropHandler.cs" />
+    <Compile Include="Drawing\Arc.cs" />
+    <Compile Include="Drawing\CubicBezier.cs" />
+    <Compile Include="Drawing\DocumentCanvas.cs" />
+    <Compile Include="Drawing\EditingCanvas.cs" />
+    <Compile Include="Drawing\Ellipse.cs" />
+    <Compile Include="Drawing\Line.cs" />
+    <Compile Include="Drawing\LineBase.cs" />
+    <Compile Include="Drawing\Marker.cs" />
+    <Compile Include="Drawing\NCanvas.cs" />
+    <Compile Include="Drawing\NPath.cs" />
+    <Compile Include="Drawing\NTextBox.cs" />
+    <Compile Include="Drawing\Polygon.cs" />
+    <Compile Include="Drawing\PolyLine.cs" />
+    <Compile Include="Drawing\PrimaryCanvas.cs" />
+    <Compile Include="Drawing\QuadraticBezier.cs" />
+    <Compile Include="Drawing\QuadraticCurve.cs" />
+    <Compile Include="Drawing\Rectangle.cs" />
+    <Compile Include="Drawing\RoutedLine.cs" />
+    <Compile Include="Drawing\RouteMap.cs" />
+    <Compile Include="Drawing\SemiEllipse.cs" />
+    <Compile Include="Drawing\Shape.cs" />
+    <Compile Include="Drawing\ShapeCollection.cs" />
+    <Compile Include="Drawing\ShapeGroup.cs" />
+    <Compile Include="Drawing\ShapeHitTest.cs" />
+    <Compile Include="Drawing\SmartPencil.cs" />
+    <Compile Include="Drawing\SnapPoint.cs" />
+    <Compile Include="Drawing\SVGAttributesExt.cs" />
+    <Compile Include="EditingPanel.cs" />
+    <Compile Include="Elements\NFile.cs" />
+    <Compile Include="Elements\NHeading.cs" />
+    <Compile Include="Elements\NImage.cs" />
+    <Compile Include="Elements\NTable.cs" />
+    <Compile Include="GeometrySelection.cs" />
+    <Compile Include="HTMLFilters.cs" />
+    <Compile Include="Dialogs\HyperlinkDialog.xaml.cs">
+      <DependentUpon>HyperlinkDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IEditable.cs" />
+    <Compile Include="IFormattable.cs" />
+    <Compile Include="IHasResources.cs" />
+    <Compile Include="IMovable.cs" />
+    <Compile Include="INavigable.cs" />
+    <Compile Include="InputHelper.cs" />
+    <Compile Include="InteractivePanel.cs" />
+    <Compile Include="IResizable.cs" />
+    <Compile Include="ISearchable.cs" />
+    <Compile Include="ISelectable.cs" />
+    <Compile Include="ISelectableText.cs" />
+    <Compile Include="ISnappable.cs" />
+    <Compile Include="ITextElement.cs" />
+    <Compile Include="IVisualElement.cs" />
+    <Compile Include="LookupHelper.cs" />
+    <Compile Include="NoteEditor.cs" />
+    <Compile Include="NotePaginator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResizingAdorner.cs" />
+    <Compile Include="Selection.cs" />
+    <Compile Include="Text\Bullet.xaml.cs">
+      <DependentUpon>Bullet.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Text\Caret.cs" />
+    <Compile Include="Text\ElementTreeNode.cs" />
+    <Compile Include="Text\FontClass.cs" />
+    <Compile Include="Text\GenericTextParagraphProperties.cs" />
+    <Compile Include="Text\GenericTextRunProperties.cs" />
+    <Compile Include="Text\GenericTextRunTypographyProperties.cs" />
+    <Compile Include="Text\ListStyles\CheckListStyle.cs" />
+    <Compile Include="Text\ListStyles\CircleListStyle.cs" />
+    <Compile Include="Text\ListStyles\DecimalListStyle.cs" />
+    <Compile Include="Text\ListStyles\DiamondListStyle.cs" />
+    <Compile Include="Text\ListStyles\IListStyle.cs" />
+    <Compile Include="Text\ListStyles\ListStyles.cs" />
+    <Compile Include="Text\ListStyles\LowerAlphaListStyle.cs" />
+    <Compile Include="Text\ListStyles\LowerRomanListStyle.cs" />
+    <Compile Include="Text\ListStyles\OpenCircleListStyle.cs" />
+    <Compile Include="Text\ListStyles\OpenDiamondListStyle.cs" />
+    <Compile Include="Text\ListStyles\OpenSquareListStyle.cs" />
+    <Compile Include="Text\ListStyles\OpenTriangleListStyle.cs" />
+    <Compile Include="Text\ListStyles\SquareListStyle.cs" />
+    <Compile Include="Text\ListStyles\TriangleListStyle.cs" />
+    <Compile Include="Text\ListStyles\UpperAlphaListStyle.cs" />
+    <Compile Include="Text\ListStyles\UpperRomanListStyle.cs" />
+    <Compile Include="Text\ListToggleButton.xaml.cs">
+      <DependentUpon>ListToggleButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Text\SectionHandle.cs" />
+    <Compile Include="Text\SectionToggleButton.xaml.cs">
+      <DependentUpon>SectionToggleButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Text\TextBuffer.cs" />
+    <Compile Include="Text\TextElement.cs" />
+    <Compile Include="Text\TextField.cs" />
+    <Compile Include="Text\TextFragment.cs" />
+    <Compile Include="Text\TextLineVisual.cs" />
+    <Compile Include="Text\TextParagraph.cs" />
+    <Compile Include="Text\TextParagraphPropertiesProxy.cs" />
+    <Compile Include="Text\TextProperties.cs" />
+    <Compile Include="Text\TextRenderer.cs" />
+    <Compile Include="Text\TextRunSource.cs" />
+    <Compile Include="Text\WordCounting.cs" />
+    <Compile Include="UndoStack.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\ColorPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\HighlighterPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\StrokeControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Styles\PickerExpanderStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Styles\PickerItemStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Styles\PickerListBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\DOMEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\HyperlinkDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\NewTableDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Text\Bullet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Text\ListToggleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Text\SectionToggleButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SilverNote.Behaviors\SilverNote.Behaviors.csproj">
+      <Project>{e854172b-2062-44c0-9b74-a7f960b7772c}</Project>
+      <Name>SilverNote.Behaviors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SilverNote.Common\SilverNote.Common.csproj">
+      <Project>{242b9764-d047-4d82-ab97-1c3097ace146}</Project>
+      <Name>SilverNote.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SilverNote.Converters\SilverNote.Converters.csproj">
+      <Project>{de6dadfa-c52e-4870-b14a-351be8ba3243}</Project>
+      <Name>SilverNote.Converters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SilverNote.DOM\SilverNote.DOM.csproj">
+      <Project>{f49de49b-5f66-426c-a559-144a49b6de82}</Project>
+      <Name>SilverNote.DOM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\ArrowExcept.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\Crosshairs.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\Eraser.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\Fill.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterAqua.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterGray.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterGreen.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterRed.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterViolet.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterWhite.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\HighlighterYellow.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\Pencil.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursors\Stroke.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="SilverNote.Editor.Bullet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             Cursor="Arrow">
+    <TextBlock x:Name="TextBlock" Padding="0" TextAlignment="Right" VerticalAlignment="Center">
+
+    </TextBlock>
+</UserControl>

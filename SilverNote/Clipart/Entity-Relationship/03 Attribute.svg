@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with SilverNote v1.1 (http://www.silver-note.com/) -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter class="dropShadow" id="ghjuettx52v">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blurResult" />
+      <feOffset in="blurResult" dx="2" dy="2" result="offsetResult" />
+      <feMerge>
+        <feMergeNode in="offsetResult" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g class="locked" fill="none">
+    <g fill="none">
+      <ellipse stroke-width="2" stroke="black" fill="white" filter="url(#ghjuettx52v)" cx="60" cy="30" rx="60" ry="30" />
+      <text class="autofocus" placeholder="Attribute" x="0" y="0" font-family="Calibri, Arial, Tahoma, Geneva, Helvetica, Sans-serif" font-size="16" font-weight="bold" font-style="normal" text-decoration="none" baseline-shift="baseline" style="width:120px;height:60px;vertical-align:middle;display:block;text-align:center;left:0px;top:0px;" />
+    </g>
+    <line class="snap" x1="60" y1="0" x2="60" y2="0" />
+    <line class="snap" x1="60" y1="60" x2="60" y2="60" />
+    <line class="snap" x1="120" y1="30" x2="120" y2="30" />
+    <line class="snap" x1="0" y1="30" x2="0" y2="30" />
+    <line class="snap" x1="25" y1="5" x2="25" y2="5" />
+    <line class="snap" x1="95" y1="5" x2="95" y2="5" />
+    <line class="snap" x1="95" y1="55" x2="95" y2="55" />
+    <line class="snap" x1="25" y1="55" x2="25" y2="55" />
+  </g>
+</svg>

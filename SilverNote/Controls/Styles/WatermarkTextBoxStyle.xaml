@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- WatermarkTextBoxTemplate -->
+    <ControlTemplate x:Key="WatermarkTextBoxTemplate" TargetType="{x:Type TextBox}">
+        <!-- Root -->
+        <Grid>
+            <!-- Border -->
+            <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" />
+            <!-- Content -->
+            <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" Margin="1" VerticalAlignment="Center" />
+            <!-- Watermark -->
+            <Label x:Name="Watermark" Content="{TemplateBinding Tag}" Foreground="#888" FontStyle="Italic" Visibility="Collapsed" Margin="4,0" Padding="1" VerticalAlignment="Center" Focusable="False" IsHitTestVisible="False" />
+        </Grid>
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsKeyboardFocused" Value="False" />
+                    <Condition Property="Text" Value="" />
+                    <Condition Property="IsEnabled" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter TargetName="Watermark" Property="Visibility" Value="Visible"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- WatermarkTextBoxStyle -->
+    <Style x:Key="WatermarkTextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+        <Setter Property="Template" Value="{StaticResource WatermarkTextBoxTemplate}"/>
+    </Style>
+    
+</ResourceDictionary>
