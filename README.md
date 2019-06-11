@@ -5,9 +5,9 @@
   The smartest way to take notes for school, work or everyday life.
   <br>
   <br>
+  <a href="https://github.com/achapweske/silvernote/releases/download/v2.0/InstallSilverNote.zip">Download</a>
+  ·
   <a href="https://github.com/achapweske/silvernote/issues/new?template=bug.md">Report bug</a>
   ·
   <a href="https://github.com/twbs/bootstrap/issues/new?template=feature.md&labels=feature">Request feature</a>
 </p>
-
-
