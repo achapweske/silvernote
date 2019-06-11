@@ -1,7 +1,7 @@
 ﻿/*
  * Copyright (c) Adam Chapweske
  * 
- * Use of this software is governed by an MIT license that can be found in the LICENSE file at the root of this project.
+ * Licensed under MIT (https://github.com/achapweske/silvernote/blob/master/LICENSE)
  */
 
 using System;
